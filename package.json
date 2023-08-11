@@ -1,4 +1,7 @@
 {
+    "name": "rpg_gm_tool",
+    "version": "1.0.0",
+    "description": "A GM tool for RPGs",
     "private": true,
     "scripts": {
         "build": "nuxt build",
