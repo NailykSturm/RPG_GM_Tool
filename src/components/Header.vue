@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import VButton from '~/components/ui/Button.vue';
 const { user, loggedIn, logout } = useAuth();
-const { changeTheme } = setTheme();
+const { changeTheme, list_themes } = setTheme();
 </script>
 
 <template>
@@ -22,9 +22,9 @@ const { changeTheme } = setTheme();
                     <li class="dropdown">
                         <label tabindex="0">Theme</label>
                         <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-base-100 rounded-box">
-                            <li><a @click="changeTheme('light')">Light</a></li>
-                            <li><a @click="changeTheme('dark')">Dark</a></li>
-                            <li><a @click="changeTheme('night')">Night</a></li>
+                            <li v-for="theme in list_themes">
+                                <a @click="changeTheme(theme)">{{ theme }}</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

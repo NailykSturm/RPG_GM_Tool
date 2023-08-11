@@ -29,7 +29,7 @@ const { errorMessage, pending, register } = useAuth();
                             <VInput v-bind="field" label="Password" type="password" placeholder="********" />
                         </VField>
                     </div>
-                    <VButton :loading="pending" class="w-full p-4 leading-6 text-lg mb-2">Sign Up</VButton>
+                    <VButton :loading="pending" class="w-full p-4 leading-6 text-lg mb-2 btn-outline btn-primary">Sign Up</VButton>
                     <div class="text-center font-extrabold flex justify-center">
                         <span>If you already have an account</span>
                         <NuxtLink to="/auth/login" class="ml-1 text-error-content hover:underline">Sign in</NuxtLink>

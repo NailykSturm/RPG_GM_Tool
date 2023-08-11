@@ -1,9 +1,11 @@
-export default function () {
-    const theme = useState('theme', () => 'light');
+import daisyui_themes from "~/assets/css/daisyui_themes";
 
-    const changeTheme = (data) => {
-        theme.value = data;
+export default function () {
+    const theme = useState('theme', () => daisyui_themes[0]);
+
+    const changeTheme = (newTheme: string) => {
+        if (daisyui_themes.includes(newTheme)) theme.value = newTheme;
     }
 
-    return { theme, changeTheme };
+    return { theme, list_themes: daisyui_themes, changeTheme };
 }
