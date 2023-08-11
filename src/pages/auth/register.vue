@@ -11,12 +11,12 @@ const { errorMessage, pending, register } = useAuth();
 </script>
 
 <template>
-    <div class="py-26 bg-white">
+    <div class="py-26">
         <div class="container px-4 mx-auto">
             <div class="max-w-lg mx-auto">
                 <div class="text-center my-8">
                     <h2 class="text-3xl md:text-4xl font-extrabold mb-2">Sign Up</h2>
-                    <p v-show="errorMessage" class="text-red-500">{{ errorMessage }}</p>
+                    <p v-show="errorMessage" class="text-error-content">{{ errorMessage }}</p>
                 </div>
                 <VForm :initial-values="{ email: '', password: '' }" @submit="register">
                     <div class="mb-6">
@@ -29,10 +29,10 @@ const { errorMessage, pending, register } = useAuth();
                             <VInput v-bind="field" label="Password" type="password" placeholder="********" />
                         </VField>
                     </div>
-                    <VButton :loading="pending">Sign Up</VButton>
+                    <VButton :loading="pending" class="w-full p-4 leading-6 text-lg mb-2">Sign Up</VButton>
                     <div class="text-center font-extrabold flex justify-center">
                         <span>If you already have an account</span>
-                        <NuxtLink to="/auth/login" class="ml-1 text-red-500 hover:underline">Sign in</NuxtLink>
+                        <NuxtLink to="/auth/login" class="ml-1 text-error-content hover:underline">Sign in</NuxtLink>
                     </div>
                 </VForm>
             </div>

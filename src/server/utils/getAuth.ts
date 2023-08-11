@@ -1,7 +1,8 @@
-import type { IUser } from '~/types/IUser';
 import { CompatibilityEvent } from 'h3';
-import userModal from '~/server/models/User';
 import jwt from 'jsonwebtoken';
+
+import type { IUser } from '~/types/IUser';
+import userModal from '~/server/models/User';
 
 export default async function (event: CompatibilityEvent): Promise<IUser> {
     const { token } = useCookies(event);

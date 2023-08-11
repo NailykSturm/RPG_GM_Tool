@@ -1,6 +1,7 @@
-import type { IUser } from '~~/src/types/IUser';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+
+import type { IUser } from '~~/src/types/IUser';
 
 interface IUserDocument extends IUser, Document {
     validatePassword: (data: string) => Promise<boolean>;

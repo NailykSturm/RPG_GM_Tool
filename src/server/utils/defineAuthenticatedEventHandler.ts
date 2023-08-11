@@ -1,5 +1,6 @@
+import { CompatibilityEvent }  from 'h3';
+
 import { IUser } from '~/types/IUser';
-import { CompatibilityEvent } from 'h3';
 import getAuth from './getAuth';
 
 export function defineAuthenticatedEventHandler<T>(handler: (event: CompatibilityEvent, user: IUser) => T | Promise<T>) {

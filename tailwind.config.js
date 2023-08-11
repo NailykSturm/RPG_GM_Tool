@@ -6,6 +6,15 @@ module.exports = {
         './src/plugins/**/*.{js,ts}',
         './nuxt.config.{js,ts}',
     ],
+    plugins: [require("daisyui")],
+    daisyui: {
+        themes: ["light", "dark", "night"],
+        base: true,
+        styled: true,
+        utils: true, 
+        prefix: "", 
+        logs: true,
+    },
     theme: {
         extend: {},
     },

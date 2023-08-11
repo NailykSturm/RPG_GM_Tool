@@ -1,8 +1,8 @@
 import { send } from 'h3';
 import { validateBody, Type } from 'h3-typebox';
-import { registerSchema } from '~/server/validations/index';
 import jwt from 'jsonwebtoken';
 
+import { registerSchema } from '~/server/validations/index';
 import userModal from '~/server/models/User';
 
 export default defineEventHandler(async (event) => {
