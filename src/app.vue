@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { theme } = setTheme();
+const { theme } = useTheme();
 </script>
 
 <template :data-theme="theme">

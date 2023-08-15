@@ -9,7 +9,7 @@ export function defineAuthenticatedEventHandler<T>(handler: (event: Compatibilit
             const user = await getAuth(event);
             return handler(event, user);
         } catch (err) {
-            sendError(event, createError({ statusCode: 400, statusMessage: 'no authorization' }));
+            sendError(event, createError({ statusCode: 400, statusMessage: `no authorization : ${err}` }));
         }
     });
 }

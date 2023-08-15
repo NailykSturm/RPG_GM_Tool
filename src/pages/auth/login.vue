@@ -7,7 +7,7 @@ definePageMeta({
     // layout: 'form',
 });
 
-const { theme } = setTheme();
+const { theme } = useTheme();
 const { errorMessage, pending, login } = useAuth();
 </script>
 

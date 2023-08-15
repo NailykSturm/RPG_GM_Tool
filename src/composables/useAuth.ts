@@ -6,7 +6,7 @@ export default function () {
     const errorMessage = useState('errorMessage', () => '');
     const pending = useState('pending', () => false);
 
-    const setUser = (data) => {
+    const setUser = (data: UserWithoutPassword | null) => {
         user.value = data;
         loggedIn.value = Boolean(data);
     };
