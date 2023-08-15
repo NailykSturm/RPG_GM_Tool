@@ -20,7 +20,7 @@ export default function () {
                 body: JSON.stringify({ email, password }),
             });
             setUser(data);
-            await navigateTo('/');
+            await navigateTo('/games');
         } catch (err) {
             errorMessage.value = err.data.statusMessage;
         }

@@ -2,8 +2,6 @@
 const { theme } = setTheme();
 </script>
 
-<template>
-    <NuxtLayout>
-        <NuxtPage :key="$route.fullPath" :data-theme="theme"/>
-    </NuxtLayout>
+<template :data-theme="theme">
+    <NuxtPage :key="$route.fullPath" />
 </template>

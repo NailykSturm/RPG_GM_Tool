@@ -4,38 +4,41 @@ import VButton from '~/components/ui/Button.vue';
 
 definePageMeta({
     middleware: 'guest-only',
-    layout: false,
+    // layout: 'form',
 });
 
 const { errorMessage, pending, register } = useAuth();
 </script>
 
 <template>
-    <div class="py-26">
-        <div class="container px-4 mx-auto">
-            <div class="max-w-lg mx-auto">
-                <div class="text-center my-8">
-                    <h2 class="text-3xl md:text-4xl font-extrabold mb-2">Sign Up</h2>
-                    <p v-show="errorMessage" class="text-error-content">{{ errorMessage }}</p>
+    <NuxtLayout>
+        <div class="py-26">
+            <div class="container px-4 mx-auto">
+                <div class="max-w-lg mx-auto">
+                    <div class="text-center my-8">
+                        <h2 class="text-3xl md:text-4xl font-extrabold mb-2">Sign Up</h2>
+                        <p v-show="errorMessage" class="text-error-content">{{ errorMessage }}</p>
+                    </div>
+                    <VForm :initial-values="{ email: '', password: '' }" @submit="register">
+                        <div class="mb-6">
+                            <VField name="email" v-slot="{ field }" rules="required|email">
+                                <VInput v-bind="field" label="Email" type="email" placeholder="Email" />
+                            </VField>
+                        </div>
+                        <div class="mb-6">
+                            <VField name="password" v-slot="{ field }" rules="required">
+                                <VInput v-bind="field" label="Password" type="password" placeholder="********" />
+                            </VField>
+                        </div>
+                        <VButton :loading="pending" class="w-full p-4 leading-6 text-lg mb-2 btn-outline btn-primary">Sign
+                            Up</VButton>
+                        <div class="text-center font-extrabold flex justify-center">
+                            <span>If you already have an account</span>
+                            <NuxtLink to="/auth/login" class="ml-1 text-error-content hover:underline">Sign in</NuxtLink>
+                        </div>
+                    </VForm>
                 </div>
-                <VForm :initial-values="{ email: '', password: '' }" @submit="register">
-                    <div class="mb-6">
-                        <VField name="email" v-slot="{ field }" rules="required|email">
-                            <VInput v-bind="field" label="Email" type="email" placeholder="Email" />
-                        </VField>
-                    </div>
-                    <div class="mb-6">
-                        <VField name="password" v-slot="{ field }" rules="required">
-                            <VInput v-bind="field" label="Password" type="password" placeholder="********" />
-                        </VField>
-                    </div>
-                    <VButton :loading="pending" class="w-full p-4 leading-6 text-lg mb-2 btn-outline btn-primary">Sign Up</VButton>
-                    <div class="text-center font-extrabold flex justify-center">
-                        <span>If you already have an account</span>
-                        <NuxtLink to="/auth/login" class="ml-1 text-error-content hover:underline">Sign in</NuxtLink>
-                    </div>
-                </VForm>
             </div>
         </div>
-    </div>
+    </NuxtLayout>
 </template>

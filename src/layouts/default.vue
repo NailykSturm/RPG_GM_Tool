@@ -1,16 +1,24 @@
 <script lang="ts" setup>
 import Header from '~/components/Header.vue';
+import Footer from '~/components/Footer.vue';
 
 const { theme } = setTheme();
 </script>
 
 <template>
-    <div :data-theme="theme">
-        <div class="h-screen w-screen">
-            <Header class="mb-4" />
-            <main class="flex flex-wrap items-center justify-center">
-                <slot />
-            </main>
+    <div class="max-h-screen h-screen max-w-screen x-screen" :data-theme="theme">
+        <div class="h-5/6">
+            <div>
+                <Header class="h-1/6 w-full" />
+            </div>
+            <div class="container h-full">
+                <main class="h-full">
+                    <slot class="h-full" />
+                </main>
+            </div>
+        </div>
+        <div>
+            <Footer class="absolute inset-x-0 bottom-0 h-1/6" />
         </div>
     </div>
 </template>
