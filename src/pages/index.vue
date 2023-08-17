@@ -13,12 +13,12 @@
                             <h2>What is it ?</h2>
                         </div>
                         <div class="mb-5">
-                            This tool is a web application where a GM can manage multiles games.
+                            This tool is a web application where a GM can manage multiples games.
                             <br>
                             For managing a game, the GM can
                             <ul>
                                 <li>Create a game</li>
-                                <li>Add all NPC and monsters that he need, with theirs characteristics.</li>
+                                <li>Add all NPC and monsters that he needs, with theirs characteristics.</li>
                                 <li>Create an event-map for the script of his game.</li>
                                 <li>Keep notes from each event that the players have done or are currently inside.</li>
                             </ul>

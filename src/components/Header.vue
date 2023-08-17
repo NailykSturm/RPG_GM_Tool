@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import VButton from '~/components/ui/Button.vue';
 
-const { user, loggedIn, logout } = useAuth();
+const { loggedIn, logout } = useAuth();
 const { changeTheme, list_themes } = useTheme();
 </script>
 

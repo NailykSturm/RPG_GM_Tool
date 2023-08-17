@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import VButton from '~~/src/components/ui/Button.vue';
+import VButton from '~/components/ui/Button.vue';
+
 const { listGames, refreshListGames } = useGameRouter();
 
 definePageMeta({
@@ -20,12 +21,12 @@ onBeforeMount(() => {
                     <h1 class="flex items-center justify-center inset-y-0 top-0">List of your games</h1>
                     <div class="flex items-center justify-around">
                         <VButton class="btn btn-info">Add game</VButton>
-                        <VButton class="btn btn-error">Delete game</VButton>
                     </div>
                     <div class="overflow-y-auto">
                         <div class="h-max flex items-center justify-around ">
-                            <ul class="menu">
-                                <li v-for="game in listGames">
+                            <ul>
+                                <li v-for="game in listGames" class="flex flex-wrap items-center mt-4">
+                                    <VButton class="btn btn-error mr-2">Delete game</VButton>
                                     <NuxtLink :to="`/games/${game.name}`">{{ game.name }}</NuxtLink>
                                 </li>
                             </ul>
@@ -38,11 +39,11 @@ onBeforeMount(() => {
                     <div class="card bg-base-300 shadow-lg">
                         <div class="card-body">
                             <div class="card-actions">
-                                <h2>Welcomme to your game's managment page</h2>
+                                <h2>Welcome to your game's management page</h2>
                             </div>
                             <div class="mb-5">
                                 Here you can found the list of your games that you alerady created.<br>
-                                You can also create or delete other games for managing multiple games.
+                                You can also create or delete others games for managing multiple games.
                             </div>
                         </div>
                     </div>
