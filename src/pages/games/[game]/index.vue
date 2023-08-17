@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { Ref } from 'nuxt/dist/app/compat/capi';
+
 import VButton from '~/components/ui/Button.vue';
+import GameListMenu from '~/components/GameList.vue';
 
 const { listNameSubpages, subpage, noSubpage, switchSubpage, isSupbage } = useGameRouter();
 const { theme } = useTheme();
-const { listGames } = useGameRouter();
 
 const displayListGame: Ref<boolean> = useState('display-list-game-in-game', () => false)
 
@@ -26,23 +27,8 @@ const togleListDisplay = () => {
     <div :data-theme="theme">
         <NuxtLayout>
             <div class="flex w-full h-full">
-                <div class="bg-secondary inset-y-0 left-0 w-1/4 h-full" v-if="displayListGame">
-                    <div class="">
-                        <h1 class="flex items-center justify-center inset-y-0 top-0">List of your games</h1>
-                        <div class="flex items-center justify-around">
-                            <VButton class="btn btn-info">Add game</VButton>
-                        </div>
-                        <div class="overflow-y-auto">
-                            <div class="h-max flex items-center justify-around ">
-                                <ul>
-                                    <li v-for="game in listGames" class="flex flex-wrap items-center mt-4">
-                                        <VButton class="btn btn-error mr-2">Delete game</VButton>
-                                        <NuxtLink :to="`/games/${game.name}`">{{ game.name }}</NuxtLink>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                <div  class="h-hull w-1/4" v-if="displayListGame">
+                    <GameListMenu  />
                 </div>
                 <div class="h-full w-full">
                     <div class="bg-error flex">
