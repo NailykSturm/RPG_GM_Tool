@@ -16,8 +16,8 @@ onBeforeMount(() => {
 <template>
     <NuxtLayout>
         <div class="flex h-full">
-            <GameListMenu  />
-            <div class="bg-warning w-full flex items-center justify-center">
+            <GameListMenu wsize="1/6" />
+            <div class="w-full flex items-center justify-center">
                 <div class="flex items-center justify-center">
                     <div class="card bg-base-300 shadow-lg">
                         <div class="card-body">

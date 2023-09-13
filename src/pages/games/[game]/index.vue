@@ -22,14 +22,14 @@ const togleListDisplay = () => {
 
 <template>
     <NuxtLayout>
-        <div class="bg-warning h-full">
+        <div class="h-full">
             <div class="drawer h-full">
                 <input id="my-drawer" type="checkbox" class="drawer-toggle" />
                 <div class="drawer-content flex flex-col h-full">
-                    <nav class="bg-error navbar">
+                    <nav class="bg-base-200 navbar">
                         <div class="navbar-start">
                             <label for="my-drawer" class="btn btn-outline btn-info">
-                                <svg class=" h-8 w-8 text-red-500" width="24" height="24" viewBox="0 0 24 24"
+                                <svg class=" h-8 w-8" width="24" height="24" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                     stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" />
@@ -39,7 +39,7 @@ const togleListDisplay = () => {
                                 </svg>
                             </label>
                         </div>
-                        <div class="navbar-center tabs">
+                        <div class="navbar-center tabs text-primary">
                             <a class="tab tab-bordered"
                                 :class="`${isSupbage(listNameSubpages.bestiary) ? 'tab-active' : ''}`"
                                 @click="switchSubpage(listNameSubpages.bestiary)">bestiary</a>
@@ -50,7 +50,7 @@ const togleListDisplay = () => {
                                 @click="switchSubpage(listNameSubpages.notebook)">notebook</a>
                         </div>
                     </nav>
-                    <div class="bg-accent grow flex items-center justify-center overflow-auto">
+                    <div class="grow flex items-center justify-center overflow-auto">
                         <subpage />
                     </div>
                 </div>

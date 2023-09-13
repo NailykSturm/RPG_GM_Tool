@@ -4,10 +4,10 @@ import { IGame } from '~~/src/types/IGame';
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     let listGames = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 20; i++) {
         const element: IGame = {
             _id: i,
-            name: `RPG${i + 1}`
+            name: `RPG_${i + 1}`
         };
         listGames.push(element);
     }

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import VButton from '~/components/ui/Button.vue';
-
 const { loggedIn, logout } = useAuth();
 const { changeTheme, list_themes } = useTheme();
 </script>
@@ -24,7 +22,7 @@ const { changeTheme, list_themes } = useTheme();
             </div>
             <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
                 <template v-if="loggedIn">
-                    <VButton class="btn-error" @click="logout">Logout</VButton>
+                    <button class="btn btn-error" @click="logout">Logout</button>
                 </template>
                 <template v-else>
                     <NuxtLink class="btn btn-success" to="/auth/login">Login</NuxtLink>

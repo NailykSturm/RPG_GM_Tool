@@ -7,7 +7,7 @@ const { theme } = useTheme();
 </script>
 
 <template>
-    <div class="flex flex-col h-screen" :data-theme="theme">
+    <div class="flex flex-col h-screen bg-base-100" :data-theme="theme">
         <Header />
         <main class="grow">
             <slot />
