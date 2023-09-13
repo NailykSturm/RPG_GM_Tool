@@ -15,10 +15,10 @@ export default defineEventHandler(async (event) => {
         const validatePass = await user.validatePassword(password);
         if (!validatePass) return createError({ statusCode: 400, statusMessage: 'Your password is wrong' });
 
-        const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, { expiresIn: process.env.NODE_END === 'production' ? '1d' : '7d' });
 
         setCookie(event, 'token', token, {
-            maxAge: 60 * 60 * 8,
+            maxAge: process.env.NODE_END === 'production' ? 60 * 60 * 8 : 60 * 60 * 24 * 7,
             httpOnly: true,
             path: '/',
             sameSite: true,

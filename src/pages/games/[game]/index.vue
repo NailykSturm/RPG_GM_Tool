@@ -27,8 +27,8 @@ const togleListDisplay = () => {
     <div :data-theme="theme">
         <NuxtLayout>
             <div class="flex w-full h-full">
-                <div  class="h-hull w-1/4" v-if="displayListGame">
-                    <GameListMenu  />
+                <div class="h-hull w-1/4" v-if="displayListGame">
+                    <GameListMenu />
                 </div>
                 <div class="h-full w-full">
                     <div class="bg-error flex">
@@ -51,14 +51,15 @@ const togleListDisplay = () => {
                             <a class="tab tab-bordered"
                                 :class="`${isSupbage(listNameSubpages.bestiary) ? 'tab-active' : ''}`"
                                 @click="switchSubpage(listNameSubpages.bestiary)">bestiary</a>
+                            <a class="tab tab-bordered" 
+                                :class="`${isSupbage(listNameSubpages.script) ? 'tab-active' : ''}`"
+                                @click="switchSubpage(listNameSubpages.script)">Script</a>
                             <a class="tab tab-bordered"
                                 :class="`${isSupbage(listNameSubpages.notebook) ? 'tab-active' : ''}`"
                                 @click="switchSubpage(listNameSubpages.notebook)">notebook</a>
-                            <a class="tab tab-bordered" :class="`${isSupbage(listNameSubpages.script) ? 'tab-active' : ''}`"
-                                @click="switchSubpage(listNameSubpages.script)">Script</a>
                         </div>
                     </div>
-                    <div class="bg-warning h-full w-full flex items-center justify-center">
+                    <div class="bg-accent h-full w-full flex items-center justify-center">
                         <subpage />
                     </div>
                 </div>

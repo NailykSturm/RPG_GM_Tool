@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
+import AddGameModal from '~/components/modals/AddGameModal.vue';
+import DeleteGameModal from '~/components/modals/DeleteGameModal.vue';
+import Notif from '~/components/Notif.vue';
 
 const { theme } = useTheme();
 </script>
@@ -17,6 +20,9 @@ const { theme } = useTheme();
                 </main>
             </div>
         </div>
+        <AddGameModal />
+        <DeleteGameModal />
+        <Notif />
         <!-- <div>
             <Footer class="absolute inset-x-0 bottom-0 h-1/6" />
         </div> -->

@@ -1,11 +1,11 @@
 import { Ref, ShallowRef } from "nuxt/dist/app/compat/capi"
 
-import { IGame } from "../types/IGame";
-import auth from "./useAuth";
+import { IGame } from "~/types/IGame";
+import auth from "~/composables/useAuth";
 
-import bestiaryVue from "../components/pages/bestiary.vue";
-import scriptVue from "../components/pages/script.vue";
-import notebookVue from "../components/pages/notebook.vue";
+import bestiaryVue from "~/components/pages/bestiary.vue";
+import scriptVue from "~/components/pages/script.vue";
+import notebookVue from "~/components/pages/notebook.vue";
 
 enum listNameSubpages {'bestiary', 'notebook' , 'script'};
 const displayNamesSubpages = ['Bestiary', 'Notebook' , 'Script'];
