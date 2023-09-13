@@ -1,4 +1,3 @@
-//!! WARNING => keep that list sync with the list used in tailwind.config.js !!
 const themes = [
     "light",
     "dark",

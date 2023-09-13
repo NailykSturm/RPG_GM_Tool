@@ -42,7 +42,7 @@ export const daisyui = {
     styled: true,
     utils: true,
     prefix: "",
-    logs: true,
+    logs: false,
 };
 export const theme = {
     extend: {},

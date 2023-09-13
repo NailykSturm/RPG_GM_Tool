@@ -1,7 +1,6 @@
 <script setup lang="ts">
-const { theme } = useTheme();
 </script>
 
-<template :data-theme="theme">
+<template>
     <NuxtPage :key="$route.fullPath" />
 </template>

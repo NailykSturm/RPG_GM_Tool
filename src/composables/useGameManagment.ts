@@ -1,9 +1,8 @@
 import { H3Error } from 'h3';
 
-const { user } = useAuth();
-const notif = useNotif();
-
 export default function () {
+    const { user } = useAuth();
+    const notif = useNotif();
 
     const newGame = async (newGameName: string) => {
         try {

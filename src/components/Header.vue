@@ -6,54 +6,30 @@ const { changeTheme, list_themes } = useTheme();
 </script>
 
 <template>
-    <nav class="bg-primary px-4 flex flex-wrap items-center">
-        <div class="container flex flex-wrap justify-between ">
-            <NuxtLink to="/" class="flex">
-                <span class="self-center text-3xl font-semibold text-primary-content">
-                    RPG Game master tool manager</span>
-            </NuxtLink>
-            <div class="flex items-center justify-center" v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
-                <ul class="flex flex-row align-baseline py-4 gap-x-4 font-medium">
-                    <li>
-                        <NuxtLink to="/" class="nav-link" aria-current="page">Home</NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink to="/games" class="nav-link">Games Managment</NuxtLink>
-                    </li>
-                    <li class="dropdown dropdown-end">
-                        <label tabindex="0">Theme</label>
-                        <div class="dropdown-content h-64 overflow-y-auto overflow-x-hidden z-[1]">
-                            <ul tabindex="0" class="menu p-2 shadow bg-base-100 rounded-box mt-4">
-                                <li v-for="theme in list_themes">
-                                    <a @click="changeTheme(theme)">{{ theme }}</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-                <div class="flex gap-x-2 ml-5">
-                    <template v-if="loggedIn">
-                        <VButton class="btn-error" @click="logout">Logout</VButton>
-                    </template>
-                    <template v-else>
-                        <NuxtLink class="btn btn-success" to="/auth/login">Login</NuxtLink>
-                    </template>
-                </div>
-            </div>
-            <div v-else class="flex items-center justify-center">
-                <ul class="flex flex-row align-baseline py-4 gap-x-4 font-medium">
-                    <li class="dropdown dropdown-end">
-                        <label tabindex="0">Theme</label>
-                        <div class="dropdown-content h-64 overflow-y-auto z-[1]">
-                            <ul tabindex="0" class="menu p-2 shadow bg-base-100 rounded-box w-32 mt-4">
-                                <li v-for="theme in list_themes">
-                                    <a @click="changeTheme(theme)">{{ theme }}</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+    <nav class="bg-primary navbar">
+        <NuxtLink to="/" class="navbar-start">
+            <span class="text-3xl font-semibold text-primary-content">
+                RPG Game master tool manager</span>
+        </NuxtLink>
+        <div class="navbar-end gap-2">
+            <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
+                <NuxtLink to="/" class="btn btn-ghost" aria-current="page">Home</NuxtLink>
+                <NuxtLink to="/games" class="btn btn-ghost">Games Managment</NuxtLink>
+            </template>
+            <div class="dropdown dropdown-end">
+                <label tabindex="0" class="btn btn-ghost rounded-btn">Theme</label>
+                <ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4">
+                    <li v-for="theme in list_themes" @click="changeTheme(theme)"><a>{{ theme }}</a></li>
                 </ul>
             </div>
+            <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
+                <template v-if="loggedIn">
+                    <VButton class="btn-error" @click="logout">Logout</VButton>
+                </template>
+                <template v-else>
+                    <NuxtLink class="btn btn-success" to="/auth/login">Login</NuxtLink>
+                </template>
+            </template>
         </div>
     </nav>
 </template>
