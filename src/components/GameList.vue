@@ -5,13 +5,14 @@ import { IGame } from '~/types/IGame';
 import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 
 const { listGames } = useGameRouter();
-const { toDeleteGame } = useModal();
 const { newGame } = useGameManagment();
 const clickedGame: Ref<IGame> = useState('clicked-game-name', () => ({ _id: '', name: '' }))
 
 const handleDeleteGame: Function = (game: IGame) => {
-    toDeleteGame.value = game;
-    clickedGame.value = game
+    clickedGame.value = game;
+}
+const handleUpdateGame: Function = (game: IGame) => {
+    clickedGame.value = game;
 }
 
 const handleConfirmCreate: Function = (newGameName: string) => {
@@ -23,7 +24,7 @@ const handleConfirmDelete: Function = () => {
     console.log('TODO : Ask the API for delete the game ', clickedGame.value);
 }
 const handleConfirmUpdate: Function = (newGameName: string) => {
-    console.log('TODO : Ask the API to update the game ', newGameName)
+    console.log('TODO : Ask the API to update the game ', newGameName);
 }
 
 defineProps({
