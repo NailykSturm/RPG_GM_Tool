@@ -4,8 +4,7 @@ import { Ref } from 'nuxt/dist/app/compat/capi';
 import { IGame } from '~/types/IGame';
 import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 
-const { listGames } = useGameRouter();
-const { newGame } = useGameManagment();
+const { listGames, newGame } = useGameManagment();
 const clickedGame: Ref<IGame> = useState('clicked-game-name', () => ({ _id: '', name: '' }))
 
 const handleDeleteGame: Function = (game: IGame) => {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import GameListMenu from '~/components/GameList.vue';
 
-const { listGames, refreshListGames } = useGameRouter();
+const { listGames, refreshListGames } = useGameManagment();
 
 definePageMeta({
     middleware: 'user-only',

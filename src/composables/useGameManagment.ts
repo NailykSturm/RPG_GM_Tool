@@ -1,14 +1,30 @@
-import { H3Error } from 'h3';
+import { Ref } from "nuxt/dist/app/compat/capi"
+
+import { IGame } from "~/types/IGame";
 
 export default function () {
     const { user } = useAuth();
     const notif = useNotif();
+    
+    const listGames: Ref<IGame[]> = useState('games-list', () => []);
+
+    const refreshListGames = async () => {
+        try {
+            const data: IGame[] = await $fetch('/api/listGame', {
+                method: 'POST',
+                body: JSON.stringify({ user: user }),
+            });
+            listGames.value = data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const newGame = async (newGameName: string) => {
         try {
             const body = {
                 user_id: user.value._id,
-                // newGameName: newGameName
+                newGameName: newGameName
             };
             console.log(JSON.stringify(body));
             $fetch('/api/game/new', {
@@ -28,7 +44,7 @@ export default function () {
                     const newNotif = new Notif({
                         type: NotifType.warning,
                         message: `${errMessage}`,
-                        title: `Error while creating a new game (${err.response.status})`,
+                        title: `Error while creating a new game (Error code : ${err.response.status})`,
                         timeout: 20 * 1000,
                         visibleInProd: false
                     });
@@ -44,5 +60,5 @@ export default function () {
     };
 
 
-    return { newGame };
+    return { listGames, refreshListGames, newGame };
 }

@@ -1,8 +1,5 @@
 import { Ref, ShallowRef } from "nuxt/dist/app/compat/capi"
 
-import { IGame } from "~/types/IGame";
-import auth from "~/composables/useAuth";
-
 import bestiaryVue from "~/components/pages/bestiary.vue";
 import scriptVue from "~/components/pages/script.vue";
 import notebookVue from "~/components/pages/notebook.vue";
@@ -13,20 +10,7 @@ const displayNamesSubpages = ['Bestiary', 'Notebook' , 'Script'];
 export default () => {
     const subpage: ShallowRef = shallowRef(null);
     const subpageName: Ref<listNameSubpages | undefined> = useState('name_subpage', () => undefined)
-    const listGames: Ref<IGame[]> = useState('games-list', () => []);
-    const noSubpage: Ref<boolean> = useState('have-subpage', () => subpageName.value === undefined);
-
-    const refreshListGames = async () => {
-        try {
-            const data: IGame[] = await $fetch('/api/listGame', {
-                method: 'POST',
-                body: JSON.stringify({ user: auth().user }),
-            });
-            listGames.value = data;
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const noSubpage: Ref<boolean> = useState('have-subpage', () => subpageName.value === undefined); 
 
     const switchSubpage = (new_subpage: listNameSubpages) => {
         switch (new_subpage) {
@@ -53,5 +37,5 @@ export default () => {
         }
     }
 
-    return { listNameSubpages ,subpage, listGames, noSubpage, refreshListGames, switchSubpage , isSupbage};
+    return { listNameSubpages ,subpage, noSubpage, switchSubpage , isSupbage};
 }

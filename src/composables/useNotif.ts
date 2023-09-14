@@ -32,7 +32,7 @@ export class Notif {
         this.timeout = config.timeout || 5000;
         this.visibleInProd = config.visibleInProd || true;
 
-        console.log(`New notification created\ntitle: ${this.title}\nmessage: ${this.message}\ntype: ${this.type}\ntimeout: ${this.timeout}\nvisibleInProd: ${this.visibleInProd}`);
+        // console.log(`New notification created\ntitle: ${this.title}\nmessage: ${this.message}\ntype: ${this.type}\ntimeout: ${this.timeout}\nvisibleInProd: ${this.visibleInProd}`);
     }
 
     displayNotif() {
