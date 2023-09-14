@@ -11,7 +11,7 @@ export const NotifType = {
 
 interface NotifConfig {
     type: string;
-    message: string;
+    message?: string;
     title: string;
     timeout?: number;
     visibleInProd?: boolean;
@@ -27,7 +27,7 @@ export class Notif {
 
     constructor(config : NotifConfig){
         this.type = config.type;
-        this.message = config.message ;
+        this.message = config.message || '' ;
         this.title = config.title;
         this.timeout = config.timeout || 5000;
         this.visibleInProd = config.visibleInProd || true;

@@ -9,8 +9,9 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
 
     const { email, password } = await validateBody(event, registerSchema);
+    const mail = email.toLowerCase();
 
-    const user = await userModal.findOne({ email });
+    const user = await userModal.findOne({ email: mail });
     if (user) {
         const validatePass = await user.validatePassword(password);
         if (!validatePass) return createError({ statusCode: 400, statusMessage: 'Your password is wrong' });

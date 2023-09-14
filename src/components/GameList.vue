@@ -1,28 +1,49 @@
 <script setup lang="ts">
-import { Ref } from 'nuxt/dist/app/compat/capi';
-
-import { IGame } from '~/types/IGame';
+import { IGameInfo, emptyGame } from '~/types/IGame';
 import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 
 const { listGames, newGame } = useGameManagment();
-const clickedGame: Ref<IGame> = useState('clicked-game-name', () => ({ _id: '', name: '' }))
+const { modalParams } = useModalParams();
 
-const handleDeleteGame: Function = (game: IGame) => {
-    clickedGame.value = game;
+const handleCreateGame: Function = () => {
+    modalParams.value = {
+        game: emptyGame,
+        title: "What's the name of your new game ?",
+        confirmButtonText: "create",
+        displayFields: true,
+        handleConfirm: handleConfirmCreate,
+    }
 }
-const handleUpdateGame: Function = (game: IGame) => {
-    clickedGame.value = game;
+const handleDeleteGame: Function = (game: IGameInfo) => {
+    modalParams.value = {
+        game: { ...game },
+        title: `Are you sure you want to delete the game ${game.name} ?`,
+        confirmButtonText: "delete",
+        displayFields: false,
+        handleConfirm: handleConfirmDelete,
+    }
+}
+const handleUpdateGame: Function = (game: IGameInfo) => {
+    modalParams.value = {
+        game: { ...game },
+        title: `How do you want to rename the game ${game.name} ?`,
+        confirmButtonText: "update",
+        displayFields: true,
+        handleConfirm: handleConfirmUpdate,
+    }
 }
 
-const handleConfirmCreate: Function = (newGameName: string) => {
-    if (newGameName === '') return;
-    console.log(`WIP : Ask the API to create the new game : ${newGameName}`);
+const handleConfirmCreate: Function = () => {
+    const newGameName = modalParams.value.game;
+    console.log(`WIP : Ask the API to create the new game : ${newGameName.name}`);
     newGame(newGameName);
 }
 const handleConfirmDelete: Function = () => {
-    console.log('TODO : Ask the API for delete the game ', clickedGame.value);
+    const gameToDelete = modalParams.value.game;
+    console.log('TODO : Ask the API for delete the game ', gameToDelete);
 }
-const handleConfirmUpdate: Function = (newGameName: string) => {
+const handleConfirmUpdate: Function = () => {
+    const newGameName = modalParams.value.game.name;
     console.log('TODO : Ask the API to update the game ', newGameName);
 }
 
@@ -38,7 +59,7 @@ defineProps({
     <div class="bg-base-200 flex flex-col h-full" v-bind:class="wsize">
         <h1 class="flex text-xl items-center justify-center mt-2">List of your games</h1>
         <div class="flex items-center justify-around mb-5">
-            <button class="btn btn-info" onclick="add_game_modal.showModal()">Add game</button>
+            <button class="btn btn-info" onclick="add_game_modal.showModal()" @click="handleCreateGame()">Add game</button>
         </div>
         <div class="flex" style="max-height: 75vh;">
             <ul class="grow overflow-y-auto">
@@ -56,7 +77,7 @@ defineProps({
                         </svg>
                     </button>
                     <button class="btn btn-warning mr-2" onclick="update_game_modal.showModal()"
-                        @click="handleDeleteGame(game)">
+                        @click="handleUpdateGame(game)">
                         <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" />
@@ -69,13 +90,7 @@ defineProps({
             </ul>
         </div>
     </div>
-    <ManageGameModal id-modal="add_game_modal" title="You're creating a new game" confirm-text="create"
-        :display-field="true" v-bind:handle-confirm="handleConfirmCreate" />
-    <ManageGameModal id-modal="delete_game_modal"
-        v-bind:title="`Are you sure you whant to delete the game ${clickedGame?.name} ?`" confirm-text="delete"
-        :display-field="false" v-bind:handle-confirm="handleConfirmDelete" v-bind:id-game="clickedGame?._id"
-        v-bind:game-name="clickedGame?.name" />
-    <ManageGameModal id-modal="update_game_modal" v-bind:title="`You're change the name of the game ${clickedGame?.name} ?`"
-        confirm-text="delete" :display-field="true" v-bind:handle-confirm="handleConfirmUpdate"
-        v-bind:id-game="clickedGame?._id" v-bind:game-name="clickedGame?.name" />
+    <ManageGameModal id-modal="add_game_modal" />
+    <ManageGameModal id-modal="delete_game_modal" />
+    <ManageGameModal id-modal="update_game_modal" />
 </template>

@@ -1,7 +1,15 @@
-export interface IUser {
-    _id: number;
+import { ObjectId } from 'mongoose';
+import { IBestiary, IGameDetails } from './IGame';
+
+export interface IUserInfo {
+    _id: ObjectId;
     email: string;
     password: string;
 }
 
-export type UserWithoutPassword = Omit<IUser, 'password'>;
+export interface IUserComplete extends IUserInfo {
+    games: IGameDetails[];
+    bestiaries: IBestiary[];    
+}
+
+export type UserWithoutPassword = Omit<IUserInfo, 'password'>;

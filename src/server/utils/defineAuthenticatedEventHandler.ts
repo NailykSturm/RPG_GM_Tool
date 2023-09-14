@@ -1,9 +1,9 @@
 import { CompatibilityEvent }  from 'h3';
 
-import { IUser } from '~/types/IUser';
+import { IUserInfo } from '~/types/IUser';
 import getAuth from './getAuth';
 
-export function defineAuthenticatedEventHandler<T>(handler: (event: CompatibilityEvent, user: IUser) => T | Promise<T>) {
+export function defineAuthenticatedEventHandler<T>(handler: (event: CompatibilityEvent, user: IUserInfo) => T | Promise<T>) {
     return defineEventHandler<T>(async (event) => {
         try {
             const user = await getAuth(event);

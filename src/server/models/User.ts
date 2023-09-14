@@ -1,16 +1,19 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import type { IUser } from '~~/src/types/IUser';
+import type { IUserComplete } from '~~/src/types/IUser';
+import { BestiarySchema, GameSchema } from '~~/src/types/IGame';
 
-interface IUserDocument extends IUser, Document {
+interface IUserDocument extends IUserComplete, Document {
     validatePassword: (data: string) => Promise<boolean>;
 }
 
-const UserSchema: mongoose.Schema = new mongoose.Schema<IUser>(
+const UserSchema: mongoose.Schema = new mongoose.Schema<IUserComplete>(
     {
         email: { type: String, requied: true },
         password: { type: String, requied: true },
+        games: { type: [GameSchema], default: []},
+        bestiaries: { type: [BestiarySchema], default: []}
     },
     { timestamps: true }
 );
