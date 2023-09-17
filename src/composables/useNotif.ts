@@ -1,8 +1,6 @@
 import { Ref } from "nuxt/dist/app/compat/capi";
 
 export const NotifType = {
-    // 'primary': 'primary',
-    // 'secondary': 'secondary',
     'success': 'success',
     'info': 'info',
     'warning': 'warning',
@@ -41,10 +39,10 @@ export class Notif {
             if ((process.env.NODE_ENV === 'production' && !this.visibleInProd)) {
                 resolve('Notif not displayed in production');
             }
-            console.log('Notif displayed');
+            // console.log('Notif displayed');
             setTimeout(() => {
                 this.display = false;
-                console.log(`Notif removed`);
+                // console.log(`Notif removed`);
                 resolve('Notification sucessfully displayed');
             }, this.timeout);
         });

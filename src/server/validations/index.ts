@@ -10,8 +10,16 @@ export const loginSchema = Type.Object({
     password: Type.String(),
 });
 
-export const newGameSchema = Type.Object({
-    newGameUniverse: Type.String(),
-    newGameName: Type.String(),
+export const gameInfoSchema = Type.Object({
+    gameUniverse: Type.String(),
+    gameName: Type.String(),
+    user_id: Type.String(),
+});
+
+export const gameInfoUpdateSchema = Type.Object({
+    gameUniverse: Type.String(),
+    gameName: Type.String(),
+    old_name: Type.String(),
+    old_universe: Type.String(),
     user_id: Type.String(),
 });

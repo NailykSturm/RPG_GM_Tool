@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Nitro } from 'nitropack';
+import {log, logLv} from '~/server/utils/log';
 
 export default async (_nitroApp: Nitro) => {
     const config = useRuntimeConfig();
@@ -10,6 +11,6 @@ export default async (_nitroApp: Nitro) => {
         .connect(config.MONGO_URI, {
             dbName: config.MONGO_DB_NAME,
         })
-        .then((db) => console.log(`Connected to DB : ${db.connection.db.databaseName}`))
-        .catch((e) => console.log(e));
+        .then((db) => log(logLv.INFO, 'db/index', `Connected to the database ${db.connection.name}`))
+        .catch((e) => log(logLv.ERROR, 'db/index', `Error while connecting to database at ${config.MONGO_URI}: ${e}`));
 };

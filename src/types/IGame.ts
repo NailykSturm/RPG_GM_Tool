@@ -11,9 +11,11 @@ export interface IGameDetails extends IGameInfo {
 export interface IGameInfo {
     name: string;
     universe: string;
+    old_name: string;
+    old_universe: string;
 }
 
-export const emptyGame: IGameInfo = { name: '', universe: '' };
+export const emptyGame: IGameInfo = { name: '', universe: '', old_name: '', old_universe: '' };
 
 export enum EBestiaryFieldType {
     'Input',        // string : Field with free value 

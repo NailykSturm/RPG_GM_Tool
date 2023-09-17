@@ -1,3 +1,12 @@
+<script setup lang="ts">
+const notifs = useNotif()
+
+// notifs.addNotif(new Notif({type: NotifType.info, title: 'Welcome to the tool for help Game Master (GM) to manage their games', timeout:1000, visibleInProd: false}))
+// notifs.addNotif(new Notif({type: NotifType.error, title: 'Welcome to the tool for help Game Master (GM) to manage their games', timeout:1000, visibleInProd: false}))
+// notifs.addNotif(new Notif({type: NotifType.warning, title: 'Welcome to the tool for help Game Master (GM) to manage their games', timeout:1000, visibleInProd: false}))
+// notifs.addNotif(new Notif({type: NotifType.success, title: 'Welcome to the tool for help Game Master (GM) to manage their games', timeout:1000, visibleInProd: false}))
+</script>
+
 <template>
     <NuxtLayout>
         <div class="hero h-full">

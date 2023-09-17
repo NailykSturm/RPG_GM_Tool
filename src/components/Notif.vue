@@ -6,11 +6,15 @@ const notif = useNotif();
 
 <template>
     <div class="toast toast-bottom toast-end">
-        <div v-for="notification in notif.listNotifs.value">
-            <div class="alert block" v-bind:class="`alert-${notification.type}`" >
-                <h3 class="text-lg">{{ notification.title }}</h3>
+        <div v-for="notification in notif.listNotifs.value" class="block alert" v-bind:class="'alert-'+notification.type">
+            <h3 class="text-lg">{{ notification.title }}</h3>
+            <div>{{ notification.message }}</div>
+
+            <!-- <div class="alert alert-success block">
+                <div>{{ notification.title }}</div>
                 <div>{{ notification.message }}</div>
-            </div>
+                <div>{{ notification.type }}</div>
+            </div> -->
         </div>
     </div>
 </template>

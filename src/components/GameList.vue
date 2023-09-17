@@ -2,7 +2,7 @@
 import { IGameInfo, emptyGame } from '~/types/IGame';
 import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 
-const { listGames, newGame } = useGameManagment();
+const { listGames, newGame, updateGame, deleteGame } = useGameManagment();
 const { modalParams } = useModalParams();
 
 const handleCreateGame: Function = () => {
@@ -25,7 +25,7 @@ const handleDeleteGame: Function = (game: IGameInfo) => {
 }
 const handleUpdateGame: Function = (game: IGameInfo) => {
     modalParams.value = {
-        game: { ...game },
+        game: { ...game, old_name: game.name, old_universe: game.universe },
         title: `How do you want to rename the game ${game.name} ?`,
         confirmButtonText: "update",
         displayFields: true,
@@ -34,17 +34,16 @@ const handleUpdateGame: Function = (game: IGameInfo) => {
 }
 
 const handleConfirmCreate: Function = () => {
-    const newGameName = modalParams.value.game;
-    console.log(`WIP : Ask the API to create the new game : ${newGameName.name}`);
+    const newGameName: IGameInfo = { ...modalParams.value.game };
     newGame(newGameName);
 }
 const handleConfirmDelete: Function = () => {
-    const gameToDelete = modalParams.value.game;
-    console.log('TODO : Ask the API for delete the game ', gameToDelete);
+    const gameToDelete: IGameInfo = { ...modalParams.value.game };
+    deleteGame(gameToDelete);
 }
 const handleConfirmUpdate: Function = () => {
-    const newGameName = modalParams.value.game.name;
-    console.log('TODO : Ask the API to update the game ', newGameName);
+    const gameToUpdate: IGameInfo = { ...modalParams.value.game };
+    updateGame(gameToUpdate);
 }
 
 defineProps({
@@ -64,7 +63,20 @@ defineProps({
         <div class="flex" style="max-height: 75vh;">
             <ul class="grow overflow-y-auto">
                 <li v-for="game in listGames" class="grid grid-cols-5 mt-4 px-8">
-                    <button class="btn btn-error mr-2" onclick="delete_game_modal.showModal()"
+                    <NuxtLink class="btn btn-ghost btn-outline col-span-3" :to="`/games/${game.name}`">{{ game.name }}
+                    </NuxtLink>
+
+                    <button class="btn btn-warning ml-2" onclick="update_game_modal.showModal()"
+                        @click="handleUpdateGame(game)">
+                        <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" />
+                            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                            <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-error ml-2" onclick="delete_game_modal.showModal()"
                         @click="handleDeleteGame(game)">
                         <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -76,16 +88,6 @@ defineProps({
                             <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
                         </svg>
                     </button>
-                    <button class="btn btn-warning mr-2" onclick="update_game_modal.showModal()"
-                        @click="handleUpdateGame(game)">
-                        <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" />
-                            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
-                            <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
-                        </svg>
-                    </button>
-                    <NuxtLink class="btn btn-primary col-span-3" :to="`/games/${game.name}`">{{ game.name }}</NuxtLink>
                 </li>
             </ul>
         </div>

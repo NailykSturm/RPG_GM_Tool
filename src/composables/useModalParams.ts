@@ -19,7 +19,6 @@ export default function () {
     }));
 
     function resetModalParams() {
-        modalParams.value.game._id = '';
         modalParams.value.game.name = '';
         modalParams.value.game.universe = '';
     }

@@ -58,7 +58,7 @@ const themesOrg = {
         "halloween",
         "forest",
         "black",
-        "luxury",
+        // "luxury",
         "business",
         "night",
         "dracula",
