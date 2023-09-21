@@ -42,6 +42,8 @@ if (!folderExists) {
 const fileLatestLog = `${logFolder}latest.log`;
 if (!fs.existsSync(fileLatestLog)) {
     fs.writeFile(fileLatestLog, "", (err) => { if (err) throw err; });
+} else {
+    fs.truncate(fileLatestLog, 0, (err) => { if (err) throw err; });
 }
 
 const logLevel = logLv.FULL;
@@ -90,7 +92,7 @@ export function log(lv: ILog = logLv.INFO, caller: string, message: string, from
 
     const fileLog = `${logFolder}${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`;
 
-    fs.appendFile(fileLatestLog, `${logLine}\n`, { flag: 'a' }, (err) => { if (err) throw err; });
+    fs.appendFile(fileLatestLog, `${logLine.replaceAll('\n','')}\n`, { flag: 'a' }, (err) => { if (err) throw err; });
     fs.appendFile(fileLog, `${logLine}\n`, { flag: 'a' }, (err) => {
         if (err) {
             if (err.code === 'ENOENT') {
