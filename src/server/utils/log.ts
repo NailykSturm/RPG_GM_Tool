@@ -1,4 +1,8 @@
 import mongoose, { ObjectId } from "mongoose";
+import fs from 'fs';
+
+const config = useRuntimeConfig();
+const logFolder = '.' + config.app.baseURL + 'logs/';
 
 interface ILog {
     displayName: string;
@@ -23,14 +27,26 @@ export const logLv = {
     FULL: lvFull,
     DEBUG: lvDebug,
     WARN: lvWarn,
-    ERROR: lvError,
+    LOW: lvLow,
     INFO: lvInfo,
+    ERROR: lvError,
     CRITICAL: lvCritical,
     FATAL: lvFatal,
-    LOW: lvLow,
 };
 
+const folderExists = fs.existsSync(logFolder);
+if (!folderExists) {
+    fs.mkdir(logFolder, (err) => { if (err) throw err; });
+}
+
+const fileLatestLog = `${logFolder}latest.log`;
+if (!fs.existsSync(fileLatestLog)) {
+    fs.writeFile(fileLatestLog, "", (err) => { if (err) throw err; });
+}
+
 const logLevel = logLv.FULL;
+const servRestart = `${'='.repeat(10)} Server restarted ${'='.repeat(10)}`;
+log(logLv.NONE, 'log', servRestart);
 log(logLv.DEBUG, 'log', `Log level set to ${logLevel.displayName}`);
 
 // for (let lv in logLv){
@@ -67,7 +83,19 @@ log(logLv.DEBUG, 'log', `Log level set to ${logLevel.displayName}`);
  */
 export function log(lv: ILog = logLv.INFO, caller: string, message: string, from: string | ObjectId = 'server') {
     const date = new Date();
+    const logLine = `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}][${lv.displayName.padEnd(6)}]{${caller.padEnd(30)}}(${from instanceof mongoose.Types.ObjectId ? 'user:' + from : from}) ${message}`;
     if (logLevel.priority <= lv.priority && lv != logLv.NONE) {
-        console.log(`${lv.color}[${date.toLocaleDateString()} ${date.toLocaleTimeString()}][${lv.displayName.padEnd(6)}]{${caller.padEnd(30)}}(${from instanceof mongoose.Types.ObjectId ? 'user:' + from : from})\n${message}\x1b[0m`);
+        console.log(`${lv.color}${logLine}\x1b[0m`);
     }
+
+    const fileLog = `${logFolder}${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`;
+
+    fs.appendFile(fileLatestLog, `${logLine}\n`, { flag: 'a' }, (err) => { if (err) throw err; });
+    fs.appendFile(fileLog, `${logLine}\n`, { flag: 'a' }, (err) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                fs.mkdir(logFolder, (err) => { throw err; });
+            }
+        }
+    });
 }

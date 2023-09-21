@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
             return createError({ statusCode: 500, statusMessage: 'Internal Server error' });
         }
     } catch (error) {
-        log(logLv.INFO, 'POST API/auth/register', `Wrong parameters for register request : ${error}`);
+        log(logLv.INFO, 'POST API/auth/login', `Wrong parameters for register request : ${error}`);
         return error;
     }
 });

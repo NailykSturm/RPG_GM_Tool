@@ -4,6 +4,7 @@ import { gameInfoUpdateSchema } from '~/server/validations/index';
 import userModel from '~/server/models/User';
 import { log, logLv } from '~/server/utils/log';
 import { IAPIResponse } from '~/types/IAPI';
+import { IBestiary } from '~/types/IGame';
 
 export default defineEventHandler(async (event) => {
     try {
@@ -25,26 +26,80 @@ export default defineEventHandler(async (event) => {
                 }
             });
 
-            try {
-                await userModel.updateOne({ _id: user_id }, { $set: { games: user.games } }).exec();
-                if (nbGameUpdated == 0) {
-                    log(logLv.ERROR, 'POST API/game/update', `Game ${old_name} not found`, user._id);
-                    return createError({ statusCode: 402, statusMessage: 'game not found' });
-                }
-                else if (nbGameUpdated == 1) log(logLv.INFO, 'POST API/game/update', `Game ${gameName} updated`, user._id);
-                else log(logLv.WARN, 'POST API/game/update', `${nbGameUpdated} games updated | request : oldName=${old_name} oldUniverse=${old_universe} newName=${gameName} newUniverse=${gameUniverse}`, user._id);
-
-                return { statusCode: 200, statusMessage: `Game ${gameName} updated` } as IAPIResponse;
-
-            } catch (error) {
-                log(logLv.CRITICAL, 'POST API/game/update', `Cannot access DB to update game : ${error}`);
-                return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+            if (nbGameUpdated == 0) {
+                log(logLv.ERROR, 'POST API/game/update', `Game ${old_name} not found`, user._id);
+                return createError({ statusCode: 402, statusMessage: 'game not found' });
             }
+            else if (nbGameUpdated == 1) log(logLv.INFO, 'POST API/game/update', `Game ${gameName} updated`, user._id);
+            else log(logLv.WARN, 'POST API/game/update', `${nbGameUpdated} games updated | request : oldName=${old_name} oldUniverse=${old_universe} newName=${gameName} newUniverse=${gameUniverse}`, user._id);
+
+            let knownOldUniverse = user.bestiaries.find(bestiary => {
+                return bestiary.universe == old_universe;
+            });
+            let knownNewUniverse = user.bestiaries.find(bestiary => {
+                return bestiary.universe == gameUniverse;
+            });
+
+            if (!knownOldUniverse) {
+                if (!knownNewUniverse) {
+
+                    knownNewUniverse = { universe: gameUniverse, creatures: [] } as IBestiary;
+                    user.bestiaries.push(knownNewUniverse);
+                    try {
+                        await userModel.updateOne({ _id: user_id }, { $set: { bestiaries: user.bestiaries } }).exec();
+                    } catch (error) {
+                        log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to create bestiary (old & new universe unknown) : ${error}`);
+                        return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+                    }
+                } else {
+                    user.bestiaries.find(bestiary => {
+                        if (bestiary.universe == gameUniverse) {
+                            bestiary.creatures = knownNewUniverse.creatures;
+                        }
+                    });
+                    try {
+                        await userModel.updateOne({ _id: user_id }, { $set: { bestiaries: user.bestiaries } }).exec();
+                    } catch (error) {
+                        log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to merge new bestiary (old universe unknown) : ${error}`);
+                        return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+                    }
+                }
+            } else {
+                if (!knownNewUniverse) {
+                    user.bestiaries.find(bestiary => {
+                        if (bestiary.universe == old_universe) {
+                            bestiary.creatures = knownOldUniverse.creatures;
+                        }
+                    });
+                    try {
+                        await userModel.updateOne({ _id: user_id }, { $set: { bestiaries: user.bestiaries } }).exec();
+                    } catch (error) {
+                        log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to merge old bestiary (new universe unknown) : ${error}`);
+                        return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+                    }
+                } else {
+                    user.bestiaries.find(bestiary => {
+                        if (bestiary.universe == gameUniverse) {
+                            bestiary.creatures = []
+                            bestiary.creatures.push(...knownNewUniverse.creatures);
+                            bestiary.creatures.push(...knownOldUniverse.creatures);
+                        }
+                    });
+                    try {
+                        await userModel.updateOne({ _id: user_id }, { $set: { bestiaries: user.bestiaries } }).exec();
+                    } catch (error) {
+                        log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to merge bestiary (old & new universe known) : ${error}`);
+                        return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+                    }
+                }
+            }
+
+            return { statusCode: 200, statusMessage: `Game ${gameName} updated` } as IAPIResponse;
+
         } catch (error) {
             log(logLv.CRITICAL, 'POST API/game/update', `Cannot access DB to get user : ${error}`);
             return createError({ statusCode: 500, statusMessage: 'Internal server error' });
         }
-
     } catch (error) {
         log(logLv.INFO, 'POST API/game/update', `Wrong parameters for update game request : ${error.statusMessage}`);
         return error;

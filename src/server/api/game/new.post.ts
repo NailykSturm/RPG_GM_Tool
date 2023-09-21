@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 import userModel from '~/server/models/User';
 import { gameInfoSchema } from '~/server/validations/index';
 import { log, logLv } from '~/server/utils/log';
-import { IAPIResponse } from '~~/src/types/IAPI';
+import { IAPIResponse } from '~/types/IAPI';
+import { IBestiary } from '~/types/IGame';
 
 export default defineEventHandler(async (event) => {
     try {
@@ -25,13 +26,28 @@ export default defineEventHandler(async (event) => {
             });
 
             try {
-                userModel.updateOne({ _id: user_id }, { $push: { games: { name: gameName, universe: gameUniverse } } }).exec();
-                return { statusCode: 200, statusMessage: `New game ${gameName} added` } as IAPIResponse;
-
+                await userModel.updateOne({ _id: user_id }, { $push: { games: { name: gameName, universe: gameUniverse } } }).exec();
             } catch (error) {
-                log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to update user : ${error}`);
+                log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to create game : ${error}`);
                 return createError({ statusCode: 500, statusMessage: 'Internal server error' });
             }
+
+            let knownUniverse = user.bestiaries.find(bestiary => {
+                return bestiary.universe == gameUniverse;
+            });
+
+            if (!knownUniverse) {
+                knownUniverse = { universe: gameUniverse, creatures: [] } as IBestiary;
+                user.bestiaries.push(knownUniverse);
+                try {
+                    await userModel.updateOne({ _id: user_id }, { $set: { bestiaries: user.bestiaries } }).exec();
+                } catch (error) {
+                    log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to create bestiary : ${error}`);
+                    return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+                }
+            }
+            return { statusCode: 200, statusMessage: `New game ${gameName} added` } as IAPIResponse;
+
         } catch (error) {
             log(logLv.CRITICAL, 'POST API/game/new', `Cannot access DB to find user : ${error}`);
             return createError({ statusCode: 500, statusMessage: 'Internal server error' });
