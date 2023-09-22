@@ -25,6 +25,9 @@ export default defineEventHandler(async (event) => {
             listGames.sort((a, b) => {
                 return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
             });
+            listBestiaries.sort((a, b) => {
+                return a.universe.toLowerCase().localeCompare(b.universe.toLowerCase());
+            });
 
             listGames.forEach((game) => {
                 if (!listBestiaries.find(bestiary => bestiary.universe == game.universe)) {

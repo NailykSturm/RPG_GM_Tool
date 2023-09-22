@@ -5,6 +5,7 @@
 /* width */
 ::-webkit-scrollbar {
     @apply w-1;
+    @apply h-1;
 }
 /* button */
 ::-webkit-scrollbar-button {

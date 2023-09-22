@@ -39,10 +39,11 @@ onBeforeMount(() => {
                             <div class="collapse-title text-xl font-medium">
                                 {{ bestiary.universe }}
                             </div>
-                            <div class="collapse-content">
-                                <p>Used in : </p>
-                                <div class="grid grid-cols-4 gap-4">
-                                    <template v-for="game in listGames">
+                            <div class="collapse-content text-base">
+                                <p class="mb-3">Used by : </p>
+                                <div class="flex flex-nowrap max-w-xs overflow-x-auto pb-1 gap-2">
+                                    <div v-if="!listGames.find((game) => {return game.universe == bestiary.universe})" class="badge badge-error">No game using it</div>
+                                    <template v-else v-for="game in listGames">
                                         <div v-if="game.universe == bestiary.universe" class="badge badge-neutral">{{ game.name }}</div>
                                     </template>
                                 </div>
