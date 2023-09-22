@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 export interface IScript { }
 export interface INotebook { }
@@ -13,6 +13,7 @@ export interface IGameInfo {
     universe: string;
     old_name: string;
     old_universe: string;
+    display?: boolean;
 }
 
 export const emptyGame: IGameInfo = { name: '', universe: '', old_name: '', old_universe: '' };
@@ -38,6 +39,10 @@ export interface IBestiary {
 export interface IBestiaryInfo {
     universe: string,
     display: boolean,
+}
+export interface IListGamesBestiaries {
+    games: IGameInfo[],
+    bestiaries: IBestiaryInfo[],
 }
 
 export interface IBestiaryCreature {
@@ -68,7 +73,7 @@ export const GameSchema: mongoose.Schema = new mongoose.Schema<IGameDetails>(
         script: { type: Object, default: {} },
         notebook: { type: Object, default: {} },
     },
-    { timestamps: true }
+    { timestamps: true, _id: false }
 );
 export const BestiaryCreatureSchema: mongoose.Schema = new mongoose.Schema<IBestiaryCreature>(
     {
@@ -81,14 +86,14 @@ export const BestiaryCreatureSchema: mongoose.Schema = new mongoose.Schema<IBest
             step: { type: Number, requied: false },
             options: { type: [String], requied: false },
             maxLenght: { type: Number, requied: false },
-        }, { timestamps: true }),
+        }, { timestamps: true, _id: false }),
     },
-    { timestamps: true }
+    { timestamps: true, _id: false }
 );
 export const BestiarySchema: mongoose.Schema = new mongoose.Schema<IBestiary>(
     {
         universe: { type: String, requied: true },
         creatures: BestiaryCreatureSchema,
     },
-    { timestamps: true }
+    { timestamps: true, _id: false }
 );

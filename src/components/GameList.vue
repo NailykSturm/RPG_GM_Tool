@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { IGameInfo, emptyGame } from '~/types/IGame';
 import ManageGameModal from '~/components/modals/ManageGameModal.vue';
+import { Ref } from 'nuxt/dist/app/compat/capi';
 
 const { listGames, newGame, updateGame, deleteGame } = useGameManagment();
 const { modalParams } = useModalParams();
 
+const searchGameInput: Ref<string> = ref('');
 const handleCreateGame: Function = () => {
     modalParams.value = {
         game: emptyGame,
@@ -46,6 +48,17 @@ const handleConfirmUpdate: Function = () => {
     updateGame(gameToUpdate);
 }
 
+function refreshOptions() {
+    listGames.value.map((game) => {
+        if (game.name.toLowerCase().includes(searchGameInput.value.toLowerCase())) {
+            game.display = true;
+        } else {
+            game.display = false;
+        }
+        return game;
+    });
+}
+
 defineProps({
     wsize: {
         type: String,
@@ -60,9 +73,14 @@ defineProps({
         <div class="flex items-center justify-around mb-5">
             <button class="btn btn-info" onclick="add_game_modal.showModal()" @click="handleCreateGame()">Add game</button>
         </div>
+        <div class="px-5">
+            <input class="input input-bordered w-full" type="text" placeholder="Type for search" @input="refreshOptions"
+                v-model="searchGameInput">
+        </div>
         <div class="flex" style="max-height: 75vh;">
             <ul class="grow overflow-y-auto">
-                <li v-for="game in listGames" class="grid grid-cols-5 mt-4 px-8">
+                <template v-for="game in listGames">
+                <li v-if="game.display" class="grid grid-cols-5 mt-4 px-8">
                     <NuxtLink class="btn btn-ghost btn-outline col-span-3" :to="`/games/${game.name}`">{{ game.name }}
                     </NuxtLink>
 
@@ -89,6 +107,7 @@ defineProps({
                         </svg>
                     </button>
                 </li>
+                </template>
             </ul>
         </div>
     </div>

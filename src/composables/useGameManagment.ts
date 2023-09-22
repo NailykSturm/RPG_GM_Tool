@@ -1,6 +1,6 @@
 import { Ref } from "nuxt/dist/app/compat/capi"
 
-import { IGameInfo, IBestiaryInfo } from "~/types/IGame";
+import { IListGamesBestiaries, IGameInfo, IBestiaryInfo } from "~/types/IGame";
 import { IAPIResponse } from "../types/IAPI";
 
 export default function () {
@@ -12,14 +12,11 @@ export default function () {
 
     const refreshListGames = async () => {
         try {
-            const data: IGameInfo[] = await $fetch('/api/game/list', {
+            const data: IListGamesBestiaries = await $fetch('/api/game/list', {
                 method: 'GET',
             });
-            listGames.value = data;
-            listBestiary.value = [];
-            listGames.value.forEach((game) => {
-                if (listBestiary.value.findIndex((bestiary) => bestiary.universe.toLowerCase() === game.universe.toLowerCase()) === -1) listBestiary.value.push({ universe: game.universe, display: true });
-            });
+            listGames.value = data.games;
+            listBestiary.value = data.bestiaries;
         } catch (error) {
             console.log(error);
         }

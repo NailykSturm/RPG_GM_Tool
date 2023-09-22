@@ -68,12 +68,12 @@ defineProps({
                             </div>
                         </span>
                     </label>
-                    <div class="dropdown dropdown-hover grow">
+                    <div class="dropdown dropdown-hover dropdown-top grow">
                         <input tabindex="0" type="text" v-model="modalParams.game.universe"
                             placeholder="Ex: Dungeon & Dragons" class="input input-bordered w-full"
                             @input="refreshOptions" />
                         <div tabindex="0"
-                            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 overflow-y-auto max-h-full">
+                            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 overflow-y-auto max-h-48">
                             <ul>
                                 <template v-for="bestiary in listBestiary">
                                     <li v-if="bestiary.display">

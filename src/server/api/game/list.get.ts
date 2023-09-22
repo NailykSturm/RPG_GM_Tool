@@ -1,6 +1,7 @@
 import userModel from '~/server/models/User';
 import meGet from '~/server/api/me.get';
 import { log, logLv } from '~/server/utils/log';
+import { IBestiaryInfo, IGameInfo, IListGamesBestiaries } from '~/types/IGame';
 
 export default defineEventHandler(async (event) => {
 
@@ -11,7 +12,28 @@ export default defineEventHandler(async (event) => {
             const user = await userModel.findById(_id);
             if (!user) return createError({ statusCode: 402, statusMessage: 'unknown user' });
 
-            return user.games;
+            let listGames: IGameInfo[] = [];
+            let listBestiaries: IBestiaryInfo[] = [];
+
+            user.games.forEach((game) => {
+                listGames.push({ display: true, name: game.name, universe: game.universe, old_name: game.name, old_universe: game.universe });
+            });
+            user.bestiaries.forEach((bestiary) => {
+                listBestiaries.push({ universe: bestiary.universe, display: true });
+            });
+
+            listGames.sort((a, b) => {
+                return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+            });
+
+            listGames.forEach((game) => {
+                if (!listBestiaries.find(bestiary => bestiary.universe == game.universe)) {
+                    log(logLv.WARN, 'GET API/game/list', `Bestiary not found for game ${game.name} | ${game.universe}`, _id);
+                    listBestiaries.push({ universe: game.universe, display: true });
+                }
+            });
+
+            return {games: listGames, bestiaries: listBestiaries} as IListGamesBestiaries;
 
         } catch (error) {
             log(logLv.ERROR, 'GET API/game/list', `Error while getting the game list : ${error}`, _id);
