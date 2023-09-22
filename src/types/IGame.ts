@@ -35,6 +35,11 @@ export interface IBestiary {
     universe: string;
     creatures: IBestiaryCreature[];
 }
+export interface IBestiaryInfo {
+    universe: string,
+    display: boolean,
+}
+
 export interface IBestiaryCreature {
     field: string;
     value: string | number | boolean;

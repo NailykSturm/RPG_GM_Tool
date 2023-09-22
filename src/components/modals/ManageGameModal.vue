@@ -1,8 +1,38 @@
 <script setup lang="ts">
-
 import useModalParams from '~/composables/useModalParams';
+import { IBestiaryInfo } from '~/types/IGame';
 
 const { modalParams } = useModalParams();
+const { listBestiary } = useGameManagment();
+
+function disableListItem(universe: string) {
+    listBestiary.value = listBestiary.value.map((bestiary) => {
+        if (bestiary.universe.toLowerCase().includes(universe.toLowerCase())) {
+            bestiary.display = true;
+        } else {
+            bestiary.display = false;
+        }
+        return bestiary;
+    });
+}
+
+function refreshOptions(event: any) {
+    disableListItem(event.target.value);
+}
+
+function selectOption(event: IBestiaryInfo) {
+    modalParams.value.game.universe = event.universe;
+    disableListItem(event.universe);
+}
+
+function createTag() {
+    if (modalParams.value.game.universe != '') {
+        if (listBestiary.value.filter((bestiary) => bestiary.universe.toLowerCase() == modalParams.value.game.universe.toLowerCase()).length == 0) {
+            console.log('create tag');
+            listBestiary.value.push({ universe: modalParams.value.game.universe, display: true });
+        }
+    }
+}
 function handleConfirm() {
     modalParams.value.handleConfirm();
     useModalParams().resetModalParams();
@@ -22,9 +52,10 @@ defineProps({
                     <label class="label">
                         <span class="label-text">Name of the game</span>
                     </label>
-                    <input type="text" v-model="modalParams.game.name" placeholder="Ex: D&D discovery" class="input input-bordered w-full" />
+                    <input type="text" v-model="modalParams.game.name" placeholder="Ex: D&D discovery"
+                        class="input input-bordered w-full" />
                 </div>
-                <div class="form-control w-full">
+                <div class="form-control flex flex-col w-full">
                     <label class="label">
                         <span class="label-text">Universe of the game</span>
                         <span class="label-text-alt">
@@ -37,7 +68,24 @@ defineProps({
                             </div>
                         </span>
                     </label>
-                    <input type="text" v-model="modalParams.game.universe" placeholder="Ex: Dungeon & Dragons" class="input input-bordered w-full" />
+                    <div class="dropdown dropdown-hover grow">
+                        <input tabindex="0" type="text" v-model="modalParams.game.universe"
+                            placeholder="Ex: Dungeon & Dragons" class="input input-bordered w-full"
+                            @input="refreshOptions" />
+                        <div tabindex="0"
+                            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 overflow-y-auto max-h-full">
+                            <ul>
+                                <template v-for="bestiary in listBestiary">
+                                    <li v-if="bestiary.display">
+                                        <a @click="selectOption(bestiary)">{{ bestiary.universe }}</a>
+                                    </li>
+                                </template>
+                                <li>
+                                    <a @click="createTag()">create new universe</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </template>
             <div class="modal-action">

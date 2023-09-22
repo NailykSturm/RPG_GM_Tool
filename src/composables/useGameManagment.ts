@@ -1,6 +1,6 @@
 import { Ref } from "nuxt/dist/app/compat/capi"
 
-import { IGameInfo } from "~/types/IGame";
+import { IGameInfo, IBestiaryInfo } from "~/types/IGame";
 import { IAPIResponse } from "../types/IAPI";
 
 export default function () {
@@ -8,6 +8,7 @@ export default function () {
     const notif = useNotif();
 
     const listGames: Ref<IGameInfo[]> = useState('games-list', () => []);
+    const listBestiary: Ref<IBestiaryInfo[]> = useState('bestiary-list', () => []);
 
     const refreshListGames = async () => {
         try {
@@ -15,6 +16,10 @@ export default function () {
                 method: 'GET',
             });
             listGames.value = data;
+            listBestiary.value = [];
+            listGames.value.forEach((game) => {
+                if (listBestiary.value.findIndex((bestiary) => bestiary.universe.toLowerCase() === game.universe.toLowerCase()) === -1) listBestiary.value.push({ universe: game.universe, display: true });
+            });
         } catch (error) {
             console.log(error);
         }
@@ -129,5 +134,5 @@ export default function () {
     };
 
 
-    return { listGames, refreshListGames, newGame, updateGame, deleteGame };
+    return { listGames, listBestiary, refreshListGames, newGame, updateGame, deleteGame };
 }

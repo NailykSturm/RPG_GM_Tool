@@ -19,7 +19,7 @@ const lvLow: ILog = { displayName: 'LOW', priority: 3, color: '\x1b[37m' };
 
 const lvWarn: ILog = { displayName: 'WARN', priority: 2, color: '\x1b[93m' };
 const lvError: ILog = { displayName: 'ERROR', priority: 5, color: '\x1b[91m' };
-const lvCritical: ILog = { displayName: 'CRITIC', priority: 6, color: '\x1b[94m' };
+const lvCritical: ILog = { displayName: 'CRITICAL', priority: 6, color: '\x1b[94m' };
 const lvFatal: ILog = { displayName: 'FATAL', priority: 7, color: '\x1b[95m' };
 
 export const logLv = {
@@ -85,7 +85,7 @@ log(logLv.DEBUG, 'log', `Log level set to ${logLevel.displayName}`);
  */
 export function log(lv: ILog = logLv.INFO, caller: string, message: string, from: string | ObjectId = 'server') {
     const date = new Date();
-    const logLine = `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}][${lv.displayName.padEnd(6)}]{${caller.padEnd(30)}}(${from instanceof mongoose.Types.ObjectId ? 'user:' + from : from}) ${message}`;
+    const logLine = `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}][${lv.displayName.padEnd(10)}]{${caller.padEnd(30)}}(${from}) ${message}`;
     if (logLevel.priority <= lv.priority && lv != logLv.NONE) {
         console.log(`${lv.color}${logLine}\x1b[0m`);
     }

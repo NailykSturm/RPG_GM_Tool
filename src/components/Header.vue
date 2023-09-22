@@ -16,18 +16,20 @@ const { changeTheme, list_themes, theme: usedTheme } = useTheme();
             </template>
             <div class="dropdown dropdown-end text-secondary-content">
                 <label tabindex="0" class="btn btn-ghost rounded-btn">Theme</label>
-                <ul tabindex="0"
-                    class="menu dropdown-content z-[1] p-2 shadow bg-primary rounded-box w-52 mt-4 overflow-auto max-h-min">
-                    <li v-for="themeCategory in list_themes">
-                        <details>
-                            <summary>{{ themeCategory[0] }}</summary>
-                            <ul>
-                                <li v-for="theme in themeCategory" @click="changeTheme(theme)" class="rounded-box"
-                                    v-bind:class="theme == usedTheme ? 'bg-secondary' : ''"><a>{{ theme }}</a></li>
-                            </ul>
-                        </details>
-                    </li>
-                </ul>
+                <div tabindex="0"
+                    class="menu dropdown-content z-[1] p-2 shadow bg-primary rounded-box w-52 mt-4 overflow-auto max-h-64">
+                    <ul>
+                        <li v-for="themeCategory in list_themes">
+                            <details>
+                                <summary>{{ themeCategory[0] }}</summary>
+                                <ul>
+                                    <li v-for="theme in themeCategory" @click="changeTheme(theme)" class="rounded-box"
+                                        v-bind:class="theme == usedTheme ? 'bg-secondary' : ''"><a>{{ theme }}</a></li>
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
                 <template v-if="loggedIn">
