@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { registerSchema } from '~/server/validations/index';
 import userModal from '~/server/models/User';
 import { log, logLv } from '~/server/utils/log';
+import { UserWithoutPassword } from '~/types/IUser';
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
@@ -32,7 +33,7 @@ export default defineEventHandler(async (event) => {
                 });
 
                 log(logLv.INFO, 'POST API/auth/login', `User logged in`, user._id);
-                return user;
+                return {_id: user._id, email: user.email} as UserWithoutPassword;
             } else return createError({ statusCode: 400, statusMessage: 'Your email is wrong' });
         } catch (error) {
             log(logLv.CRITICAL, 'POST API/auth/login', `Cannot access DB to find a user : ${error}`, email);
