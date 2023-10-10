@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { IGameInfo, emptyGame } from '~/types/IGame';
-import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 import { Ref } from 'nuxt/dist/app/compat/capi';
+
+import { IGameInfo } from '~/types/IGame';
+import { emptyGame } from '~/types/IGameImpl';
+import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 
 const { listGames, newGame, updateGame, deleteGame } = useGameManagment();
 const { modalParams } = useModalParams();

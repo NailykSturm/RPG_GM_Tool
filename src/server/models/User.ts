@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import type { IUserComplete } from '~~/src/types/IUser';
-import { BestiarySchema, GameSchema } from '~~/src/types/IGame';
+import type { IUserComplete } from '~/types/IUser';
+import { BestiarySchema, GameSchema } from '~/types/IGameDB';
 
 interface IUserDocument extends IUserComplete, Document {
     validatePassword: (data: string) => Promise<boolean>;

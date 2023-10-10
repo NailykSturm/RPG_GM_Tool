@@ -1,5 +1,6 @@
 import { Ref } from "nuxt/dist/app/compat/capi"
-import { IGameInfo, emptyGame } from "~/types/IGame";
+import { IGameInfo } from "~/types/IGame";
+import { emptyGame } from "~/types/IGameImpl";
 
 export interface IModalParams {
     game: IGameInfo,

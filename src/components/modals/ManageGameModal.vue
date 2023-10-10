@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useModalParams from '~/composables/useModalParams';
-import { IBestiaryInfo } from '~/types/IGame';
+import { IUIBestiaryInfo } from '~/types/IUI';
 
 const { modalParams } = useModalParams();
 const { listBestiary } = useGameManagment();
@@ -20,7 +20,7 @@ function refreshOptions(event: any) {
     disableListItem(event.target.value);
 }
 
-function selectOption(event: IBestiaryInfo) {
+function selectOption(event: IUIBestiaryInfo) {
     modalParams.value.game.universe = event.universe;
     disableListItem(event.universe);
 }

@@ -1,7 +1,8 @@
 import userModel from '~/server/models/User';
 import meGet from '~/server/api/me.get';
 import { log, logLv } from '~/server/utils/log';
-import { IBestiaryInfo, IGameInfo, IListGamesBestiaries } from '~/types/IGame';
+import { IGameInfo, IListGamesBestiaries } from '~/types/IGame';
+import { IUIBestiaryInfo } from '~/types/IUI';
 
 export default defineEventHandler(async (event) => {
 
@@ -13,7 +14,7 @@ export default defineEventHandler(async (event) => {
             if (!user) return createError({ statusCode: 402, statusMessage: 'unknown user' });
 
             let listGames: IGameInfo[] = [];
-            let listBestiaries: IBestiaryInfo[] = [];
+            let listBestiaries: IUIBestiaryInfo[] = [];
 
             user.games.forEach((game) => {
                 listGames.push({ display: true, name: game.name, universe: game.universe, old_name: game.name, old_universe: game.universe });

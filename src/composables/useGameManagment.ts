@@ -1,6 +1,7 @@
 import { Ref } from "nuxt/dist/app/compat/capi"
 
-import { IListGamesBestiaries, IGameInfo, IBestiaryInfo } from "~/types/IGame";
+import { IListGamesBestiaries, IGameInfo } from "~/types/IGame";
+import { IUIBestiaryInfo } from '~/types/IUI';
 import { IAPIResponse } from "../types/IAPI";
 
 export default function () {
@@ -8,7 +9,7 @@ export default function () {
     const notif = useNotif();
 
     const listGames: Ref<IGameInfo[]> = useState('games-list', () => []);
-    const listBestiary: Ref<IBestiaryInfo[]> = useState('bestiary-list', () => []);
+    const listBestiary: Ref<IUIBestiaryInfo[]> = useState('bestiary-list', () => []);
 
     const refreshListGames = async () => {
         try {
@@ -18,6 +19,12 @@ export default function () {
             listGames.value = data.games;
             listBestiary.value = data.bestiaries;
         } catch (error) {
+            let errMessage = '';
+            if (error.response._data) {
+                if (error.response._data.message) errMessage = error.response._data.message;
+                else errMessage = error.response.statusText;
+            } else errMessage = error.response.statusText;
+            notif.addNotif(new Notif({ type: NotifType.error, message: errMessage, title: `Error while refreshing the list of games` }));
             console.log(error);
         }
     }
@@ -49,10 +56,10 @@ export default function () {
                             else errMessage = err.response.statusText;
                         } else errMessage = err.response.statusText;
 
-                        notif.addNotif(new Notif({ type: NotifType.error, message: `${errMessage}`, title: `Error while creating a new game (Error code : ${err.response.status})`, timeout: 20 * 1000, visibleInProd: false }));
+                        notif.addNotif(new Notif({ type: NotifType.error, message: `${errMessage}`, title: `Error while creating a new game (Error code : ${err.response.status})`, timeout: 20 * 1000 }));
                     } else {
 
-                        notif.addNotif(new Notif({ type: NotifType.error, title: `Error while creating a new game`, timeout: 20 * 1000, visibleInProd: false }));
+                        notif.addNotif(new Notif({ type: NotifType.error, title: `Error while creating a new game`, timeout: 20 * 1000 }));
                         console.log(err);
                     }
                 });
@@ -73,7 +80,7 @@ export default function () {
             return;
         }
 
-        const body = { user_id: user.value._id, gameName: gameName, gameUniverse: gameUniverse, old_name: oldGameName, old_universe: oldGameUniverse,};
+        const body = { user_id: user.value._id, gameName: gameName, gameUniverse: gameUniverse, old_name: oldGameName, old_universe: oldGameUniverse, };
         $fetch('/api/game/update', { method: 'POST', body: JSON.stringify(body) })
             .then(async (data: IAPIResponse) => {
                 await refreshListGames();
@@ -130,6 +137,11 @@ export default function () {
             });
     };
 
+    const getUniverseOfGame = (game: string) => {
+        const gameInfo = listGames.value.find((g) => g.name === game);
+        if (!gameInfo) return null;
+        return gameInfo.universe;
+    }
 
-    return { listGames, listBestiary, refreshListGames, newGame, updateGame, deleteGame };
+    return { listGames, listBestiary, refreshListGames, newGame, updateGame, deleteGame, getUniverseOfGame };
 }
