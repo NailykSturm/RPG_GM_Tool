@@ -1,124 +1,34 @@
 <script setup lang="ts">
+import { Ref } from 'nuxt/dist/app/compat/capi';
+
 import { bestiaryFieldTypes, emptyBestiaryField } from '~/types/IGameImpl';
-import { IUISelect, IUISelectCat, IUISelectSubCat, IUISelectOption } from '~/types/IUI';
+import { CSelectList } from '~/types/CGame';
+import { IBestiaryField } from '~/types/IGame';
 import BestiaryInput from '~/components/ui/BestiaryInput.vue';
+import SelectMenu from '~/components/ui/SelectMenu.vue';
 
 const { fields, creatures, fetchBestiary } = useBestiaryManagment();
 const { getUniverseOfGame } = useGameManagment();
 const route = useRoute();
 
 const newOptionForSelect = ref('');
-const fieldOptionCopy = ref();
 const newField = ref(emptyBestiaryField);
 
 onBeforeMount(() => {
     const game = route.params.game as string;
     const universe = getUniverseOfGame(game);
     fetchBestiary(universe);
-    newField.value.options = {
-        default: [
-            'test1', 
-            'test2', 
-            'test3', 
-            'test4'
-        ],
-        arme: {
-            melee: [
-                'melee1', 
-                'melee2', 
-                'melee3', 
-                'melee4'
-            ],
-            distance: [
-                'dist1',
-                'dist2', 
-                'dist3', 
-                'dist4'
-            ],
-        },
-        armure: {
-            legere: [
-                'legere1', 
-                'legere2', 
-                'legere3', 
-                'legere4'
-            ],
-            moyenne: [
-                'moyenne1', 
-                'moyenne2', 
-                'moyenne3', 
-                'moyenne4'
-            ],
-            lourde: [
-                'lourde1',
-                'lourde2',
-                'lourde3', 
-                'lourde4'
-            ],
-        },
-        bouclier: [
-            'bouclier1', 
-            'bouclier2', 
-            'bouclier3', 
-            'bouclier4'
-        ],
-    };
-    // newField.value.options = ['test1', 'test2', 'test3', 'test4'];
-    fieldOptionCopy.value = newField.value.options;
+
+    newField.value.options = new CSelectList();
 });
 
 function addOptionForSelect() {
     if (newOptionForSelect.value != '') {
-
-        // const cats = newOptionForSelect.value.split('/');
-        // if (!newField.value.options) newField.value.options = { default: [] };
-        // if (cats.length > 1) {
-        //     console.log(newField.value.options);
-        //     const cat = cats.shift();
-        //     const opt = cats;
-        //     if (newField.value.options[cat] == undefined) newField.value.options[cat] = [];
-
-        //     if (opt.length > 1) {
-        //         const subCat = opt.shift();
-        //         const subOpt = opt;
-        //         if (newField.value.options[cat][subCat] == undefined) newField.value.options[cat][subCat] = [];
-        //         if (!newField.value.options[cat][subCat].includes(subOpt)) newField.value.options[cat][subCat].push(subOpt);
-        //     }
-        //     else {
-        //         if (!newField.value.options[cat].includes(opt)) newField.value.options[cat].push(opt);
-        //     }
-        // }
-        // else {
-        //     if (!newField.value.options.default.includes(cats[0])) newField.value.options.default.push(cats[0]);
-        // }
-        // console.log(newField.value.options);
-        fieldOptionCopy.value = newField.value.options;
+        newField.value.options.addOption(newOptionForSelect.value);
+        newOptionForSelect.value = '';
     }
 }
 
-function updateOptionsList() {
-    if (newOptionForSelect.value == '') {
-        fieldOptionCopy.value = newField.value.options;
-        return;
-    }
-
-    console.log('---------------------------------');
-    fieldOptionCopy.value = undefined;
-    const cats = newOptionForSelect.value.split('/');
-    let cat: string, subCat: string, obj: string = undefined;
-    if (cats.length == 1) obj = cats[0];
-    else if (cats.length == 2) {
-        cat = cats.shift();
-        obj = cats.toString();
-    }
-    else {
-        cat = cats.shift();
-        subCat = cats.shift();
-        obj = cats.toString();
-    }
-
-    console.log(`obj: ${obj} | cat: ${cat} | subCat: ${subCat}`);
-}
 </script>
 
 <template>
@@ -178,7 +88,11 @@ function updateOptionsList() {
             </div>
 
             <div>
-                <BestiaryInput :readonly="true" v-bind:data="ref(newField)" />
+                <div class="divider overflow-x-auto overflow-y-hidden mb-0 py-4">
+                    {{ bestiaryFieldTypes.find((field) => { return field.field == newField.type }).desc }}
+                </div>
+                <div class="mb-1">Render :</div>
+                <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IBestiaryField>)" />
             </div>
             <div class="divider">Options</div>
 
@@ -210,42 +124,7 @@ function updateOptionsList() {
                     </label>
                     <div class="join">
                         <button class="btn join-item" @click="addOptionForSelect">Add Option</button>
-                        <div class="dropdown dropdown-top dropdown-end">
-                            <input type="text" class="input input-bordered join-item" v-model="newOptionForSelect"
-                                @input="updateOptionsList">
-                            <div tabindex="0"
-                                class="menu dropdown-content z-[1] p-2 shadow bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-64">
-                                <ul>
-                                    <li v-for="(catA, keyA) in fieldOptionCopy">
-                                        <template v-if="typeof keyA === typeof 0">
-                                            <a>{{ catA }}</a>
-                                        </template>
-                                        <template v-else>
-                                            <details open>
-                                                <summary>{{ keyA }}</summary>
-                                                <ul>
-                                                    <li v-for="(catB, keyB) in catA" class="rounded-box">
-                                                        <template v-if="typeof keyB === typeof 0">
-                                                            <a>{{ catB }}</a>
-                                                        </template>
-                                                        <template v-else>
-                                                            <details open>
-                                                                <summary>{{ keyB }}</summary>
-                                                                <ul>
-                                                                    <li v-for="(catC, keyC) in catB" class="rounded-box">
-                                                                        <a>{{ catC }}</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </details>
-                                                        </template>
-                                                    </li>
-                                                </ul>
-                                            </details>
-                                        </template>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <SelectMenu :listOptions="(newField.options as CSelectList)" />
                     </div>
                 </div>
             </div>

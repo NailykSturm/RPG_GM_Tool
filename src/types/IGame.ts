@@ -1,5 +1,6 @@
+import { CSelectList } from "./CGame";
 import { EBestiaryFieldType } from "./EGame";
-import { IUIBestiaryInfo, IUISelect } from "./IUI";
+import { IUIBestiaryInfo } from "./IUI";
 
 export interface IGameDetails extends IGameInfo {
     script: IScript,
@@ -37,7 +38,7 @@ export interface IBestiaryField {
     field: string;
     value: string | number | boolean;
     type: EBestiaryFieldType;
-    options?: string[] | Record<string, string[] | Record<string, string[]>> | IUISelect;
+    options?: CSelectList;
     min?: number;
     max?: number;
     step?: number;

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { PropType, Ref } from 'nuxt/dist/app/compat/capi';
+
 import { IBestiaryField } from '~/types/IGame';
 import { bestiaryFieldTypes } from '~/types/IGameImpl';
-
+import { CSelectList } from '~/types/CGame';
 
 const props = defineProps({
     readonly: {
@@ -15,10 +16,10 @@ const props = defineProps({
     }
 });
 
-function selectValue(value: string, catA: any = '', catB: any = '') {
+function selectValue(value: string, cat: string = '', subcat: string = '') {
     let selectValue = '';
-    if (catA != '') selectValue += `${catA}/`;
-    if (catB != '') selectValue += `${catB}/`;
+    if (cat != '') selectValue += `${cat}/`;
+    if (subcat != '') selectValue += `${subcat}/`;
     selectValue += value;
     console.log(`new selected value: ${selectValue}`);
     props.data.value.value = selectValue;
@@ -27,12 +28,8 @@ function selectValue(value: string, catA: any = '', catB: any = '') {
 </script>
 
 <template>
-    <div class="divider overflow-x-auto overflow-y-hidden py-4">{{ bestiaryFieldTypes.find((field) => {
-        return field.field ==
-            props.data.value.type
-    }).desc }}</div>
     <div class="form-control">
-        <label class="label"> 
+        <label class="label">
             <span class="label-text">{{ props.data.value.field }}
                 <template v-if="props.data.value.required == true">
                     <span class="text-error">*</span>
@@ -52,43 +49,7 @@ function selectValue(value: string, catA: any = '', catB: any = '') {
             </label>
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[1].field">
-            <!-- <select type="text" class="input input-bordered" v-model="props.data.value.value">
-                <option v-for="opt in props.data.value.options">{{ opt }}</option>
-            </select> -->
-            <div class="dropdown dropdown-top">
-                <input tabindex="0" class="input input-bordered" v-model="props.data.value.value" readonly />
-                <div tabindex="0" class="menu dropdown-content z-[4] p-2 bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-64">
-                    <ul>
-                        <li v-for="(catA, keyA) in props.data.value.options">
-                            <template v-if="typeof keyA == typeof 0">
-                                <a @click="selectValue(catA)">{{ catA }}</a>
-                            </template>
-                            <template v-else>
-                                <details>
-                                    <summary>{{ keyA }}</summary>
-                                    <ul>
-                                        <li v-for="(catB, keyB) in catA" class="rounded-box">
-                                            <template v-if="typeof keyB == typeof 0">
-                                                <a @click="selectValue(catB, keyA)">{{ catB }}</a>
-                                            </template>
-                                            <template v-else>
-                                                <details>
-                                                    <summary>{{ keyB }}</summary>
-                                                    <ul>
-                                                        <li v-for="(catC, keyC) in catB" class="rounded-box" @click="selectValue(catC, keyA, keyB)">
-                                                            <a>{{ catC }}</a>
-                                                        </li>
-                                                    </ul>
-                                                </details>
-                                            </template>
-                                        </li>
-                                    </ul>
-                                </details>
-                            </template>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <UiSelectMenu :list-options="(props.data.value.options as CSelectList)" dropdown-options="dropdown-top"/>
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[2].field"></template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[3].field">

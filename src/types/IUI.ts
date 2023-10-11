@@ -7,14 +7,6 @@ export interface IUISelectOption {
     value: string,
     display: boolean,
 };
-export interface IUISelectSubCat {
-    name: string,
-    values: IUISelectOption[],
-};
-export interface IUISelectCat {
-    name: string,
-    values: IUISelectSubCat[] | IUISelectOption[],
-};
 export interface IUISelect {
-    values: IUISelectCat[] | IUISelectOption[],
+    values: IUISelectOption[] | Record<string, IUISelectOption[] | Record<string, IUISelectOption[]>>,
 };
