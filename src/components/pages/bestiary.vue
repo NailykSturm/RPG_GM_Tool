@@ -9,9 +9,9 @@ import SelectMenu from '~/components/ui/SelectMenu.vue';
 
 const { fields, creatures, fetchBestiary } = useBestiaryManagment();
 const { getUniverseOfGame } = useGameManagment();
+const { selectFieldSelected } = useForm();
 const route = useRoute();
 
-const newOptionForSelect = ref('');
 const newField = ref(emptyBestiaryField);
 
 onBeforeMount(() => {
@@ -23,10 +23,15 @@ onBeforeMount(() => {
 });
 
 function addOptionForSelect() {
-    if (newOptionForSelect.value != '') {
-        newField.value.options.addOption(newOptionForSelect.value);
-        newOptionForSelect.value = '';
+    if (selectFieldSelected.value != '') {
+        newField.value.options.addOption(selectFieldSelected.value);
+        selectFieldSelected.value = '';
+        newField.value.options.resetDisplay();
     }
+}
+function onClickMenuItem(value: string) {
+    console.log(`new selected value: ${value}`);
+    selectFieldSelected.value = value;
 }
 
 </script>
@@ -124,7 +129,7 @@ function addOptionForSelect() {
                     </label>
                     <div class="join">
                         <button class="btn join-item" @click="addOptionForSelect">Add Option</button>
-                        <SelectMenu :listOptions="(newField.options as CSelectList)" />
+                        <SelectMenu :listOptions="(newField.options as CSelectList)" :onClickItem="onClickMenuItem"/>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { CSelectList } from '~/types/CGame';
 
-const inputRef = ref('');
+const { selectFieldSelected } = useForm();
 
 const props = defineProps({
     listOptions: {
@@ -11,21 +11,25 @@ const props = defineProps({
     dropdownOptions: {
         type: String,
         default: 'dropdown-top dropdown-end'
-    }
-})
+    },
+    onClickItem: {
+        type: Function,
+        default: (value: string) => { }
+    },
+});
 
 function updateOptionsList() {
-    if (inputRef.value == '') {
+    if (selectFieldSelected.value == '') {
         props.listOptions.resetDisplay();
         return;
     }
-    props.listOptions.includeOption(inputRef.value);
+    props.listOptions.includeOption(selectFieldSelected.value);
 }
 </script>
 
 <template>
     <div class="dropdown" :class="props.dropdownOptions">
-        <input type="text" class="input input-bordered join-item" v-model="inputRef" @input="updateOptionsList">
+        <input type="text" class="input input-bordered join-item" v-model="selectFieldSelected" @input="updateOptionsList">
         <div tabindex="0"
             class="menu dropdown-content z-[1] p-2 shadow bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-64">
             <ul>
@@ -42,8 +46,9 @@ function updateOptionsList() {
                                                     <summary>{{ subcat.name }}</summary>
                                                     <ul>
                                                         <template v-for="elt in subcat.value">
-                                                            <li v-if="elt.display"><a>{{
-                                                                props.listOptions.getElement(elt.value) }}</a></li>
+                                                            <li v-if="elt.display" @click="props.onClickItem(elt.value)">
+                                                                <a>{{
+                                                                    props.listOptions.getElement(elt.value) }}</a></li>
                                                         </template>
                                                     </ul>
                                                 </details>
@@ -51,8 +56,9 @@ function updateOptionsList() {
                                         </template>
                                     </template>
                                     <template v-for="eltWithoutSubcat in category.valueWithoutSubcat">
-                                        <li v-if="eltWithoutSubcat.display"><a>{{
-                                            props.listOptions.getElement(eltWithoutSubcat.value) }}</a></li>
+                                        <li v-if="eltWithoutSubcat.display"
+                                            @click="props.onClickItem(eltWithoutSubcat.value)"><a>{{
+                                                props.listOptions.getElement(eltWithoutSubcat.value) }}</a></li>
                                     </template>
                                 </ul>
                             </details>
@@ -60,9 +66,9 @@ function updateOptionsList() {
                     </template>
                 </template>
                 <template v-for="eltWithoutCat in props.listOptions.getListCategory().valueWithoutCat">
-                    <li v-if="eltWithoutCat.display"><a>{{ props.listOptions.getElement(eltWithoutCat.value) }}</a></li>
+                    <li v-if="eltWithoutCat.display" @click="props.onClickItem(eltWithoutCat.value)"><a>{{
+                        props.listOptions.getElement(eltWithoutCat.value) }}</a></li>
                 </template>
             </ul>
         </div>
-    </div>
-</template>
+</div></template>

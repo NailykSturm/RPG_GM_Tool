@@ -45,7 +45,10 @@ export class CSelectList {
     }
 
     addOption(option: string) {
-        this._options.add({ value: option, display: true } as IUISelectOption);
+        console.log(option);
+        let find = false;
+        this._options.forEach(opt => { if (opt.value == option) find = true });
+        if (!find) this._options.add({ value: option, display: true });
     }
     removeOption(option: string) {
         this._options.forEach(opt => { if (opt.value == option) this._options.delete(opt) });
@@ -151,7 +154,6 @@ export class CSelectList {
                 }
             }
         });
-
 
         categories.cat.forEach(cat => {
             cat.subcat.forEach(subcat => {

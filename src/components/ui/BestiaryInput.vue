@@ -13,18 +13,8 @@ const props = defineProps({
     data: {
         type: Object as PropType<Ref<IBestiaryField>>,
         required: true,
-    }
+    },
 });
-
-function selectValue(value: string, cat: string = '', subcat: string = '') {
-    let selectValue = '';
-    if (cat != '') selectValue += `${cat}/`;
-    if (subcat != '') selectValue += `${subcat}/`;
-    selectValue += value;
-    console.log(`new selected value: ${selectValue}`);
-    props.data.value.value = selectValue;
-}
-
 </script>
 
 <template>
@@ -49,7 +39,7 @@ function selectValue(value: string, cat: string = '', subcat: string = '') {
             </label>
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[1].field">
-            <UiSelectMenu :list-options="(props.data.value.options as CSelectList)" dropdown-options="dropdown-top"/>
+            <UiSelectMenu :list-options="(props.data.value.options as CSelectList)" dropdown-options="dropdown-top" />
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[2].field"></template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[3].field">
