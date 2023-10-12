@@ -10,7 +10,7 @@ const props = defineProps({
     },
     dropdownOptions: {
         type: String,
-        default: 'dropdown-top dropdown-end'
+        default: ''
     },
     onClickItem: {
         type: Function,
@@ -29,9 +29,9 @@ function updateOptionsList() {
 
 <template>
     <div class="dropdown" :class="props.dropdownOptions">
-        <input type="text" class="input input-bordered join-item" v-model="selectFieldSelected" @input="updateOptionsList">
+        <input type="text" class="input input-bordered" v-model="selectFieldSelected" @input="updateOptionsList">
         <div tabindex="0"
-            class="menu dropdown-content z-[1] p-2 shadow bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-64">
+            class="menu dropdown-content z-[1] p-2 shadow bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-40">
             <ul>
                 <template v-for="category in props.listOptions.getListCategory().cat">
                     <template v-if="category.display">

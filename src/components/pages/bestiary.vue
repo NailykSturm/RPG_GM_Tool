@@ -29,8 +29,16 @@ function addOptionForSelect() {
         newField.value.options.resetDisplay();
     }
 }
+
+function deleteOptionForSelect() {
+    if (selectFieldSelected.value != '') {
+        newField.value.options.removeOption(selectFieldSelected.value);
+        selectFieldSelected.value = '';
+        newField.value.options.resetDisplay();
+    }
+}
+
 function onClickMenuItem(value: string) {
-    console.log(`new selected value: ${value}`);
     selectFieldSelected.value = value;
 }
 
@@ -62,76 +70,90 @@ function onClickMenuItem(value: string) {
     </div>
 
     <dialog id="add_field_modal" class="modal">
-        <div class="modal-box overflow-hidden">
-            <h3 class="font-bold text-lg">Create new field</h3>
-            <div class="grid grid-cols-2 gap-4 items-center">
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Name of the field <span class="text-error">*</span></span>
-                    </label>
-                    <input v-model="newField.field" class="input input-bordered w-full" type="text">
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Type of the field <span class="text-error">*</span></span>
-                        <span class="label-text-alt">
-                            <div class="tooltip tooltip-left z-[1]"
-                                data-tip="The type of a field means what kind of value it can takes. For example, if it was an input, the value is a free text value">
-                                <svg class="h-6 w-6 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+        <div class="modal-box overflow-hidden w-full max-w-4xl flex flex-col md:flex-row">
+            <div class="flex-col">
+                <h3 class="font-bold text-lg">Create new field</h3>
+                <div class="place-items-center">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Name of the field <span class="text-error">*</span></span>
+                        </label>
+                        <input v-model="newField.field" class="input input-bordered" type="text">
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Type of the field <span class="text-error">*</span></span>
+                            <span class="label-text-alt">
+                                <div class="tooltip tooltip-left z-[1]"
+                                    data-tip="The type of a field means what kind of value it can takes. For example, if it was an input, the value is a free text value">
+                                    <svg class="h-6 w-6 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            </span>
+                        </label>
+                        <select class="select tooltip select-bordered" v-model="newField.type">
+                            <option v-for="option in bestiaryFieldTypes" v-bind:value="option.field">
+                                {{ option.label }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="divider">Options</div>
+
+                    <div class="form-control">
+                        <!-- {{ option.label }} : {{ option.desc }} -->
+                        <label class="label">
+                            <span class="label-text">Requirered ?</span>
+                            <input type="checkbox" class="checkbox" v-model="newField.required" />
+                        </label>
+                        <label class="label" v-if="newField.type == bestiaryFieldTypes[0].field">
+                            <span class="label-text">Maximum length</span>
+                            <input type="number" class="input input-bordered" v-model="newField.maxLenght">
+                        </label>
+                        <label class="label" v-if="newField.type == bestiaryFieldTypes[3].field">
+                            <span class="label-text">Minimum</span>
+                            <input type="number" class="input input-bordered" v-model="newField.min">
+                        </label>
+                        <label class="label" v-if="newField.type == bestiaryFieldTypes[3].field">
+                            <span class="label-text">Maximum</span>
+                            <input type="number" class="input input-bordered" v-model="newField.max">
+                        </label>
+                        <label class="label" v-if="newField.type == bestiaryFieldTypes[3].field">
+                            <span class="label-text">Step</span>
+                            <input type="number" class="input input-bordered" v-model="newField.step">
+                        </label>
+                        <div v-if="newField.type == bestiaryFieldTypes[1].field">
+                            <label class="label">
+                                <span class="label-text">Options</span>
+                            </label>
+                            <div class="join">
+                                <button class="btn join-item" @click="addOptionForSelect">Add Option</button>
+                                <SelectMenu :listOptions="(newField.options as CSelectList)" :onClickItem="onClickMenuItem"
+                                    dropdown-options="dropdown-top dropdown-end join-item" />
+                                <button class="btn join-item btn-error" @click="deleteOptionForSelect">
+                                    <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                        <line x1="4" y1="7" x2="20" y2="7" />
+                                        <line x1="10" y1="11" x2="10" y2="17" />
+                                        <line x1="14" y1="11" x2="14" y2="17" />
+                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                    </svg>
+                                </button>
                             </div>
-                        </span>
-                    </label>
-                    <select class="select w-full tooltip select-bordered" v-model="newField.type">
-                        <option v-for="option in bestiaryFieldTypes" v-bind:value="option.field">
-                            {{ option.label }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <div class="divider overflow-x-auto overflow-y-hidden mb-0 py-4">
-                    {{ bestiaryFieldTypes.find((field) => { return field.field == newField.type }).desc }}
-                </div>
-                <div class="mb-1">Render :</div>
-                <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IBestiaryField>)" />
-            </div>
-            <div class="divider">Options</div>
-
-            <div class="form-control">
-                <!-- {{ option.label }} : {{ option.desc }} -->
-                <label class="label">
-                    <span class="label-text">Requirered ?</span>
-                    <input type="checkbox" class="checkbox" v-model="newField.required" />
-                </label>
-                <label class="label" v-if="newField.type == bestiaryFieldTypes[0].field">
-                    <span class="label-text">Maximum length</span>
-                    <input type="number" class="input input-bordered" v-model="newField.maxLenght">
-                </label>
-                <label class="label" v-if="newField.type == bestiaryFieldTypes[3].field">
-                    <span class="label-text">Minimum</span>
-                    <input type="number" class="input input-bordered" v-model="newField.min">
-                </label>
-                <label class="label" v-if="newField.type == bestiaryFieldTypes[3].field">
-                    <span class="label-text">Maximum</span>
-                    <input type="number" class="input input-bordered" v-model="newField.max">
-                </label>
-                <label class="label" v-if="newField.type == bestiaryFieldTypes[3].field">
-                    <span class="label-text">Step</span>
-                    <input type="number" class="input input-bordered" v-model="newField.step">
-                </label>
-                <div v-if="newField.type == bestiaryFieldTypes[1].field">
-                    <label class="label">
-                        <span class="label-text">Options</span>
-                    </label>
-                    <div class="join">
-                        <button class="btn join-item" @click="addOptionForSelect">Add Option</button>
-                        <SelectMenu :listOptions="(newField.options as CSelectList)" :onClickItem="onClickMenuItem"/>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="divider divider-horizontal"></div>
+            <div class="bg-base-200 rounded p-5 flex-grow ">
+                <h3 class="font-bold text-lg">Render</h3>
+                <div class="mb-0 py-4">
+                    {{ bestiaryFieldTypes.find((field) => { return field.field == newField.type }).desc }}
+                </div>
+                <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IBestiaryField>)" />
             </div>
         </div>
     </dialog>

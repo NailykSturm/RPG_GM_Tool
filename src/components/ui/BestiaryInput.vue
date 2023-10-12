@@ -39,7 +39,7 @@ const props = defineProps({
             </label>
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[1].field">
-            <UiSelectMenu :list-options="(props.data.value.options as CSelectList)" dropdown-options="dropdown-top" />
+            <UiSelectMenu :list-options="(props.data.value.options as CSelectList)" dropdown-options="dropdown-bottom"/>
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[2].field"></template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[3].field">
