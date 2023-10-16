@@ -56,6 +56,9 @@ export class CSelectList {
     getOptions() {
         return Array.from(this._options);
     }
+    getOptionsForAPI() {
+        return Array.from(this._options).map(opt => opt.value);
+    }
     resetDisplay() {
         this._options.forEach(option => option.display = true);
     }

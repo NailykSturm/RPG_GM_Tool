@@ -1,6 +1,6 @@
 import userModel from '~/server/models/User';
 import meGet from '~/server/api/me.get';
-import { log, logLv } from '~/server/utils/log';
+import { log } from '~/server/utils/log';
 import { IGameInfo, IListGamesBestiaries } from '~/types/IGame';
 import { IUIBestiaryInfo } from '~/types/IUI';
 
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
 
             listGames.forEach((game) => {
                 if (!listBestiaries.find(bestiary => bestiary.universe == game.universe)) {
-                    log(logLv.WARN, 'GET API/game/list', `Bestiary not found for game ${game.name} | ${game.universe}`, _id);
+                    log.warn('GET API/game/list', `Bestiary not found for game ${game.name} | ${game.universe} => create new one`, _id);
                     listBestiaries.push({ universe: game.universe, display: true });
                 }
             });
@@ -40,11 +40,11 @@ export default defineEventHandler(async (event) => {
             return {games: listGames, bestiaries: listBestiaries} as IListGamesBestiaries;
 
         } catch (error) {
-            log(logLv.ERROR, 'GET API/game/list', `Error while getting the game list : ${error}`, _id);
+            log.error('GET API/game/list', `Error while getting the game list : ${error}`, _id);
             return createError({ statusCode: 500, statusMessage: 'Internal server error' });
         }
     } catch (error) {
-        log(logLv.CRITICAL, 'GET API/game/list', `Error while getting user ID : ${error}`);
+        log.critical('GET API/game/list', `Error while getting user ID : ${error}`);
         return error;
     }
 });

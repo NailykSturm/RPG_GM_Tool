@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import { registerSchema } from '~/server/validations/index';
 import userModal from '~/server/models/User';
-import { log, logLv } from '~/server/utils/log';
+import { log } from '~/server/utils/log';
 import { UserWithoutPassword } from '~/types/IUser';
 
 export default defineEventHandler(async (event) => {
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
         const { email, password } = await validateBody(event, registerSchema);
         const mail = email.toLowerCase();
 
-        log(logLv.FULL, 'POST API/auth/login', `New login request incoming => user email : ${mail}`, mail);
+        log.full('POST API/auth/login', `New login request incoming => user email : ${mail}`, mail);
 
         try {
             const user = await userModal.findOne({ email: mail });
@@ -32,15 +32,15 @@ export default defineEventHandler(async (event) => {
                     secure: process.env.NODE_ENV === 'production' ? true : false,
                 });
 
-                log(logLv.INFO, 'POST API/auth/login', `User logged in`, user._id);
+                log.info('POST API/auth/login', `User logged in`, user._id);
                 return {_id: user._id, email: user.email} as UserWithoutPassword;
             } else return createError({ statusCode: 400, statusMessage: 'Your email is wrong' });
         } catch (error) {
-            log(logLv.CRITICAL, 'POST API/auth/login', `Cannot access DB to find a user : ${error}`, email);
+            log.critical('POST API/auth/login', `Cannot access DB to find a user : ${error}`, email);
             return createError({ statusCode: 500, statusMessage: 'Internal Server error' });
         }
     } catch (error) {
-        log(logLv.INFO, 'POST API/auth/login', `Wrong parameters for register request : ${error}`);
+        log.error('POST API/auth/login', `Wrong parameters for register request : ${error}`);
         return error;
     }
 });

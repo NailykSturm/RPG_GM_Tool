@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Nitro } from 'nitropack';
-import {log, logLv} from '~/server/utils/log';
+import { log } from '~/server/utils/log';
 
 export default async (_nitroApp: Nitro) => {
     const config = useRuntimeConfig();
@@ -11,8 +11,8 @@ export default async (_nitroApp: Nitro) => {
             dbName: config.MONGO_DB_NAME || 'RPG_tool_gm',
         })
         .then((db) => {
-            log(logLv.INFO, 'db/index', `Connected to the database ${db.connection.name}`)
-            db.connection.on('error', (e) => log(logLv.ERROR, 'db/index', `Error during use of the database at ${config.MONGO_URI}: ${e}`));
+            log.info('db/index', `Connected to the database ${db.connection.name}`)
+            db.connection.on('error', (e) => log.fatal('db/index', `Error during use of the database at ${config.MONGO_URI}: ${e}`));
         })
-        .catch((e) => log(logLv.ERROR, 'db/index', `Error while connecting to database at ${config.MONGO_URI}: ${e}`));
+        .catch((e) => log.critical('db/index', `Error while connecting to database at ${config.MONGO_URI}: ${e}`));
 };

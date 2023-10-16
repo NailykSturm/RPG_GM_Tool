@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType, Ref } from 'nuxt/dist/app/compat/capi';
 
-import { IBestiaryField } from '~/types/IGame';
+import { IUIBestiaryField } from '~/types/IUI';
 import { bestiaryFieldTypes } from '~/types/IGameImpl';
 import { CSelectList } from '~/types/CGame';
 
@@ -11,7 +11,7 @@ const props = defineProps({
         default: false,
     },
     data: {
-        type: Object as PropType<Ref<IBestiaryField>>,
+        type: Object as PropType<Ref<IUIBestiaryField>>,
         required: true,
     },
 });

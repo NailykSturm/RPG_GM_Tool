@@ -1,7 +1,9 @@
 import { ObjectId } from "mongoose";
 
-import { IBestiary } from "~/types/IGame";
+import { IBestiary, IBestiaryField } from "~/types/IGame";
+import { IUIBestiaryField } from "~/types/IUI";
 import { UserWithoutPassword } from "~/types/IUser";
+import { bestiaryFieldTypes } from "../types/IGameImpl";
 
 export default function () {
     interface ILoaded { universe: string, owner: string | ObjectId }
@@ -15,13 +17,14 @@ export default function () {
 
     const fetchBestiary = async (universe: string) => {
 
-        if (loadedBestiary.value.universe === universe && loadedBestiary.value.owner == user.value._id) return;
+        if (loadedBestiary.value.universe === universe && loadedBestiary.value.owner === user.value._id) return;
 
         try {
             const bestiary: IBestiary = await $fetch(`/api/bestiary/${universe}`, {
                 method: 'GET',
             });
 
+            console.log(bestiary);
             fields.value = bestiary.fields;
             creatures.value = bestiary.creatures;
             loadedBestiary.value.universe = bestiary.universe;
@@ -37,5 +40,65 @@ export default function () {
         }
     }
 
-    return { fields, creatures, fetchBestiary }
+    const addFieldInBestiary = async (universe: string, newField: IUIBestiaryField) => {
+
+        console.log(`addFieldInBestiary: ${universe} ${newField.field} in loadedBestiary: ${loadedBestiary.value.universe} by ${loadedBestiary.value.owner}`)
+
+        if (!(loadedBestiary.value.universe === universe && loadedBestiary.value.owner === user.value._id)) return;
+        console.log(newField);
+
+        const dataToSend: { universe: string, field: IBestiaryField } = {
+            universe,
+            field: {
+                field: newField.field,
+                type: newField.type,
+                required: newField.required,
+                value: undefined,
+                options: undefined,
+                min: undefined,
+                max: undefined,
+                step: undefined,
+                maxLenght: undefined,
+            }
+        };
+
+        switch (newField.type) {
+            case bestiaryFieldTypes[0].field:
+                dataToSend.field.maxLenght = newField.maxLenght;
+                break;
+            case bestiaryFieldTypes[1].field:
+                dataToSend.field.options = newField.options.getOptionsForAPI();
+                break;
+            case bestiaryFieldTypes[2].field:
+                break;
+            case bestiaryFieldTypes[3].field:
+                dataToSend.field.min = newField.min;
+                dataToSend.field.max = newField.max;
+                dataToSend.field.step = newField.step;
+                break;
+            default:
+                break;
+        }
+
+        try {
+            const response = await $fetch(`/api/bestiary/${universe}/addField`, {
+                method: 'POST',
+                body: JSON.stringify(dataToSend),
+            });
+
+            console.log(response);
+
+            // await fetchBestiary(universe);
+        } catch (err) {
+            let errMessage = '';
+            if (err.response._data) {
+                if (err.response._data.message) errMessage = err.response._data.message;
+                else errMessage = err.response.statusText;
+            } else errMessage = err.response.statusText;
+            notif.addNotif(new Notif({ type: NotifType.error, message: errMessage, title: `Error while adding a field in bestiary` }));
+            console.log(err);
+        }
+    }
+
+    return { fields, creatures, fetchBestiary, addFieldInBestiary }
 }

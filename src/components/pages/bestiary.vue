@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import { Ref } from 'nuxt/dist/app/compat/capi';
 
-import { bestiaryFieldTypes, emptyBestiaryField } from '~/types/IGameImpl';
+import { bestiaryFieldTypes, emptyUIBestiaryField } from '~/types/IGameImpl';
 import { CSelectList } from '~/types/CGame';
 import { IBestiaryField } from '~/types/IGame';
 import BestiaryInput from '~/components/ui/BestiaryInput.vue';
 import SelectMenu from '~/components/ui/SelectMenu.vue';
+import { IUIBestiaryField } from '~~/src/types/IUI';
 
-const { fields, creatures, fetchBestiary } = useBestiaryManagment();
+const { fields, creatures, fetchBestiary, addFieldInBestiary } = useBestiaryManagment();
 const { getUniverseOfGame } = useGameManagment();
 const { selectFieldSelected } = useForm();
 const route = useRoute();
 
-const newField = ref(emptyBestiaryField);
+const newField = ref(emptyUIBestiaryField);
+const universe = ref('');
 
 onBeforeMount(() => {
     const game = route.params.game as string;
-    const universe = getUniverseOfGame(game);
-    fetchBestiary(universe);
+    universe.value = getUniverseOfGame(game);
+    fetchBestiary(universe.value);
 
     newField.value.options = new CSelectList();
 });
@@ -40,6 +42,10 @@ function deleteOptionForSelect() {
 
 function onClickMenuItem(value: string) {
     selectFieldSelected.value = value;
+}
+
+function createField() {
+    addFieldInBestiary(universe.value, newField.value as IUIBestiaryField);
 }
 
 </script>
@@ -147,13 +153,16 @@ function onClickMenuItem(value: string) {
                     </div>
                 </div>
             </div>
-            <div class="divider divider-horizontal"></div>
-            <div class="bg-base-200 rounded p-5 flex-grow ">
+            <div class="bg-base-200 rounded ml-4 p-5 flex-grow relative">
                 <h3 class="font-bold text-lg">Render</h3>
                 <div class="mb-0 py-4">
                     {{ bestiaryFieldTypes.find((field) => { return field.field == newField.type }).desc }}
                 </div>
-                <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IBestiaryField>)" />
+                <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IUIBestiaryField>)" />
+                <div class="absolute bottom-5 right-5 modal-action">
+                    <button class="btn btn-outline" onclick="add_field_modal.close()">Cancel</button>
+                    <button class="btn btn-success" @click="createField">Add</button>
+                </div>
             </div>
         </div>
     </dialog>

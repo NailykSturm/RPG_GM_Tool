@@ -1,5 +1,6 @@
 import { EBestiaryFieldType } from "./EGame";
-import { IGameInfo, IBestiaryField } from "./IGame";
+import { IGameInfo, IBestiaryField, IBestiary } from "./IGame";
+import { IUIBestiaryField } from "./IUI";
 
 export const emptyGame: IGameInfo = { name: '', universe: '', old_name: '', old_universe: '' };
 export const bestiaryFieldTypes = [
@@ -17,4 +18,5 @@ export const bestiaryFieldTypes = [
 //     { name: EBestiaryFieldOption.MaxLenght, usedBy: EBestiaryFieldType.Input, label: 'MaxLenght', type: 'number', value: 50, desc: 'Maximum number of characters for the field (default: 50)' },
 //     { name: EBestiaryFieldOption.Required, label: 'Required', type: 'boolean', value: false, desc: 'Is the field required ? (default: false)' },
 // ];
+export const emptyUIBestiaryField: IUIBestiaryField = { field: 'Default', value: 'Default', type: EBestiaryFieldType.Input, min: 0, max: 100, step: 1, maxLenght: 50, required: false };
 export const emptyBestiaryField: IBestiaryField = { field: 'Default', value: 'Default', type: EBestiaryFieldType.Input, min: 0, max: 100, step: 1, maxLenght: 50, required: false };

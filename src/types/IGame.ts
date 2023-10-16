@@ -38,7 +38,7 @@ export interface IBestiaryField {
     field: string;
     value: string | number | boolean;
     type: EBestiaryFieldType;
-    options?: CSelectList;
+    options?: string[];
     min?: number;
     max?: number;
     step?: number;
