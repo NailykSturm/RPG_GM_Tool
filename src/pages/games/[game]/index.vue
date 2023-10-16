@@ -28,7 +28,7 @@ const togleListDisplay = () => {
                 <div class="drawer-content flex flex-col h-full">
                     <nav class="bg-base-200 navbar">
                         <div class="navbar-start">
-                            <label for="my-drawer" class="btn btn-outline btn-info">
+                            <label for="my-drawer" class="btn ">
                                 <svg class=" h-8 w-8" width="24" height="24" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                     stroke-linejoin="round">

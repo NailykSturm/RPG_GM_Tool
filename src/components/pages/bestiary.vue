@@ -53,9 +53,8 @@ function createField() {
 
 <template>
     <div class="h-full w-full grid grid-cols-4 gap-4">
-        <!-- <div v-for="i in 12" class="bg-warning text-warning-content flex items-center justify-center">{{ i }}</div> -->
         <div class="flex bg-base-300 flex-col items-center py-4">Fields
-            <button class="btn btn-info" onclick="add_field_modal.showModal()">Add field</button>
+            <button class="btn btn-primary" onclick="add_field_modal.showModal()">Add field</button>
             <div style="max-height: 75vh;">
                 <template v-if="!fields || fields.length == 0">
                     <div class="flex flex-col items-center justify-center">
@@ -64,19 +63,44 @@ function createField() {
                     </div>
                 </template>
                 <template v-else>
-                    <!-- <ul class="grow overflow-y-auto">
-                        <li v-for="field in fields" class="grid h-8 rounded text-primary-content place-content-center">
-                            {{ field.field }} : {{ EBestiaryFieldType[field.type] }}
-                        </li>
-                    </ul> -->
                     <table class="table table-zebra">
                         <thead>
-                            <tr><th>Name</th><th>Type</th></tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="field in fields">
+                            <tr v-for="field in fields" class="hover bg-base-100">
                                 <td>{{ field.field }}</td>
                                 <td>{{ EBestiaryFieldType[field.type] }}</td>
+                                <td>
+                                    <button class="btn btn-ghost text-secondary px-0">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                            <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+                                        </svg>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-ghost text-error px-0">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                            <line x1="4" y1="7" x2="20" y2="7" />
+                                            <line x1="10" y1="11" x2="10" y2="17" />
+                                            <line x1="14" y1="11" x2="14" y2="17" />
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -173,9 +197,8 @@ function createField() {
                 <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IUIBestiaryField>)" />
                 <div class="absolute bottom-5 right-5 modal-action">
                     <button class="btn btn-outline" onclick="add_field_modal.close()">Cancel</button>
-                    <button class="btn btn-success" @click="createField">Add</button>
-                </div>
+                <button class="btn btn-success" @click="createField">Add</button>
             </div>
         </div>
-    </dialog>
-</template>
+    </div>
+</dialog></template>
