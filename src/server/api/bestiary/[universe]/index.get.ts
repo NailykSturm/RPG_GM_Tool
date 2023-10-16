@@ -1,4 +1,5 @@
 import userModel from '~/server/models/User';
+import bestiaryModel from '~/server/models/Bestiary';
 import { log } from '~/server/utils/log';
 import meGet from '~/server/api/me.get';
 import { IBestiary } from '~/types/IGame';
@@ -14,9 +15,9 @@ export default defineEventHandler(async (event) => {
 
         try {
             const user = await userModel.findById(me._id);
-
+            const bestiaries = await bestiaryModel.find({ owner: me._id });
             let bestiary: IBestiary;
-            user.bestiaries.forEach((b) => {
+            bestiaries.forEach((b) => {
                 if (b.universe == universe) {
                     bestiary = b;
                     return;

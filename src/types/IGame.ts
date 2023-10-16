@@ -1,4 +1,5 @@
-import { CSelectList } from "./CGame";
+import { ObjectId } from "mongoose";
+
 import { EBestiaryFieldType } from "./EGame";
 import { IUIBestiaryInfo } from "./IUI";
 
@@ -9,7 +10,7 @@ export interface IGameDetails extends IGameInfo {
 
 export interface IGameInfo {
     name: string;
-    universe: string;
+    universe: { name: string, id: ObjectId };
     old_name: string;
     old_universe: string;
     display?: boolean;
@@ -25,6 +26,8 @@ export interface IGameInfo {
  * 
  */
 export interface IBestiary {
+    _id: ObjectId;
+    owner: ObjectId;
     universe: string;
     fields: IBestiaryField[];
     creatures: IBestiaryCreature[];

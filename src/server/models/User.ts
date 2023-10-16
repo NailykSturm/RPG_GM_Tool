@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 import type { IUserComplete } from '~/types/IUser';
-import { BestiarySchema, GameSchema } from '~/types/IGameDB';
+import { GameSchema } from '~/types/IGameDB';
 
 interface IUserDocument extends IUserComplete, Document {
     validatePassword: (data: string) => Promise<boolean>;
@@ -13,7 +13,6 @@ const UserSchema: mongoose.Schema = new mongoose.Schema<IUserComplete>(
         email: { type: String, requied: true },
         password: { type: String, requied: true },
         games: { type: [GameSchema], default: []},
-        bestiaries: { type: [BestiarySchema], default: []}
     },
     { timestamps: true }
 );

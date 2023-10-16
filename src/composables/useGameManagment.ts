@@ -140,7 +140,7 @@ export default function () {
     const getUniverseOfGame = (game: string) => {
         const gameInfo = listGames.value.find((g) => g.name === game);
         if (!gameInfo) return null;
-        return gameInfo.universe;
+        return gameInfo.universe.name;
     }
 
     return { listGames, listBestiary, refreshListGames, newGame, updateGame, deleteGame, getUniverseOfGame };

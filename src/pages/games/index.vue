@@ -44,10 +44,10 @@ onBeforeMount(() => {
                                         <div class="collapse-content text-base">
                                             <p class="mb-3">Used by : </p>
                                             <div class="flex flex-nowrap overflow-x-auto pb-1 gap-2">
-                                                <div v-if="!listGames.find((game) => { return game.universe == bestiary.universe })"
+                                                <div v-if="!listGames.find((game) => { return game.universe.name == bestiary.universe })"
                                                     class="badge badge-error">No game using it</div>
                                                 <template v-else v-for="game in listGames">
-                                                    <div v-if="game.universe == bestiary.universe"
+                                                    <div v-if="game.universe.name == bestiary.universe"
                                                         class="badge badge-neutral">
                                                         {{ game.name }}</div>
                                                 </template>

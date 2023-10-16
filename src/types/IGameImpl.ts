@@ -2,7 +2,7 @@ import { EBestiaryFieldType } from "./EGame";
 import { IGameInfo, IBestiaryField, IBestiary } from "./IGame";
 import { IUIBestiaryField } from "./IUI";
 
-export const emptyGame: IGameInfo = { name: '', universe: '', old_name: '', old_universe: '' };
+export const emptyGame: IGameInfo = { name: '', universe: {id : null, name: ''}, old_name: '', old_universe: '' };
 export const bestiaryFieldTypes = [
     { field: EBestiaryFieldType.Input, label: 'Input', type: 'string', desc: 'Field with free value ' },
     { field: EBestiaryFieldType.Select, label: 'Select', type: 'string', desc: 'Field with a list of values' },

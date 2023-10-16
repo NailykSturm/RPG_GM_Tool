@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
         let nbGameDeleted = 0;
         user.games.forEach((game, index) => {
-            if (game.name == gameName && game.universe == gameUniverse) {
+            if (game.name == gameName && game.universe.name == gameUniverse.name) {
                 user.games.splice(index, 1);
                 nbGameDeleted++;
             }
@@ -25,12 +25,12 @@ export default defineEventHandler(async (event) => {
 
         try {
 
-            await userModel.updateOne({ _id: user_id }, { $set: { games: user.games } }).exec();
-            if (nbGameDeleted == 0) {
+            const ack = await userModel.updateOne({ _id: user_id }, { $set: { games: user.games } }).exec();
+            if (ack.modifiedCount == 0) {
                 log.error('POST API/game/delete', `Cannot delete game ${gameName} : game not found`, user._id);
                 return createError({ statusCode: 402, statusMessage: 'game not found' })
             }
-            else if (nbGameDeleted == 1) log.info('POST API/game/delete', `Game ${gameName} deleted`, user._id);
+            else if (ack.modifiedCount == 1) log.info('POST API/game/delete', `Game ${gameName} deleted`, user._id);
             else log.warn('POST API/game/delete', `${nbGameDeleted} games ${gameName} deleted`, user._id);
 
             return { statusCode: 200, statusMessage: 'Delete game successfully', message: `Game ${gameName} deleted` } as IAPIResponse;

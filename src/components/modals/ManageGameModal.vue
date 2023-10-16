@@ -21,15 +21,15 @@ function refreshOptions(event: any) {
 }
 
 function selectOption(event: IUIBestiaryInfo) {
-    modalParams.value.game.universe = event.universe;
+    modalParams.value.game.universe.name = event.universe;
     disableListItem(event.universe);
 }
 
 function createTag() {
-    if (modalParams.value.game.universe != '') {
-        if (listBestiary.value.filter((bestiary) => bestiary.universe.toLowerCase() == modalParams.value.game.universe.toLowerCase()).length == 0) {
+    if (modalParams.value.game.universe.name != '') {
+        if (listBestiary.value.filter((bestiary) => bestiary.universe.toLowerCase() == modalParams.value.game.universe.name.toLowerCase()).length == 0) {
             console.log('create tag');
-            listBestiary.value.push({ universe: modalParams.value.game.universe, display: true });
+            listBestiary.value.push({ universe: modalParams.value.game.universe.name, display: true });
         }
     }
 }
@@ -69,7 +69,7 @@ defineProps({
                         </span>
                     </label>
                     <div class="dropdown dropdown-hover dropdown-top grow">
-                        <input tabindex="0" type="text" v-model="modalParams.game.universe"
+                        <input tabindex="0" type="text" v-model="modalParams.game.universe.name"
                             placeholder="Ex: Dungeon & Dragons" class="input input-bordered w-full"
                             @input="refreshOptions" />
                         <div tabindex="0"

@@ -21,7 +21,7 @@ export default function () {
 
     function resetModalParams() {
         modalParams.value.game.name = '';
-        modalParams.value.game.universe = '';
+        modalParams.value.game.universe = emptyGame.universe;
     }
 
     return { modalParams, resetModalParams }

@@ -1,55 +1,60 @@
 import { createError } from 'h3';
-import { validateBody, Type } from 'h3-typebox'
-import mongoose from 'mongoose';
+import { validateBody, Type } from 'h3-typebox';
+import { NuxtError } from 'nuxt/dist/app/composables';
 
 import userModel from '~/server/models/User';
 import { gameInfoSchema } from '~/server/validations/index';
 import { log } from '~/server/utils/log';
 import { IAPIResponse } from '~/types/IAPI';
 import { IBestiary } from '~/types/IGame';
+import newBestiary from '~/server/api/bestiary/[universe]/new.post';
 
+const caller = 'POST API/game/new';
 export default defineEventHandler(async (event) => {
     try {
         const { gameName, gameUniverse, user_id } = await validateBody(event, gameInfoSchema);
-        log.debug('POST API/game/new', `New game request incoming => new game name : ${gameName}`, user_id);
+        log.debug(caller, `New game request incoming => new game name : ${gameName}`, user_id);
 
         try {
             const user = await userModel.findById(user_id);
             if (!user) {
-                log.error('POST API/game/new', `Cannot find user`, user_id);
-                return createError({ statusCode: 402, statusMessage: 'unknown user' })
+                log.error(caller, `Cannot find user`, user_id);
+                return createError({ statusCode: 402, statusMessage: 'unknown user' });
             }
-            log.debug('POST API/game/new', `User retreived => add a new game : ${gameName}`, user._id);
 
-            user.games.forEach(game => {
-                if (game.name == gameName) return createError({ statusCode: 401, statusMessage: 'game already exists' })
-            });
-
+            log.debug(caller, 'User retreived, try to find bestiary', user_id);
+            let bestiary: IBestiary;
             try {
-                await userModel.updateOne({ _id: user_id }, { $push: { games: { name: gameName, universe: gameUniverse } } }).exec();
+                event.context.params.universe = gameUniverse.name;
+                const createBestiaryResult = await newBestiary(event)
+                if (!isError(createBestiaryResult))
+                    bestiary = createBestiaryResult;
             } catch (error) {
-                log.critical('POST API/game/new', `Cannot access DB to create game : ${error}`);
+                log.critical(caller, `Cannot create bestiary : ${error}`);
                 return createError({ statusCode: 500, statusMessage: 'Internal server error' });
             }
 
-            let knownUniverse = user.bestiaries.find(bestiary => {
-                return bestiary.universe == gameUniverse;
+            user.games.forEach(game => {
+                if (game.name.toLowerCase() == gameName.toLowerCase()) {
+                    log.info(caller, `game already exists`, user._id);
+                    return createError({ statusCode: 401, statusMessage: 'game already exists' })
+                }
             });
 
-            if (!knownUniverse) {
-                knownUniverse = { universe: gameUniverse, creatures: [], fields: [] } as IBestiary;
-                user.bestiaries.push(knownUniverse);
-                try {
-                    await userModel.updateOne({ _id: user_id }, { $set: { bestiaries: user.bestiaries } }).exec();
-                } catch (error) {
-                    log.critical('POST API/game/new', `Cannot access DB to create bestiary : ${error}`);
-                    return createError({ statusCode: 500, statusMessage: 'Internal server error' });
-                }
+            try {
+                await userModel.updateOne(
+                    { _id: user_id },
+                    { $push: { games: { name: gameName, universe: { name: bestiary.universe, id: bestiary._id } } } }
+                ).exec();
+            } catch (error) {
+                log.critical(caller, `Cannot access DB to create game : ${error}`);
+                return createError({ statusCode: 500, statusMessage: 'Internal server error' });
             }
+
             return { statusCode: 200, statusMessage: `New game ${gameName} added` } as IAPIResponse;
 
         } catch (error) {
-            log.critical('POST API/game/new', `Cannot access DB to find user : ${error}`);
+            log.critical(caller, `Cannot access DB to find user : ${error}`);
             return createError({ statusCode: 500, statusMessage: 'Internal server error' });
         }
     } catch (error) {
@@ -58,7 +63,7 @@ export default defineEventHandler(async (event) => {
         if (statusMessage.includes("'user_id")) statusMessage = 'Cannot identify the user';
         else if (statusMessage.includes("'newGameName")) statusMessage = 'New game name is missing';
 
-        log.error('POST API/game/new', `Wrong parameters for update game request : ${error}`);
+        log.error(caller, `Wrong parameters for update game request : ${error}`);
         return createError({ statusCode: statusCode, statusMessage: statusMessage });
     }
 });

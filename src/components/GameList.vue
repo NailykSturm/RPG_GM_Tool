@@ -29,7 +29,7 @@ const handleDeleteGame: Function = (game: IGameInfo) => {
 }
 const handleUpdateGame: Function = (game: IGameInfo) => {
     modalParams.value = {
-        game: { ...game, old_name: game.name, old_universe: game.universe },
+        game: { ...game, old_name: game.name, old_universe: game.universe.name },
         title: `How do you want to rename the game ${game.name} ?`,
         confirmButtonText: "update",
         displayFields: true,
