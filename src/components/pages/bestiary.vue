@@ -6,7 +6,8 @@ import { CSelectList } from '~/types/CGame';
 import { IBestiaryField } from '~/types/IGame';
 import BestiaryInput from '~/components/ui/BestiaryInput.vue';
 import SelectMenu from '~/components/ui/SelectMenu.vue';
-import { IUIBestiaryField } from '~~/src/types/IUI';
+import { IUIBestiaryField } from '~/types/IUI';
+import { EBestiaryFieldType } from '~/types/EGame';
 
 const { fields, creatures, fetchBestiary, addFieldInBestiary } = useBestiaryManagment();
 const { getUniverseOfGame } = useGameManagment();
@@ -63,11 +64,22 @@ function createField() {
                     </div>
                 </template>
                 <template v-else>
-                    <ul class="grow overflow-y-auto">
-                        <li v-for="field in fields" class="flex items-center justify-center">
-                            {{ field.name }}
+                    <!-- <ul class="grow overflow-y-auto">
+                        <li v-for="field in fields" class="grid h-8 rounded text-primary-content place-content-center">
+                            {{ field.field }} : {{ EBestiaryFieldType[field.type] }}
                         </li>
-                    </ul>
+                    </ul> -->
+                    <table class="table table-zebra">
+                        <thead>
+                            <tr><th>Name</th><th>Type</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="field in fields">
+                                <td>{{ field.field }}</td>
+                                <td>{{ EBestiaryFieldType[field.type] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </template>
             </div>
         </div>

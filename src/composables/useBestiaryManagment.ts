@@ -16,13 +16,8 @@ export default function () {
     const { user } = useAuth();
 
     const fetchBestiary = async (universe: string) => {
-
-        if (loadedBestiary.value.universe === universe && loadedBestiary.value.owner === user.value._id) return;
-
         try {
-            const bestiary: IBestiary = await $fetch(`/api/bestiary/${universe}`, {
-                method: 'GET',
-            });
+            const bestiary: IBestiary = await $fetch(`/api/bestiary/${universe}`, { method: 'GET' });
 
             console.log(bestiary);
             fields.value = bestiary.fields;
@@ -88,7 +83,7 @@ export default function () {
 
             console.log(response);
 
-            // await fetchBestiary(universe);
+            await fetchBestiary(universe);
         } catch (err) {
             let errMessage = '';
             if (err.response._data) {
