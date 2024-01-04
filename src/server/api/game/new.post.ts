@@ -26,33 +26,30 @@ export default defineEventHandler(async (event) => {
             let bestiary: IBestiary;
             try {
                 event.context.params.universe = gameUniverse.name;
-                const createBestiaryResult = await newBestiary(event)
-                if (!isError(createBestiaryResult))
-                    bestiary = createBestiaryResult;
+                const createBestiaryResult = await newBestiary(event);
+                if (!isError(createBestiaryResult)) bestiary = createBestiaryResult;
             } catch (error) {
                 log.critical(caller, `Cannot create bestiary : ${error}`);
                 return createError({ statusCode: 500, statusMessage: 'Internal server error' });
             }
 
-            user.games.forEach(game => {
+            user.games.forEach((game) => {
                 if (game.name.toLowerCase() == gameName.toLowerCase()) {
                     log.info(caller, `game already exists`, user._id);
-                    return createError({ statusCode: 401, statusMessage: 'game already exists' })
+                    return createError({ statusCode: 401, statusMessage: 'game already exists' });
                 }
             });
 
             try {
-                await userModel.updateOne(
-                    { _id: user_id },
-                    { $push: { games: { name: gameName, universe: { name: bestiary.universe, id: bestiary._id } } } }
-                ).exec();
+                await userModel
+                    .updateOne({ _id: user_id }, { $push: { games: { name: gameName, universe: { name: bestiary.universe, id: bestiary._id } } } })
+                    .exec();
             } catch (error) {
                 log.critical(caller, `Cannot access DB to create game : ${error}`);
                 return createError({ statusCode: 500, statusMessage: 'Internal server error' });
             }
 
             return { statusCode: 200, statusMessage: `New game ${gameName} added` } as IAPIResponse;
-
         } catch (error) {
             log.critical(caller, `Cannot access DB to find user : ${error}`);
             return createError({ statusCode: 500, statusMessage: 'Internal server error' });

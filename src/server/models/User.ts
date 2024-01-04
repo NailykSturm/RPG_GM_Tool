@@ -12,7 +12,7 @@ const UserSchema: mongoose.Schema = new mongoose.Schema<IUserComplete>(
     {
         email: { type: String, requied: true },
         password: { type: String, requied: true },
-        games: { type: [GameSchema], default: []},
+        games: { type: [GameSchema], default: [] },
     },
     { timestamps: true }
 );

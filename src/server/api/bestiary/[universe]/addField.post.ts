@@ -63,6 +63,6 @@ export default defineEventHandler(async (event) => {
         }
     } catch (error) {
         log.critical(caller, `Error while getting user ID : ${error}`);
-        return { statusCode: 500, statusMessage: 'Internal server error' } as IAPIResponse
+        return { statusCode: 500, statusMessage: 'Internal server error' } as IAPIResponse;
     }
 });

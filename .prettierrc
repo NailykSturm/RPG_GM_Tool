@@ -5,5 +5,8 @@
     "singleQuote": true,
     "printWidth": 150,
     "bracketSpacing": true,
-    "jsxBracketSameLine": true
+    "jsxBracketSameLine": true,
+    "bracketSameLine": true,
+    "vueIndentScriptAndStyle": true,
+    "singleAttributePerLine": false
 }

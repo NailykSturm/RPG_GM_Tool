@@ -22,7 +22,9 @@ export default defineEventHandler(async (event) => {
                 const validatePass = await user.validatePassword(password);
                 if (!validatePass) return createError({ statusCode: 400, statusMessage: 'Your password is wrong' });
 
-                const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, { expiresIn: process.env.NODE_END === 'production' ? '1d' : '7d' });
+                const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, {
+                    expiresIn: process.env.NODE_END === 'production' ? '1d' : '7d',
+                });
 
                 setCookie(event, 'token', token, {
                     maxAge: process.env.NODE_END === 'production' ? 60 * 60 * 8 : 60 * 60 * 24 * 7,
@@ -33,7 +35,7 @@ export default defineEventHandler(async (event) => {
                 });
 
                 log.info('POST API/auth/login', `User logged in`, user._id);
-                return {_id: user._id, email: user.email} as UserWithoutPassword;
+                return { _id: user._id, email: user.email } as UserWithoutPassword;
             } else return createError({ statusCode: 400, statusMessage: 'Your email is wrong' });
         } catch (error) {
             log.critical('POST API/auth/login', `Cannot access DB to find a user : ${error}`, email);

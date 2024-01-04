@@ -24,17 +24,14 @@ export default defineEventHandler(async (event) => {
         });
 
         try {
-
             const ack = await userModel.updateOne({ _id: user_id }, { $set: { games: user.games } }).exec();
             if (ack.modifiedCount == 0) {
                 log.error('POST API/game/delete', `Cannot delete game ${gameName} : game not found`, user._id);
-                return createError({ statusCode: 402, statusMessage: 'game not found' })
-            }
-            else if (ack.modifiedCount == 1) log.info('POST API/game/delete', `Game ${gameName} deleted`, user._id);
+                return createError({ statusCode: 402, statusMessage: 'game not found' });
+            } else if (ack.modifiedCount == 1) log.info('POST API/game/delete', `Game ${gameName} deleted`, user._id);
             else log.warn('POST API/game/delete', `${nbGameDeleted} games ${gameName} deleted`, user._id);
 
             return { statusCode: 200, statusMessage: 'Delete game successfully', message: `Game ${gameName} deleted` } as IAPIResponse;
-
         } catch (error) {
             log.error('POST API/game/delete', `Cannot delete game ${gameName} : ${error}`, user._id);
             return createError({ statusCode: 500, statusMessage: 'Cannot delete game' });

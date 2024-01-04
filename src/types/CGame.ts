@@ -1,7 +1,6 @@
-import { IUISelectOption } from "~/types/IUI";
+import { IUISelectOption } from '~/types/IUI';
 
 export class CSelectList {
-
     _options: Set<IUISelectOption>;
 
     constructor() {
@@ -47,24 +46,28 @@ export class CSelectList {
     addOption(option: string) {
         console.log(option);
         let find = false;
-        this._options.forEach(opt => { if (opt.value == option) find = true });
+        this._options.forEach((opt) => {
+            if (opt.value == option) find = true;
+        });
         if (!find) this._options.add({ value: option, display: true });
     }
     removeOption(option: string) {
-        this._options.forEach(opt => { if (opt.value == option) this._options.delete(opt) });
+        this._options.forEach((opt) => {
+            if (opt.value == option) this._options.delete(opt);
+        });
     }
     getOptions() {
         return Array.from(this._options);
     }
     getOptionsForAPI() {
-        return Array.from(this._options).map(opt => opt.value);
+        return Array.from(this._options).map((opt) => opt.value);
     }
     resetDisplay() {
-        this._options.forEach(option => option.display = true);
+        this._options.forEach((option) => (option.display = true));
     }
     includeOption(option: string) {
         const { cat, subCat, obj } = this._splitValue(option);
-        this._options.forEach(opt => {
+        this._options.forEach((opt) => {
             const { cat: c, subCat: sc, obj: o } = this._splitValue(opt.value);
 
             if (!subCat) {
@@ -72,26 +75,28 @@ export class CSelectList {
                     if ((o && o.includes(obj)) || (sc && sc.includes(obj)) || (c && c.includes(obj))) opt.display = true;
                     else opt.display = false;
                 } else {
-                    if (((c && c.includes(cat)) || (sc && sc.includes(cat))) && ((o && o.includes(obj)) || (sc && sc.includes(obj)))) opt.display = true;
+                    if (((c && c.includes(cat)) || (sc && sc.includes(cat))) && ((o && o.includes(obj)) || (sc && sc.includes(obj))))
+                        opt.display = true;
                     else opt.display = false;
                 }
             } else {
-                if ((c && c.includes(cat)) && (sc && sc.includes(subCat)) && (o && o.includes(obj))) opt.display = true;
+                if (c && c.includes(cat) && sc && sc.includes(subCat) && o && o.includes(obj)) opt.display = true;
                 else opt.display = false;
             }
-        })
+        });
     }
 
     private _splitValue(value: string) {
         if (!value) return { cat: undefined, subCat: undefined, obj: undefined };
         const cats = value.split('/');
-        let cat: string, subCat: string, obj: string = undefined;
+        let cat: string,
+            subCat: string,
+            obj: string = undefined;
         if (cats.length == 1) obj = cats[0];
         else if (cats.length == 2) {
             cat = cats.shift();
             obj = cats.toString();
-        }
-        else {
+        } else {
             cat = cats.shift();
             subCat = cats.shift();
             obj = cats.toString();
@@ -113,28 +118,28 @@ export class CSelectList {
 
     getListCategory() {
         interface ISubCat {
-            name: string,
-            display: boolean,
-            value: IUISelectOption[],
-        };
+            name: string;
+            display: boolean;
+            value: IUISelectOption[];
+        }
         interface ICategory {
-            name: string,
-            display: boolean,
-            subcat:ISubCat[],
-            valueWithoutSubcat: IUISelectOption[],
-        };
+            name: string;
+            display: boolean;
+            subcat: ISubCat[];
+            valueWithoutSubcat: IUISelectOption[];
+        }
         const categories = {
             cat: [] as ICategory[],
             valueWithoutCat: [] as IUISelectOption[],
         };
 
-        this._options.forEach(option => {
+        this._options.forEach((option) => {
             const { cat, subCat, obj } = this._splitValue(option.value);
             if (!subCat) {
                 if (!cat) {
                     categories.valueWithoutCat.push(option);
                 } else {
-                    const indexCat = categories.cat.findIndex(c => c.name == cat);
+                    const indexCat = categories.cat.findIndex((c) => c.name == cat);
                     if (indexCat == -1) {
                         categories.cat.push({ name: cat, subcat: [], valueWithoutSubcat: [], display: false });
                         categories.cat[categories.cat.length - 1].valueWithoutSubcat.push(option);
@@ -143,12 +148,12 @@ export class CSelectList {
                     }
                 }
             } else {
-                const indexCat = categories.cat.findIndex(c => c.name == cat);
+                const indexCat = categories.cat.findIndex((c) => c.name == cat);
                 if (indexCat == -1) {
                     categories.cat.push({ name: cat, subcat: [], valueWithoutSubcat: [], display: false });
                     categories.cat[categories.cat.length - 1].subcat.push({ name: subCat, value: [option], display: false });
                 } else {
-                    const indexSubCat = categories.cat[indexCat].subcat.findIndex(sc => sc.name == subCat);
+                    const indexSubCat = categories.cat[indexCat].subcat.findIndex((sc) => sc.name == subCat);
                     if (indexSubCat == -1) {
                         categories.cat[indexCat].subcat.push({ name: subCat, value: [option], display: false });
                     } else {
@@ -158,23 +163,22 @@ export class CSelectList {
             }
         });
 
-        categories.cat.forEach(cat => {
-            cat.subcat.forEach(subcat => {
-                subcat.value.forEach(value => {
+        categories.cat.forEach((cat) => {
+            cat.subcat.forEach((subcat) => {
+                subcat.value.forEach((value) => {
                     if (value.display) {
                         cat.display = true;
                         subcat.display = true;
                     }
                 });
             });
-            cat.valueWithoutSubcat.forEach(value => {
+            cat.valueWithoutSubcat.forEach((value) => {
                 if (value.display) {
                     cat.display = true;
                 }
             });
-        })
+        });
 
-        return {cat : Array.from(new Set([...categories.cat])), valueWithoutCat: Array.from(new Set([...categories.valueWithoutCat]))};
+        return { cat: Array.from(new Set([...categories.cat])), valueWithoutCat: Array.from(new Set([...categories.valueWithoutCat])) };
     }
-
 }

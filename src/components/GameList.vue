@@ -1,80 +1,77 @@
 <script setup lang="ts">
-import { Ref } from 'nuxt/dist/app/compat/capi';
+    import { Ref } from 'nuxt/dist/app/compat/capi';
 
-import { IGameInfo } from '~/types/IGame';
-import { emptyGame } from '~/types/IGameImpl';
-import ManageGameModal from '~/components/modals/ManageGameModal.vue';
+    import { IGameInfo } from '~/types/IGame';
+    import { emptyGame } from '~/types/IGameImpl';
+    import ManageGameModal from '~/components/modals/ManageGameModal.vue';
 
-const { listGames, newGame, updateGame, deleteGame } = useGameManagment();
-const { modalParams } = useModalParams();
+    const { listGames, newGame, updateGame, deleteGame } = useGameManagment();
+    const { modalParams } = useModalParams();
 
-const searchGameInput: Ref<string> = ref('');
-const handleCreateGame: Function = () => {
-    modalParams.value = {
-        game: emptyGame,
-        title: "What's the name of your new game ?",
-        confirmButtonText: "create",
-        displayFields: true,
-        handleConfirm: handleConfirmCreate,
+    const searchGameInput: Ref<string> = ref('');
+    const handleCreateGame: Function = () => {
+        modalParams.value = {
+            game: emptyGame,
+            title: "What's the name of your new game ?",
+            confirmButtonText: 'create',
+            displayFields: true,
+            handleConfirm: handleConfirmCreate,
+        };
+    };
+    const handleDeleteGame: Function = (game: IGameInfo) => {
+        modalParams.value = {
+            game: { ...game },
+            title: `Are you sure you want to delete the game ${game.name} ?`,
+            confirmButtonText: 'delete',
+            displayFields: false,
+            handleConfirm: handleConfirmDelete,
+        };
+    };
+    const handleUpdateGame: Function = (game: IGameInfo) => {
+        modalParams.value = {
+            game: { ...game, old_name: game.name, old_universe: game.universe.name },
+            title: `How do you want to rename the game ${game.name} ?`,
+            confirmButtonText: 'update',
+            displayFields: true,
+            handleConfirm: handleConfirmUpdate,
+        };
+    };
+
+    const handleConfirmCreate: Function = () => {
+        const newGameName: IGameInfo = { ...modalParams.value.game };
+        newGame(newGameName);
+    };
+    const handleConfirmDelete: Function = () => {
+        const gameToDelete: IGameInfo = { ...modalParams.value.game };
+        deleteGame(gameToDelete);
+    };
+    const handleConfirmUpdate: Function = () => {
+        const gameToUpdate: IGameInfo = { ...modalParams.value.game };
+        updateGame(gameToUpdate);
+    };
+
+    function refreshOptions() {
+        listGames.value.map((game) => {
+            if (game.name.toLowerCase().includes(searchGameInput.value.toLowerCase())) {
+                game.display = true;
+            } else {
+                game.display = false;
+            }
+            return game;
+        });
     }
-}
-const handleDeleteGame: Function = (game: IGameInfo) => {
-    modalParams.value = {
-        game: { ...game },
-        title: `Are you sure you want to delete the game ${game.name} ?`,
-        confirmButtonText: "delete",
-        displayFields: false,
-        handleConfirm: handleConfirmDelete,
-    }
-}
-const handleUpdateGame: Function = (game: IGameInfo) => {
-    modalParams.value = {
-        game: { ...game, old_name: game.name, old_universe: game.universe.name },
-        title: `How do you want to rename the game ${game.name} ?`,
-        confirmButtonText: "update",
-        displayFields: true,
-        handleConfirm: handleConfirmUpdate,
-    }
-}
-
-const handleConfirmCreate: Function = () => {
-    const newGameName: IGameInfo = { ...modalParams.value.game };
-    newGame(newGameName);
-}
-const handleConfirmDelete: Function = () => {
-    const gameToDelete: IGameInfo = { ...modalParams.value.game };
-    deleteGame(gameToDelete);
-}
-const handleConfirmUpdate: Function = () => {
-    const gameToUpdate: IGameInfo = { ...modalParams.value.game };
-    updateGame(gameToUpdate);
-}
-
-function refreshOptions() {
-    listGames.value.map((game) => {
-        if (game.name.toLowerCase().includes(searchGameInput.value.toLowerCase())) {
-            game.display = true;
-        } else {
-            game.display = false;
-        }
-        return game;
-    });
-}
-
 </script>
 
 <template>
     <div class="bg-base-200 flex flex-col h-full w-96">
         <h1 class="flex text-xl items-center justify-center mt-2">List of your games</h1>
         <div class="flex items-center justify-around mb-5">
-            <button class="btn btn-primary" onclick="add_game_modal.showModal()" @click="handleCreateGame()">Add
-                game</button>
+            <button class="btn btn-primary" onclick="add_game_modal.showModal()" @click="handleCreateGame()">Add game</button>
         </div>
         <div class="px-5">
-            <input class="input input-bordered w-full" type="text" placeholder="Type for search" @input="refreshOptions"
-                v-model="searchGameInput">
+            <input class="input input-bordered w-full" type="text" placeholder="Type for search" @input="refreshOptions" v-model="searchGameInput" />
         </div>
-        <div class="flex mx-2" style="max-height: 75vh;">
+        <div class="flex mx-2" style="max-height: 75vh">
             <div class="grow overflow-y-auto">
                 <table class="table table-zebra">
                     <thead>
@@ -88,15 +85,21 @@ function refreshOptions() {
                         <template v-for="game in listGames">
                             <tr v-if="game.display" class="hover bg-base-100">
                                 <td class="w-full">
-                                    <NuxtLink class="btn btn-ghost btn-outline w-full" :to="`/games/${game.name}`">{{
-                                        game.name }}
-                                    </NuxtLink>
+                                    <NuxtLink class="btn btn-ghost btn-outline w-full" :to="`/games/${game.name}`">{{ game.name }} </NuxtLink>
                                 </td>
                                 <td>
-                                    <button class="btn btn-ghost text-secondary px-1"
-                                        onclick="update_game_modal.showModal()" @click="handleUpdateGame(game)">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                    <button
+                                        class="btn btn-ghost text-secondary px-1"
+                                        onclick="update_game_modal.showModal()"
+                                        @click="handleUpdateGame(game)">
+                                        <svg
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2"
+                                            stroke="currentColor"
+                                            fill="none"
+                                            stroke-linecap="round"
                                             stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" />
                                             <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -105,10 +108,18 @@ function refreshOptions() {
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-ghost text-error px-1" onclick="delete_game_modal.showModal()"
+                                    <button
+                                        class="btn btn-ghost text-error px-1"
+                                        onclick="delete_game_modal.showModal()"
                                         @click="handleDeleteGame(game)">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                        <svg
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2"
+                                            stroke="currentColor"
+                                            fill="none"
+                                            stroke-linecap="round"
                                             stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" />
                                             <line x1="4" y1="7" x2="20" y2="7" />

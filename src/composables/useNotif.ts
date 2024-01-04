@@ -1,11 +1,11 @@
-import { Ref } from "nuxt/dist/app/compat/capi";
+import { Ref } from 'nuxt/dist/app/compat/capi';
 
 export const NotifType = {
-    'success': 'success',
-    'info': 'info',
-    'warning': 'warning',
-    'error': 'error',
-}
+    success: 'success',
+    info: 'info',
+    warning: 'warning',
+    error: 'error',
+};
 
 interface NotifConfig {
     type: string;
@@ -23,9 +23,9 @@ export class Notif {
     visibleInProd: boolean;
     display: boolean;
 
-    constructor(config : NotifConfig){
+    constructor(config: NotifConfig) {
         this.type = config.type;
-        this.message = config.message || '' ;
+        this.message = config.message || '';
         this.title = config.title;
         this.timeout = config.timeout || 5000;
         this.visibleInProd = config.visibleInProd || true;
@@ -36,7 +36,7 @@ export class Notif {
     displayNotif() {
         this.display = true;
         return new Promise((resolve, reject) => {
-            if ((process.env.NODE_ENV === 'production' && !this.visibleInProd)) {
+            if (process.env.NODE_ENV === 'production' && !this.visibleInProd) {
                 resolve('Notif not displayed in production');
             }
             // console.log('Notif displayed');
@@ -57,7 +57,7 @@ export default function () {
         notif.displayNotif().then(() => {
             listNotifs.value.splice(listNotifs.value.indexOf(notif), 1);
         });
-    }
+    };
 
     return { Notif, listNotifs, addNotif };
 }

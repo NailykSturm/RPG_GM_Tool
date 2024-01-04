@@ -1,13 +1,18 @@
-import { EBestiaryFieldType } from "./EGame";
-import { IGameInfo, IBestiaryField, IBestiary } from "./IGame";
-import { IUIBestiaryField } from "./IUI";
+import { EBestiaryFieldType } from './EGame';
+import { IGameInfo, IBestiaryField, IBestiary } from './IGame';
+import { IUIBestiaryField } from './IUI';
 
-export const emptyGame: IGameInfo = { name: '', universe: {id : null, name: ''}, old_name: '', old_universe: '' };
+export const emptyGame: IGameInfo = { name: '', universe: { id: null, name: '' }, old_name: '', old_universe: '' };
 export const bestiaryFieldTypes = [
     { field: EBestiaryFieldType.Input, label: 'Input', type: 'string', desc: 'Field with free value ' },
     { field: EBestiaryFieldType.Select, label: 'Select', type: 'string', desc: 'Field with a list of values' },
     { field: EBestiaryFieldType.Checkbox, label: 'Checkbox', type: 'boolean', desc: 'Field that can be true or false' },
-    { field: EBestiaryFieldType.Spinner, label: 'Spinner', type: 'number', desc: 'Field with a number value, that can be incremented or decremented' },
+    {
+        field: EBestiaryFieldType.Spinner,
+        label: 'Spinner',
+        type: 'number',
+        desc: 'Field with a number value, that can be incremented or decremented',
+    },
 ];
 
 // export const bestiaryFieldOptions = [
@@ -18,5 +23,23 @@ export const bestiaryFieldTypes = [
 //     { name: EBestiaryFieldOption.MaxLenght, usedBy: EBestiaryFieldType.Input, label: 'MaxLenght', type: 'number', value: 50, desc: 'Maximum number of characters for the field (default: 50)' },
 //     { name: EBestiaryFieldOption.Required, label: 'Required', type: 'boolean', value: false, desc: 'Is the field required ? (default: false)' },
 // ];
-export const emptyUIBestiaryField: IUIBestiaryField = { field: 'Default', value: 'Default', type: EBestiaryFieldType.Input, min: 0, max: 100, step: 1, maxLenght: 50, required: false };
-export const emptyBestiaryField: IBestiaryField = { field: 'Default', value: 'Default', type: EBestiaryFieldType.Input, min: 0, max: 100, step: 1, maxLenght: 50, required: false };
+export const emptyUIBestiaryField: IUIBestiaryField = {
+    field: 'Default',
+    value: 'Default',
+    type: EBestiaryFieldType.Input,
+    min: 0,
+    max: 100,
+    step: 1,
+    maxLenght: 50,
+    required: false,
+};
+export const emptyBestiaryField: IBestiaryField = {
+    field: 'Default',
+    value: 'Default',
+    type: EBestiaryFieldType.Input,
+    min: 0,
+    max: 100,
+    step: 1,
+    maxLenght: 50,
+    required: false,
+};

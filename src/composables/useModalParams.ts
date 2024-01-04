@@ -1,13 +1,13 @@
-import { Ref } from "nuxt/dist/app/compat/capi"
-import { IGameInfo } from "~/types/IGame";
-import { emptyGame } from "~/types/IGameImpl";
+import { Ref } from 'nuxt/dist/app/compat/capi';
+import { IGameInfo } from '~/types/IGame';
+import { emptyGame } from '~/types/IGameImpl';
 
 export interface IModalParams {
-    game: IGameInfo,
-    title: string,
-    confirmButtonText: string,
-    displayFields: boolean,
-    handleConfirm: Function,
+    game: IGameInfo;
+    title: string;
+    confirmButtonText: string;
+    displayFields: boolean;
+    handleConfirm: Function;
 }
 
 export default function () {
@@ -16,7 +16,7 @@ export default function () {
         title: '',
         confirmButtonText: '',
         displayFields: false,
-        handleConfirm: () => { },
+        handleConfirm: () => {},
     }));
 
     function resetModalParams() {
@@ -24,5 +24,5 @@ export default function () {
         modalParams.value.game.universe = emptyGame.universe;
     }
 
-    return { modalParams, resetModalParams }
+    return { modalParams, resetModalParams };
 }

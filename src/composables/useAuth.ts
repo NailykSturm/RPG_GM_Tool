@@ -48,14 +48,14 @@ export default function () {
                 method: 'POST',
             });
             setUser(null);
-        } catch (err) { }
+        } catch (err) {}
     };
 
     const me = async () => {
         try {
             const data = await $fetch('/api/me');
             setUser(data);
-        } catch (err) { }
+        } catch (err) {}
     };
 
     return { errorMessage, loggedIn, pending, user, register, login, logout, me };

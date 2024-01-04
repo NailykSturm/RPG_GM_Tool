@@ -6,7 +6,6 @@ import { IGameInfo, IListGamesBestiaries } from '~/types/IGame';
 import { IUIBestiaryInfo } from '~/types/IUI';
 
 export default defineEventHandler(async (event) => {
-
     try {
         const { _id } = await meGet(event);
 
@@ -20,7 +19,13 @@ export default defineEventHandler(async (event) => {
 
             if (user.games) {
                 user.games.forEach((game) => {
-                    listGames.push({ display: true, name: game.name, universe: game.universe, old_name: game.name, old_universe: game.universe.name });
+                    listGames.push({
+                        display: true,
+                        name: game.name,
+                        universe: game.universe,
+                        old_name: game.name,
+                        old_universe: game.universe.name,
+                    });
                 });
                 listGames.sort((a, b) => {
                     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -36,14 +41,13 @@ export default defineEventHandler(async (event) => {
             }
 
             listGames.forEach((game) => {
-                if (!listBestiaries.find(bestiary => bestiary.universe == game.universe.name)) {
+                if (!listBestiaries.find((bestiary) => bestiary.universe == game.universe.name)) {
                     log.warn('GET API/game/list', `Bestiary not found for game ${game.name} | ${game.universe} => create new one`, _id);
                     listBestiaries.push({ universe: game.universe.name, display: true });
                 }
             });
 
             return { games: listGames, bestiaries: listBestiaries } as IListGamesBestiaries;
-
         } catch (error) {
             log.error('GET API/game/list', `Error while getting the game list : ${error}`, _id);
             return createError({ statusCode: 500, statusMessage: 'Internal server error' });

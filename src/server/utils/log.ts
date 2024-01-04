@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId } from 'mongoose';
 import fs from 'fs';
 
 const config = useRuntimeConfig();
@@ -48,18 +48,24 @@ const logLv = {
 function logWriter(lv: ILog = logLv.INFO, caller: string, message: string | Object, from: string | ObjectId = 'server') {
     const date = new Date();
     if (typeof message != typeof '') message = JSON.stringify(message);
-    const logLine = `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}][${lv.displayName.padEnd(10)}]{${caller.padEnd(30)}}(${from}) ${message}`;
+    const logLine = `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}][${lv.displayName.padEnd(10)}]{${caller.padEnd(
+        30
+    )}}(${from}) ${message}`;
     if (logLevel.priority <= lv.priority && lv != logLv.NONE) {
         console.log(`${lv.color}${logLine}\x1b[0m`);
     }
 
     const fileLog = `${logFolder}${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`;
 
-    fs.appendFile(fileLatestLog, `${logLine.replaceAll('\n', '')}\n`, { flag: 'a' }, (err) => { if (err) throw err; });
+    fs.appendFile(fileLatestLog, `${logLine.replaceAll('\n', '')}\n`, { flag: 'a' }, (err) => {
+        if (err) throw err;
+    });
     fs.appendFile(fileLog, `${logLine}\n`, { flag: 'a' }, (err) => {
         if (err) {
             if (err.code === 'ENOENT') {
-                fs.mkdir(logFolder, (err) => { throw err; });
+                fs.mkdir(logFolder, (err) => {
+                    throw err;
+                });
             }
         }
     });
@@ -82,9 +88,8 @@ function logWriter(lv: ILog = logLv.INFO, caller: string, message: string | Obje
 // }
 
 class Log {
-
     private static instance: Log;
-    private constructor() { }
+    private constructor() {}
 
     static getInstance() {
         if (!Log.instance) {
@@ -129,14 +134,20 @@ export const log: Log = Log.getInstance();
 
 const folderExists = fs.existsSync(logFolder);
 if (!folderExists) {
-    fs.mkdir(logFolder, (err) => { if (err) throw err; });
+    fs.mkdir(logFolder, (err) => {
+        if (err) throw err;
+    });
 }
 
 const fileLatestLog = `${logFolder}latest.log`;
 if (!fs.existsSync(fileLatestLog)) {
-    fs.writeFile(fileLatestLog, "", (err) => { if (err) throw err; });
+    fs.writeFile(fileLatestLog, '', (err) => {
+        if (err) throw err;
+    });
 } else {
-    fs.truncate(fileLatestLog, 0, (err) => { if (err) throw err; });
+    fs.truncate(fileLatestLog, 0, (err) => {
+        if (err) throw err;
+    });
 }
 
 const logLevel = logLv.FULL;

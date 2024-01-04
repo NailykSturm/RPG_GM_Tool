@@ -1,16 +1,21 @@
-import { ObjectId } from "mongoose";
+import { ObjectId } from 'mongoose';
 
-import { IBestiary, IBestiaryField } from "~/types/IGame";
-import { IUIBestiaryField } from "~/types/IUI";
-import { UserWithoutPassword } from "~/types/IUser";
-import { bestiaryFieldTypes } from "../types/IGameImpl";
+import { IBestiary, IBestiaryField } from '~/types/IGame';
+import { IUIBestiaryField } from '~/types/IUI';
+import { UserWithoutPassword } from '~/types/IUser';
+import { bestiaryFieldTypes } from '../types/IGameImpl';
 
 export default function () {
-    interface ILoaded { universe: string, owner: string | ObjectId }
+    interface ILoaded {
+        universe: string;
+        owner: string | ObjectId;
+    }
 
     const fields = useState('fields', () => []);
     const creatures = useState('creatures', () => []);
-    const loadedBestiary = useState('loadedBestiary', () => { return { universe: '', owner: '' } as ILoaded });
+    const loadedBestiary = useState('loadedBestiary', () => {
+        return { universe: '', owner: '' } as ILoaded;
+    });
 
     const notif = useNotif();
     const { user } = useAuth();
@@ -33,16 +38,17 @@ export default function () {
             notif.addNotif(new Notif({ type: NotifType.error, message: errMessage, title: `Error while refreshing the list of games` }));
             console.log(err);
         }
-    }
+    };
 
     const addFieldInBestiary = async (universe: string, newField: IUIBestiaryField) => {
-
-        console.log(`addFieldInBestiary: ${universe} ${newField.field} in loadedBestiary: ${loadedBestiary.value.universe} by ${loadedBestiary.value.owner}`)
+        console.log(
+            `addFieldInBestiary: ${universe} ${newField.field} in loadedBestiary: ${loadedBestiary.value.universe} by ${loadedBestiary.value.owner}`
+        );
 
         if (!(loadedBestiary.value.universe === universe && loadedBestiary.value.owner === user.value._id)) return;
         console.log(newField);
 
-        const dataToSend: { universe: string, field: IBestiaryField } = {
+        const dataToSend: { universe: string; field: IBestiaryField } = {
             universe,
             field: {
                 field: newField.field,
@@ -54,7 +60,7 @@ export default function () {
                 max: undefined,
                 step: undefined,
                 maxLenght: undefined,
-            }
+            },
         };
 
         switch (newField.type) {
@@ -93,7 +99,7 @@ export default function () {
             notif.addNotif(new Notif({ type: NotifType.error, message: errMessage, title: `Error while adding a field in bestiary` }));
             console.log(err);
         }
-    }
+    };
 
-    return { fields, creatures, fetchBestiary, addFieldInBestiary }
+    return { fields, creatures, fetchBestiary, addFieldInBestiary };
 }

@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import Spinner from '~/components/icons/Spinner.vue';
-const props = defineProps({
-    click: {
-        type: Function,
-        default: () => {},
-    },
-    loading: {
-        type: Boolean,
-        default: false,
-    },
-});
+    import Spinner from '~/components/icons/Spinner.vue';
+    const props = defineProps({
+        click: {
+            type: Function,
+            default: () => {},
+        },
+        loading: {
+            type: Boolean,
+            default: false,
+        },
+    });
 </script>
 
 <template>

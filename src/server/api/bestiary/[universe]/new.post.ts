@@ -5,7 +5,6 @@ import { IBestiary } from '~/types/IGame';
 
 const caller = 'POST API/bestiary/:universe/new';
 export default defineEventHandler(async (event) => {
-
     try {
         const me = await meGet(event);
         const { universe } = event.context.params;
