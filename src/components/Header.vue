@@ -11,11 +11,13 @@
         <div class="navbar-end gap-2">
             <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
                 <NuxtLink to="/" class="btn btn-ghost" aria-current="page">Home</NuxtLink>
-                <NuxtLink to="/games" class="btn btn-ghost">Games Managment</NuxtLink>
+                <NuxtLink v-if="loggedIn" to="/games" class="btn btn-ghost">Games Managment</NuxtLink>
             </template>
             <div class="dropdown dropdown-end">
                 <label tabindex="0" class="btn btn-ghost rounded-btn">Theme</label>
-                <div tabindex="0" class="menu dropdown-content z-[2] p-2 shadow bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-64">
+                <div
+                    tabindex="0"
+                    class="menu dropdown-content z-[2] p-2 shadow bg-base-200 rounded-box w-52 mt-4 overflow-auto max-h-64">
                     <ul>
                         <li v-for="themeCategory in list_themes">
                             <details>

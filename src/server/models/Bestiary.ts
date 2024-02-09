@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-import { IBestiary, IBestiaryCreature, IBestiaryField } from '~/types/IGame';
+import type { IBestiary, IBestiaryCreature, IBestiaryField } from "../../types/Game/IGame";
 
 const BestiaryFieldSchema: mongoose.Schema = new mongoose.Schema<IBestiaryField>(
     {
@@ -46,4 +46,4 @@ const BestiarySchema: mongoose.Schema = new mongoose.Schema<IBestiary>(
     { timestamps: true }
 );
 
-export default mongoose.model<IBestiary>('bestiaries', BestiarySchema);
+export default mongoose.model<IBestiary>("bestiaries", BestiarySchema);

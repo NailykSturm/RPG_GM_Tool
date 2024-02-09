@@ -1,9 +1,9 @@
-import userModel from '~/server/models/User';
-import bestiaryModel from '~/server/models/Bestiary';
-import meGet from '~/server/api/me.get';
-import { log } from '~/server/utils/log';
-import { IGameInfo, IListGamesBestiaries } from '~/types/IGame';
-import { IUIBestiaryInfo } from '~/types/IUI';
+import userModel from "../../models/User";
+import bestiaryModel from "../../models/Bestiary";
+import meGet from "../me.get";
+import { log } from "../../utils/filelogger";
+import type { IGameInfo, IListGamesBestiaries } from "../../../types/Game/IGame";
+import type { IUIBestiaryInfo } from "../../../types/User/IUI";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
         try {
             const user = await userModel.findById(_id);
-            if (!user) return createError({ statusCode: 402, statusMessage: 'unknown user' });
+            if (!user) return createError({ statusCode: 402, statusMessage: "unknown user" });
             const bestiaries = await bestiaryModel.find({ owner: _id });
 
             let listGames: IGameInfo[] = [];
@@ -42,18 +42,22 @@ export default defineEventHandler(async (event) => {
 
             listGames.forEach((game) => {
                 if (!listBestiaries.find((bestiary) => bestiary.universe == game.universe.name)) {
-                    log.warn('GET API/game/list', `Bestiary not found for game ${game.name} | ${game.universe} => create new one`, _id);
+                    log.warn(
+                        "GET API/game/list",
+                        `Bestiary not found for game ${game.name} | ${game.universe} => create new one`,
+                        _id
+                    );
                     listBestiaries.push({ universe: game.universe.name, display: true });
                 }
             });
 
             return { games: listGames, bestiaries: listBestiaries } as IListGamesBestiaries;
         } catch (error) {
-            log.error('GET API/game/list', `Error while getting the game list : ${error}`, _id);
-            return createError({ statusCode: 500, statusMessage: 'Internal server error' });
+            log.error("GET API/game/list", `Error while getting the game list : ${error}`, _id);
+            return createError({ statusCode: 500, statusMessage: "Internal server error" });
         }
     } catch (error) {
-        log.critical('GET API/game/list', `Error while getting user ID : ${error}`);
+        log.critical("GET API/game/list", `Error while getting user ID : ${error}`);
         return error;
     }
 });

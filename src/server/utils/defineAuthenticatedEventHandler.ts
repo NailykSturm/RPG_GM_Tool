@@ -1,10 +1,10 @@
-import { CompatibilityEvent } from 'h3';
+import { H3Event } from "h3";
 
-import { IUserInfo } from '~/types/IUser';
-import { log } from '~/server/utils/log';
-import getAuth from './getAuth';
+import type { IUserInfo } from "../../types/User/IUser";
+import { log } from "./filelogger";
+import getAuth from "./getAuth";
 
-export function defineAuthenticatedEventHandler<T>(handler: (event: CompatibilityEvent, user: IUserInfo | null) => T | Promise<T>) {
+export function defineAuthenticatedEventHandler<T>(handler: (event: H3Event, user: IUserInfo | null) => T | Promise<T>) {
     return defineEventHandler<T>(async (event) => {
         try {
             const user = await getAuth(event);
@@ -13,8 +13,8 @@ export function defineAuthenticatedEventHandler<T>(handler: (event: Compatibilit
             }
             return handler(event, user);
         } catch (err) {
-            log.error('defineAuthenticatedEventHandler', `no authorization : ${err}`);
-            sendError(event, createError({ statusCode: 401, statusMessage: `no authorization : ${err}` }));
+            log.critical("defineAuthenticatedEventHandler", `${err}`);
+            sendError(event, createError({ statusCode: 500, statusMessage: `Internal server error` }));
         }
     });
 }

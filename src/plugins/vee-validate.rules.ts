@@ -1,6 +1,6 @@
-import { configure, defineRule } from 'vee-validate';
-import { email, required, min_value } from '@vee-validate/rules';
-import { defineNuxtPlugin } from '#imports';
+import { configure, defineRule } from "vee-validate";
+import { email, required, min_value } from "@vee-validate/rules";
+import { defineNuxtPlugin } from "#imports";
 
 export default defineNuxtPlugin((nuxtApp) => {
     configure({

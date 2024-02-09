@@ -1,4 +1,3 @@
-// my purpose for using defineComponent here vue does not support inheritAttrs in setup.
 <script lang="ts">
     export default defineComponent({
         inheritAttrs: false,
@@ -6,11 +5,11 @@
 </script>
 
 <script lang="ts" setup>
-    import { useField } from 'vee-validate';
+    import { useField } from "vee-validate";
     const props = defineProps({
         label: {
             type: String,
-            default: '',
+            default: "",
         },
         name: {
             type: String,
@@ -18,12 +17,12 @@
         },
         type: {
             type: String,
-            default: 'text',
+            default: "text",
         },
         placeholder: String,
     });
 
-    const { value, errorMessage } = useField(toRef(props, 'name'), undefined);
+    const { value, errorMessage } = useField(toRef(props, "name"), undefined);
 </script>
 
 <template>

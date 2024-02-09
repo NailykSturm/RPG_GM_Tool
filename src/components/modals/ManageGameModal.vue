@@ -1,12 +1,12 @@
 <script setup lang="ts">
-    import useModalParams from '~/composables/useModalParams';
-    import { IUIBestiaryInfo } from '~/types/IUI';
+    import useModalParams from "../../composables/useModalParams";
+    import type { IUIBestiaryInfo } from "../../types/User/IUI";
 
     const { modalParams } = useModalParams();
     const { listBestiary } = useGameManagment();
 
     function disableListItem(universe: string) {
-        listBestiary.value = listBestiary.value.map((bestiary) => {
+        listBestiary.value = listBestiary.value.map((bestiary: IUIBestiaryInfo) => {
             if (bestiary.universe.toLowerCase().includes(universe.toLowerCase())) {
                 bestiary.display = true;
             } else {
@@ -26,12 +26,13 @@
     }
 
     function createTag() {
-        if (modalParams.value.game.universe.name != '') {
+        if (modalParams.value.game.universe.name != "") {
             if (
-                listBestiary.value.filter((bestiary) => bestiary.universe.toLowerCase() == modalParams.value.game.universe.name.toLowerCase())
-                    .length == 0
+                listBestiary.value.filter(
+                    (bestiary: IUIBestiaryInfo) => bestiary.universe.toLowerCase() == modalParams.value.game.universe.name.toLowerCase()
+                ).length == 0
             ) {
-                console.log('create tag');
+                console.log("create tag");
                 listBestiary.value.push({ universe: modalParams.value.game.universe.name, display: true });
             }
         }
@@ -54,7 +55,11 @@
                     <label class="label">
                         <span class="label-text">Name of the game</span>
                     </label>
-                    <input type="text" v-model="modalParams.game.name" placeholder="Ex: D&D discovery" class="input input-bordered w-full" />
+                    <input
+                        type="text"
+                        v-model="modalParams.game.name"
+                        placeholder="Ex: D&D discovery"
+                        class="input input-bordered w-full" />
                 </div>
                 <div class="form-control flex flex-col w-full">
                     <label class="label">
@@ -81,7 +86,9 @@
                             placeholder="Ex: Dungeon & Dragons"
                             class="input input-bordered w-full"
                             @input="refreshOptions" />
-                        <div tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 overflow-y-auto max-h-48">
+                        <div
+                            tabindex="0"
+                            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 overflow-y-auto max-h-48">
                             <ul>
                                 <template v-for="bestiary in listBestiary">
                                     <li v-if="bestiary.display">

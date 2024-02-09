@@ -1,42 +1,42 @@
-import type { UserWithoutPassword } from '~/types/IUser';
+import type { IUserCreditentials, UserWithoutPassword } from "../types/User/IUser";
 
 export default function () {
-    const user = useState<UserWithoutPassword | null>('user', () => null);
-    const loggedIn = useState('loggedIn', () => false);
-    const errorMessage = useState('errorMessage', () => '');
-    const pending = useState('pending', () => false);
+    const user = useState<UserWithoutPassword | null>("user", () => null);
+    const loggedIn = useState("loggedIn", () => false);
+    const errorMessage = useState("errorMessage", () => "");
+    const pending = useState("pending", () => false);
 
     const setUser = (data: UserWithoutPassword | null) => {
         user.value = data;
         loggedIn.value = Boolean(data);
     };
 
-    const login = async ({ email, password }) => {
-        errorMessage.value = '';
+    const login = async ({ email, password }: IUserCreditentials) => {
+        errorMessage.value = "";
         pending.value = true;
         try {
-            const data: UserWithoutPassword = await $fetch('/api/auth/login', {
-                method: 'POST',
+            const data: UserWithoutPassword = await $fetch("/api/auth/login", {
+                method: "POST",
                 body: JSON.stringify({ email, password }),
             });
             setUser(data);
-            await navigateTo('/games');
-        } catch (err) {
+            await navigateTo("/games");
+        } catch (err: any) {
             errorMessage.value = err.data.statusMessage;
         }
         pending.value = false;
     };
 
-    const register = async ({ email, password }) => {
-        errorMessage.value = '';
+    const register = async ({ email, password }: IUserCreditentials) => {
+        errorMessage.value = "";
         pending.value = true;
         try {
-            const data: UserWithoutPassword = await $fetch('/api/auth/register', {
-                method: 'POST',
+            const data: UserWithoutPassword = await $fetch("/api/auth/register", {
+                method: "POST",
                 body: JSON.stringify({ email, password }),
             });
-            await navigateTo('/auth/login');
-        } catch (err) {
+            await navigateTo("/auth/login");
+        } catch (err: any) {
             errorMessage.value = err.data.statusMessage;
         }
         pending.value = false;
@@ -44,8 +44,8 @@ export default function () {
 
     const logout = async () => {
         try {
-            const data: UserWithoutPassword = await $fetch('/api/auth/logout', {
-                method: 'POST',
+            const data: UserWithoutPassword = await $fetch("/api/auth/logout", {
+                method: "POST",
             });
             setUser(null);
         } catch (err) {}
@@ -53,7 +53,7 @@ export default function () {
 
     const me = async () => {
         try {
-            const data = await $fetch('/api/me');
+            const data = await $fetch("/api/me");
             setUser(data);
         } catch (err) {}
     };

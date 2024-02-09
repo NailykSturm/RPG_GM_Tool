@@ -1,4 +1,4 @@
-import { Type } from 'h3-typebox';
+import { Type } from "h3-typebox";
 
 export const registerSchema = Type.Object({
     email: Type.String(),

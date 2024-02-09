@@ -1,9 +1,8 @@
-import { ObjectId } from 'mongoose';
+import type { ObjectId } from "mongoose";
 
-import { IBestiary, IBestiaryField } from '~/types/IGame';
-import { IUIBestiaryField } from '~/types/IUI';
-import { UserWithoutPassword } from '~/types/IUser';
-import { bestiaryFieldTypes } from '../types/IGameImpl';
+import type { IBestiary, IBestiaryCreature, IBestiaryField } from "../types/Game/IGame";
+import type { IUIBestiaryField } from "../types/User/IUI";
+import { bestiaryFieldTypes } from "../types/Game/IGameImpl";
 
 export default function () {
     interface ILoaded {
@@ -11,10 +10,10 @@ export default function () {
         owner: string | ObjectId;
     }
 
-    const fields = useState('fields', () => []);
-    const creatures = useState('creatures', () => []);
-    const loadedBestiary = useState('loadedBestiary', () => {
-        return { universe: '', owner: '' } as ILoaded;
+    const fields: Ref<IBestiaryField[]> = useState("fields", () => []);
+    const creatures: Ref<IBestiaryCreature[]> = useState("creatures", () => []);
+    const loadedBestiary = useState("loadedBestiary", () => {
+        return { universe: "", owner: "" } as ILoaded;
     });
 
     const notif = useNotif();
@@ -22,20 +21,22 @@ export default function () {
 
     const fetchBestiary = async (universe: string) => {
         try {
-            const bestiary: IBestiary = await $fetch(`/api/bestiary/${universe}`, { method: 'GET' });
+            const bestiary: IBestiary = await $fetch(`/api/bestiary/${universe}`, { method: "GET" });
 
             console.log(bestiary);
             fields.value = bestiary.fields;
             creatures.value = bestiary.creatures;
             loadedBestiary.value.universe = bestiary.universe;
-            loadedBestiary.value.owner = user.value._id;
-        } catch (err) {
-            let errMessage = '';
+            loadedBestiary.value.owner = user.value!._id;
+        } catch (err: any) {
+            let errMessage = "";
             if (err.response._data) {
                 if (err.response._data.message) errMessage = err.response._data.message;
                 else errMessage = err.response.statusText;
             } else errMessage = err.response.statusText;
-            notif.addNotif(new Notif({ type: NotifType.error, message: errMessage, title: `Error while refreshing the list of games` }));
+            notif.addNotif(
+                new Notif({ type: NotifType.error, message: errMessage, title: `Error while refreshing the list of games` })
+            );
             console.log(err);
         }
     };
@@ -45,7 +46,7 @@ export default function () {
             `addFieldInBestiary: ${universe} ${newField.field} in loadedBestiary: ${loadedBestiary.value.universe} by ${loadedBestiary.value.owner}`
         );
 
-        if (!(loadedBestiary.value.universe === universe && loadedBestiary.value.owner === user.value._id)) return;
+        if (!(loadedBestiary.value.universe === universe && loadedBestiary.value.owner === user.value!._id)) return;
         console.log(newField);
 
         const dataToSend: { universe: string; field: IBestiaryField } = {
@@ -68,7 +69,7 @@ export default function () {
                 dataToSend.field.maxLenght = newField.maxLenght;
                 break;
             case bestiaryFieldTypes[1].field:
-                dataToSend.field.options = newField.options.getOptionsForAPI();
+                dataToSend.field.options = newField.options!.getOptionsForAPI();
                 break;
             case bestiaryFieldTypes[2].field:
                 break;
@@ -83,20 +84,22 @@ export default function () {
 
         try {
             const response = await $fetch(`/api/bestiary/${universe}/addField`, {
-                method: 'POST',
+                method: "POST",
                 body: JSON.stringify(dataToSend),
             });
 
             console.log(response);
 
             await fetchBestiary(universe);
-        } catch (err) {
-            let errMessage = '';
+        } catch (err: any) {
+            let errMessage = "";
             if (err.response._data) {
                 if (err.response._data.message) errMessage = err.response._data.message;
                 else errMessage = err.response.statusText;
             } else errMessage = err.response.statusText;
-            notif.addNotif(new Notif({ type: NotifType.error, message: errMessage, title: `Error while adding a field in bestiary` }));
+            notif.addNotif(
+                new Notif({ type: NotifType.error, message: errMessage, title: `Error while adding a field in bestiary` })
+            );
             console.log(err);
         }
     };

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-    import { Ref } from 'nuxt/dist/app/compat/capi';
+    import type { Ref } from "nuxt/dist/app/compat/capi";
 
-    import GameListMenu from '~/components/GameList.vue';
+    import GameListMenu from "../../../components/GameList.vue";
 
     const { listNameSubpages, subpage, noSubpage, switchSubpage, isSupbage } = useGameRouter();
-    const displayListGame: Ref<boolean> = useState('display-list-game-in-game', () => false);
+    const displayListGame: Ref<boolean> = useState("display-list-game-in-game", () => false);
 
     definePageMeta({
-        middleware: 'user-only',
+        middleware: "user-only",
     });
 
     onBeforeMount(() => {

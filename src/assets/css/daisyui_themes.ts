@@ -28,10 +28,10 @@ const themes = [
     "night",
     // "coffee",
     // "winter",
-]
+];
 
 const themesOrg = {
-    'light': [
+    light: [
         "light",
         "cupcake",
         "bumblebee",
@@ -51,7 +51,7 @@ const themesOrg = {
         // "lemonade",
         // "winter",
     ],
-    'dark': [
+    dark: [
         "dark",
         // "aqua",
         "synthwave",
@@ -63,7 +63,7 @@ const themesOrg = {
         "night",
         "dracula",
         // "coffee",
-    ]
-}
+    ],
+};
 
 export default themesOrg;

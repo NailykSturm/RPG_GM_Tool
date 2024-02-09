@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-    import GameListMenu from '~/components/GameList.vue';
+    import GameListMenu from "~/components/GameList.vue";
 
     const { listGames, listBestiary, refreshListGames } = useGameManagment();
 
     definePageMeta({
-        middleware: 'user-only',
+        middleware: "user-only",
     });
 
     onBeforeMount(() => {
@@ -53,7 +53,9 @@
                                                     No game using it
                                                 </div>
                                                 <template v-else v-for="game in listGames">
-                                                    <div v-if="game.universe.name == bestiary.universe" class="badge badge-neutral">
+                                                    <div
+                                                        v-if="game.universe.name == bestiary.universe"
+                                                        class="badge badge-neutral">
                                                         {{ game.name }}
                                                     </div>
                                                 </template>

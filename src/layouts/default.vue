@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-    import Header from '~/components/Header.vue';
-    import Footer from '~/components/Footer.vue';
-    import Notif from '~/components/Notif.vue';
+    import Header from "../components/Header.vue";
+    import Footer from "../components/Footer.vue";
+    import Notif from "../components/Notif.vue";
 
     const { theme } = useTheme();
 </script>

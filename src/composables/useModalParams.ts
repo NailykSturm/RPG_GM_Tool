@@ -1,6 +1,7 @@
-import { Ref } from 'nuxt/dist/app/compat/capi';
-import { IGameInfo } from '~/types/IGame';
-import { emptyGame } from '~/types/IGameImpl';
+import type { Ref } from "nuxt/dist/app/compat/capi";
+
+import type { IGameInfo } from "../types/Game/IGame";
+import { emptyGame } from "../types/Game/IGameImpl";
 
 export interface IModalParams {
     game: IGameInfo;
@@ -11,16 +12,16 @@ export interface IModalParams {
 }
 
 export default function () {
-    const modalParams: Ref<IModalParams> = useState('modal-params', () => ({
+    const modalParams: Ref<IModalParams> = useState("modal-params", () => ({
         game: emptyGame,
-        title: '',
-        confirmButtonText: '',
+        title: "",
+        confirmButtonText: "",
         displayFields: false,
         handleConfirm: () => {},
     }));
 
     function resetModalParams() {
-        modalParams.value.game.name = '';
+        modalParams.value.game.name = "";
         modalParams.value.game.universe = emptyGame.universe;
     }
 

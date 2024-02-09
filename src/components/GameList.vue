@@ -1,19 +1,19 @@
 <script setup lang="ts">
-    import { Ref } from 'nuxt/dist/app/compat/capi';
+    import type { Ref } from "nuxt/dist/app/compat/capi";
 
-    import { IGameInfo } from '~/types/IGame';
-    import { emptyGame } from '~/types/IGameImpl';
-    import ManageGameModal from '~/components/modals/ManageGameModal.vue';
+    import type { IGameInfo } from "../types/Game/IGame";
+    import { emptyGame } from "../types/Game/IGameImpl";
+    import ManageGameModal from "../components/modals/ManageGameModal.vue";
 
     const { listGames, newGame, updateGame, deleteGame } = useGameManagment();
     const { modalParams } = useModalParams();
 
-    const searchGameInput: Ref<string> = ref('');
+    const searchGameInput: Ref<string> = ref("");
     const handleCreateGame: Function = () => {
         modalParams.value = {
             game: emptyGame,
             title: "What's the name of your new game ?",
-            confirmButtonText: 'create',
+            confirmButtonText: "create",
             displayFields: true,
             handleConfirm: handleConfirmCreate,
         };
@@ -22,7 +22,7 @@
         modalParams.value = {
             game: { ...game },
             title: `Are you sure you want to delete the game ${game.name} ?`,
-            confirmButtonText: 'delete',
+            confirmButtonText: "delete",
             displayFields: false,
             handleConfirm: handleConfirmDelete,
         };
@@ -31,7 +31,7 @@
         modalParams.value = {
             game: { ...game, old_name: game.name, old_universe: game.universe.name },
             title: `How do you want to rename the game ${game.name} ?`,
-            confirmButtonText: 'update',
+            confirmButtonText: "update",
             displayFields: true,
             handleConfirm: handleConfirmUpdate,
         };
@@ -51,7 +51,7 @@
     };
 
     function refreshOptions() {
-        listGames.value.map((game) => {
+        listGames.value.map((game: IGameInfo) => {
             if (game.name.toLowerCase().includes(searchGameInput.value.toLowerCase())) {
                 game.display = true;
             } else {
@@ -69,7 +69,12 @@
             <button class="btn btn-primary" onclick="add_game_modal.showModal()" @click="handleCreateGame()">Add game</button>
         </div>
         <div class="px-5">
-            <input class="input input-bordered w-full" type="text" placeholder="Type for search" @input="refreshOptions" v-model="searchGameInput" />
+            <input
+                class="input input-bordered w-full"
+                type="text"
+                placeholder="Type for search"
+                @input="refreshOptions"
+                v-model="searchGameInput" />
         </div>
         <div class="flex mx-2" style="max-height: 75vh">
             <div class="grow overflow-y-auto">
@@ -85,7 +90,9 @@
                         <template v-for="game in listGames">
                             <tr v-if="game.display" class="hover bg-base-100">
                                 <td class="w-full">
-                                    <NuxtLink class="btn btn-ghost btn-outline w-full" :to="`/games/${game.name}`">{{ game.name }} </NuxtLink>
+                                    <NuxtLink class="btn btn-ghost btn-outline w-full" :to="`/games/${game.name}`"
+                                        >{{ game.name }}
+                                    </NuxtLink>
                                 </td>
                                 <td>
                                     <button

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-    import { Ref } from 'nuxt/dist/app/compat/capi';
+    import type { Ref } from "nuxt/dist/app/compat/capi";
 
-    const full_road: Ref<string[]> = useState('full_road', () => []);
-    const gameName: Ref<string | string[]> = useState('game_name', () => '');
+    const full_road: Ref<string[]> = useState("full_road", () => []);
+    const gameName: Ref<string | string[]> = useState("game_name", () => "");
 
     useRouter().afterEach((to, from) => {
-        full_road.value = to.fullPath.split('/');
+        full_road.value = to.fullPath.split("/");
         gameName.value = to.params.game;
     });
 
-    const games_links = useState('games_links', () => {
+    const games_links = useState("games_links", () => {
         return {
             bestiary: `/games/${gameName.value}/bestiary`,
             script: `/games/${gameName.value}/script`,
@@ -28,15 +28,24 @@
             </ul>
         </div>
         <div class="tabs flex-1">
-            <NuxtLink class="tab tab-bordered" :class="useRoute().fullPath == games_links.bestiary ? 'tab-active' : ''" :to="games_links.bestiary"
-                >Bestiary</NuxtLink
-            >
-            <NuxtLink class="tab tab-bordered" :class="useRoute().fullPath == games_links.script ? 'tab-active' : ''" :to="games_links.script"
-                >Script</NuxtLink
-            >
-            <NuxtLink class="tab tab-bordered" :class="useRoute().fullPath == games_links.notebook ? 'tab-active' : ''" :to="games_links.notebook"
-                >Notebook</NuxtLink
-            >
+            <NuxtLink
+                class="tab tab-bordered"
+                :class="useRoute().fullPath == games_links.bestiary ? 'tab-active' : ''"
+                :to="games_links.bestiary">
+                Bestiary
+            </NuxtLink>
+            <NuxtLink
+                class="tab tab-bordered"
+                :class="useRoute().fullPath == games_links.script ? 'tab-active' : ''"
+                :to="games_links.script">
+                Script
+            </NuxtLink>
+            <NuxtLink
+                class="tab tab-bordered"
+                :class="useRoute().fullPath == games_links.notebook ? 'tab-active' : ''"
+                :to="games_links.notebook">
+                Notebook
+            </NuxtLink>
         </div>
     </div>
 </template>

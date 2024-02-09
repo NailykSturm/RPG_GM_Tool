@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import { PropType, Ref } from 'nuxt/dist/app/compat/capi';
+    import type { PropType, Ref } from "nuxt/dist/app/compat/capi";
 
-    import { IUIBestiaryField } from '~/types/IUI';
-    import { bestiaryFieldTypes } from '~/types/IGameImpl';
-    import { CSelectList } from '~/types/CGame';
+    import type { IUIBestiaryField } from "../../types/User/IUI";
+    import { bestiaryFieldTypes } from "../../types/Game/IGameImpl";
+    import { CSelectList } from "../../types/Game/CSelectList";
 
     const props = defineProps({
         readonly: {
@@ -31,14 +31,18 @@
             </template>
         </label>
         <template v-if="props.data.value.type == bestiaryFieldTypes[0].field">
-            <input type="text" class="input input-bordered" v-model="props.data.value.value" :maxlength="props.data.value.maxLenght" />
+            <input
+                type="text"
+                class="input input-bordered"
+                v-model="props.data.value.value"
+                :maxlength="props.data.value.maxLenght" />
             <label class="label">
                 <span class="label-text"></span>
                 <span class="label-text">{{ props.data.value.value.toString().length }} / {{ props.data.value.maxLenght }} </span>
             </label>
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[1].field">
-            <UiSelectMenu :list-options="(props.data.value.options as CSelectList)" dropdown-options="dropdown-bottom" />
+            <UiSelectMenu :list-options="props.data.value.options as CSelectList" dropdown-options="dropdown-bottom" />
         </template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[2].field"></template>
         <template v-else-if="props.data.value.type == bestiaryFieldTypes[3].field">

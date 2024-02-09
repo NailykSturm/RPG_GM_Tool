@@ -11,7 +11,9 @@
     <NuxtLayout>
         <div class="hero h-full">
             <div class="hero-content text-center block">
-                <h1 class="text-2xl font-semibold mt-8 mb-4">Welcome on the tool for help Game Master (GM) to manage their games</h1>
+                <h1 class="text-2xl font-semibold mt-8 mb-4">
+                    Welcome on the tool for help Game Master (GM) to manage their games
+                </h1>
                 <div class="card bg-base-200 shadow-lg">
                     <div class="card-body">
                         <div class="card-title block text-start">
@@ -20,7 +22,11 @@
 
                         <div class="mb-5 text-start">
                             <div class="alert alert-warning">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="stroke-current shrink-0 h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"

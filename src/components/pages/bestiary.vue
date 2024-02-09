@@ -1,13 +1,14 @@
 <script setup lang="ts">
-    import { Ref } from 'nuxt/dist/app/compat/capi';
+    /* __placeholder__ */
+    import type { Ref } from "nuxt/dist/app/compat/capi";
 
-    import { bestiaryFieldTypes, emptyUIBestiaryField } from '~/types/IGameImpl';
-    import { CSelectList } from '~/types/CGame';
-    import { IBestiaryField } from '~/types/IGame';
-    import BestiaryInput from '~/components/ui/BestiaryInput.vue';
-    import SelectMenu from '~/components/ui/SelectMenu.vue';
-    import { IUIBestiaryField } from '~/types/IUI';
-    import { EBestiaryFieldType } from '~/types/EGame';
+    import { bestiaryFieldTypes, emptyUIBestiaryField } from "../../types/Game/IGameImpl";
+    import { CSelectList } from "../../types/Game/CSelectList";
+    import type { IBestiaryField } from "../../types/Game/IGame";
+    import BestiaryInput from "../../components/ui/BestiaryInput.vue";
+    import SelectMenu from "../../components/ui/SelectMenu.vue";
+    import type { IUIBestiaryField } from "../../types/User/IUI";
+    import { EBestiaryFieldType } from "../../types/Game/EGame";
 
     const { fields, creatures, fetchBestiary, addFieldInBestiary } = useBestiaryManagment();
     const { getUniverseOfGame } = useGameManagment();
@@ -15,29 +16,29 @@
     const route = useRoute();
 
     const newField = ref(emptyUIBestiaryField);
-    const universe = ref('');
+    const universe = ref("");
 
     onBeforeMount(() => {
         const game = route.params.game as string;
-        universe.value = getUniverseOfGame(game);
+        universe.value = getUniverseOfGame(game)!;
         fetchBestiary(universe.value);
 
         newField.value.options = new CSelectList();
     });
 
     function addOptionForSelect() {
-        if (selectFieldSelected.value != '') {
-            newField.value.options.addOption(selectFieldSelected.value);
-            selectFieldSelected.value = '';
-            newField.value.options.resetDisplay();
+        if (selectFieldSelected.value != "") {
+            newField.value.options!.addOption(selectFieldSelected.value);
+            selectFieldSelected.value = "";
+            newField.value.options!.resetDisplay();
         }
     }
 
     function deleteOptionForSelect() {
-        if (selectFieldSelected.value != '') {
-            newField.value.options.removeOption(selectFieldSelected.value);
-            selectFieldSelected.value = '';
-            newField.value.options.resetDisplay();
+        if (selectFieldSelected.value != "") {
+            newField.value.options!.removeOption(selectFieldSelected.value);
+            selectFieldSelected.value = "";
+            newField.value.options!.resetDisplay();
         }
     }
 
@@ -50,11 +51,11 @@
     }
 
     function updateField(field: IBestiaryField) {
-        console.log('update field : ', field);
+        console.log("update field : ", field);
     }
 
     function removeField(field: IBestiaryField) {
-        console.log('remove field : ', field);
+        console.log("remove field : ", field);
     }
 </script>
 
@@ -196,7 +197,7 @@
                             <div class="join">
                                 <button class="btn join-item" @click="addOptionForSelect">Add Option</button>
                                 <SelectMenu
-                                    :listOptions="(newField.options as CSelectList)"
+                                    :listOptions="newField.options as CSelectList"
                                     :onClickItem="onClickMenuItem"
                                     dropdown-options="dropdown-top dropdown-end join-item" />
                                 <button class="btn join-item btn-error" @click="deleteOptionForSelect">
@@ -229,10 +230,10 @@
                     {{
                         bestiaryFieldTypes.find((field) => {
                             return field.field == newField.type;
-                        }).desc
+                        })!.desc
                     }}
                 </div>
-                <BestiaryInput :readonly="true" v-bind:data="(ref(newField) as Ref<IUIBestiaryField>)" />
+                <BestiaryInput :readonly="true" v-bind:data="ref(newField) as Ref<IUIBestiaryField>" />
                 <div class="absolute bottom-5 right-5 modal-action">
                     <button class="btn btn-outline" onclick="add_field_modal.close()">Cancel</button>
                     <button class="btn btn-success" @click="createField">Add</button>

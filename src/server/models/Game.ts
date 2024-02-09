@@ -1,3 +1,3 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-import {} from '~/types/IGame';
+import {} from "../../types/Game/IGame";
