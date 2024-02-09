@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { IGameDetails } from './IGame';
+import mongoose from "mongoose";
+import type { IGameDetails } from "./IGame";
 
 const UniverseSchema: mongoose.Schema = new mongoose.Schema(
     {

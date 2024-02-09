@@ -1,7 +1,8 @@
-import { ObjectId } from 'mongoose';
+import type { ObjectId } from "mongoose";
 
-import { EBestiaryFieldType } from './EGame';
-import { IUIBestiaryInfo } from './IUI';
+import { EBestiaryFieldType } from "./EGame";
+import type { IUIBestiaryInfo } from "../User/IUI";
+import type { CSelectListElement } from "./CSelectList";
 
 export interface IGameDetails extends IGameInfo {
     script: IScript;
@@ -38,9 +39,9 @@ export interface IListGamesBestiaries {
 }
 export interface IBestiaryField {
     field: string;
-    value: string | number | boolean;
     type: EBestiaryFieldType;
-    options?: string[];
+    value?: string | number | boolean;
+    options?: CSelectListElement[];
     min?: number;
     max?: number;
     step?: number;
@@ -54,7 +55,7 @@ export interface IBestiaryCreature {
         {
             fieldName: string;
             fieldValue: string | number | boolean;
-        }
+        },
     ];
 }
 

@@ -1,5 +1,5 @@
-import { CSelectList } from './CGame';
-import { EBestiaryFieldType } from './EGame';
+import { CSelectList, CSelectListElement } from "../Game/CSelectList";
+import { EBestiaryFieldType } from "../Game/EGame";
 
 export interface IUIBestiaryField {
     field: string;
@@ -16,12 +16,4 @@ export interface IUIBestiaryField {
 export interface IUIBestiaryInfo {
     universe: string;
     display: boolean;
-}
-
-export interface IUISelectOption {
-    value: string;
-    display: boolean;
-}
-export interface IUISelect {
-    values: IUISelectOption[] | Record<string, IUISelectOption[] | Record<string, IUISelectOption[]>>;
 }

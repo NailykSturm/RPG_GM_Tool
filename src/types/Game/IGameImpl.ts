@@ -1,17 +1,24 @@
-import { EBestiaryFieldType } from './EGame';
-import { IGameInfo, IBestiaryField, IBestiary } from './IGame';
-import { IUIBestiaryField } from './IUI';
+import type { ObjectId } from "mongoose";
 
-export const emptyGame: IGameInfo = { name: '', universe: { id: null, name: '' }, old_name: '', old_universe: '' };
+import { EBestiaryFieldType } from "./EGame";
+import type { IGameInfo, IBestiaryField, IBestiary } from "./IGame";
+import type { IUIBestiaryField } from "../User/IUI";
+
+export const emptyGame: IGameInfo = {
+    name: "",
+    universe: { id: "" as unknown as ObjectId, name: "" },
+    old_name: "",
+    old_universe: "",
+};
 export const bestiaryFieldTypes = [
-    { field: EBestiaryFieldType.Input, label: 'Input', type: 'string', desc: 'Field with free value ' },
-    { field: EBestiaryFieldType.Select, label: 'Select', type: 'string', desc: 'Field with a list of values' },
-    { field: EBestiaryFieldType.Checkbox, label: 'Checkbox', type: 'boolean', desc: 'Field that can be true or false' },
+    { field: EBestiaryFieldType.Input, label: "Input", type: "string", desc: "Field with free value " },
+    { field: EBestiaryFieldType.Select, label: "Select", type: "string", desc: "Field with a list of values" },
+    { field: EBestiaryFieldType.Checkbox, label: "Checkbox", type: "boolean", desc: "Field that can be true or false" },
     {
         field: EBestiaryFieldType.Spinner,
-        label: 'Spinner',
-        type: 'number',
-        desc: 'Field with a number value, that can be incremented or decremented',
+        label: "Spinner",
+        type: "number",
+        desc: "Field with a number value, that can be incremented or decremented",
     },
 ];
 
@@ -24,8 +31,8 @@ export const bestiaryFieldTypes = [
 //     { name: EBestiaryFieldOption.Required, label: 'Required', type: 'boolean', value: false, desc: 'Is the field required ? (default: false)' },
 // ];
 export const emptyUIBestiaryField: IUIBestiaryField = {
-    field: 'Default',
-    value: 'Default',
+    field: "Default",
+    value: "Default",
     type: EBestiaryFieldType.Input,
     min: 0,
     max: 100,
@@ -34,8 +41,8 @@ export const emptyUIBestiaryField: IUIBestiaryField = {
     required: false,
 };
 export const emptyBestiaryField: IBestiaryField = {
-    field: 'Default',
-    value: 'Default',
+    field: "Default",
+    value: "Default",
     type: EBestiaryFieldType.Input,
     min: 0,
     max: 100,
