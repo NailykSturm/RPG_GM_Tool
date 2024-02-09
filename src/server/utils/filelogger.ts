@@ -31,7 +31,7 @@ class FileLogger extends ConsoleLogger {
             });
         }
 
-        this._logLevel = logLv.NONE;
+        this._logLevel = logLv.FULL;
         const servRestart = `${"=".repeat(10)} Server restarted ${"=".repeat(10)}`;
         this.none("log", servRestart);
         this.debug("log", `Log level set to ${this._logLevel.displayName}`);
