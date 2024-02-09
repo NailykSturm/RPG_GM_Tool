@@ -1,16 +1,38 @@
+import { defineNuxtConfig } from "nuxt/config";
+
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-    srcDir: 'src',
-    modules: ['@nuxtjs/tailwindcss'],
-    tailwindcss: {
-        cssPath: '~/assets/css/tailwind.css',
+    // alias: {
+    //     "~": "/<rootDir>",
+    //     "@": "/<rootDir>",
+    //     "~~": "/<rootDir>",
+    //     "@@": "/<rootDir>",
+    //     assets: "/<rootDir>/assets",
+    //     public: "/<rootDir>/public",
+    // },
+    app: {
+        head: {
+            link: [{ rel: "favicon", href: "/favicons/de.ico" }],
+        },
     },
+    devtools: {
+        enabled: true,
+
+        timeline: {
+            enabled: true,
+        },
+    },
+    srcDir: "src",
+    modules: ["@nuxtjs/tailwindcss", "@nuxt/test-utils/module"],
     nitro: {
-        plugins: ['@/server/db/index.ts'],
+        plugins: ["@/server/db/index.ts"],
     },
-    plugins: ['~/plugins/vee-validate.components.ts', '~/plugins/vee-validate.rules.ts'],
+    plugins: ["~/plugins/vee-validate.components.ts", "~/plugins/vee-validate.rules.ts"],
     build: {
-        transpile: ['@vee-validate/rules'],
+        transpile: ["@vee-validate/rules"],
+    },
+    tailwindcss: {
+        cssPath: "~/assets/css/tailwind.css",
     },
     runtimeConfig: {
         MONGO_URI: process.env.MONGO_URI,
