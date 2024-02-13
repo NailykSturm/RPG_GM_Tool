@@ -29,7 +29,8 @@
         if (modalParams.value.game.universe.name != "") {
             if (
                 listBestiary.value.filter(
-                    (bestiary: IUIBestiaryInfo) => bestiary.universe.toLowerCase() == modalParams.value.game.universe.name.toLowerCase()
+                    (bestiary: IUIBestiaryInfo) =>
+                        bestiary.universe.toLowerCase() == modalParams.value.game.universe.name.toLowerCase()
                 ).length == 0
             ) {
                 console.log("create tag");
