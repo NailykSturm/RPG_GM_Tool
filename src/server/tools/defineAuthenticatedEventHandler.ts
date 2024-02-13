@@ -1,7 +1,7 @@
 import { H3Event } from "h3";
 
 import type { IUserInfo } from "../../types/User/IUser";
-import { log } from "./filelogger";
+import { log } from "../utils/filelogger";
 import getAuth from "./getAuth";
 
 export function defineAuthenticatedEventHandler<T>(handler: (event: H3Event, user: IUserInfo | null) => T | Promise<T>) {

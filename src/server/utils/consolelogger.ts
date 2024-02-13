@@ -1,6 +1,7 @@
 import type { ObjectId } from "mongoose";
 
-import { type ILog, logLv, formatLog } from "./logger";
+import { type ILog, logLv, formatLog, getLogLevelFromString } from "./logger";
+const config = useRuntimeConfig();
 
 /**
  * Logger only for the console
@@ -18,6 +19,7 @@ export class ConsoleLogger {
 
     constructor() {
         this._logLevel = logLv.NONE;
+        this.setLogLvFromEnv();
     }
     protected logWriter(lv: ILog = logLv.INFO, caller: string, message: string | Object, from: string | ObjectId = "server") {
         if (this._logLevel.priority <= lv.priority) {
@@ -26,6 +28,9 @@ export class ConsoleLogger {
         }
     }
 
+    setLogLvFromEnv() {
+        this._logLevel = getLogLevelFromString(config.LOG_LEVEL ?? "FULL");
+    }
     none(caller: string, message: string | Object, from: string | ObjectId = "server") {
         this.logWriter(logLv.NONE, caller, message, from);
     }

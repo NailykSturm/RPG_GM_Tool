@@ -49,3 +49,55 @@ export function formatLog(lv: ILog = logLv.INFO, caller: string, message: string
     )}}(${from}) ${message}`;
     return logLine;
 }
+
+export function getLogLevelFromString(lv: string): ILog {
+    let logLvParsed: ILog = logLv.FULL;
+
+    switch (lv) {
+        case lvNone.displayName: {
+            logLvParsed = logLv.NONE;
+            break;
+        }
+        case lvTrace.displayName: {
+            logLvParsed = logLv.TRACE;
+            break;
+        }
+        case lvFull.displayName: {
+            logLvParsed = logLv.FULL;
+            break;
+        }
+        case lvDebug.displayName: {
+            logLvParsed = logLv.DEBUG;
+            break;
+        }
+        case lvInfo.displayName: {
+            logLvParsed = logLv.INFO;
+            break;
+        }
+        case lvLow.displayName: {
+            logLvParsed = logLv.LOW;
+            break;
+        }
+        case lvWarn.displayName: {
+            logLvParsed = logLv.WARN;
+            break;
+        }
+        case lvError.displayName: {
+            logLvParsed = logLv.ERROR;
+            break;
+        }
+        case lvCritical.displayName: {
+            logLvParsed = logLv.CRITICAL;
+            break;
+        }
+        case lvFatal.displayName: {
+            logLvParsed = logLv.FATAL;
+            break;
+        }
+    }
+
+    if (lv == lvNone.displayName) logLvParsed = logLv.NONE;
+    else if (lv == lvTrace.displayName) logLvParsed = logLv.TRACE;
+
+    return logLvParsed;
+}

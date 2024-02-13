@@ -5,7 +5,8 @@ import { type ILog, logLv, formatLog } from "./logger";
 import { ConsoleLogger } from "./consolelogger";
 
 const config = useRuntimeConfig();
-const logFolder = "." + config.app.baseURL + "logs/";
+const baseLogFolder = "." + config.app.baseURL + "logs/";
+let logFolder = baseLogFolder;
 
 class FileLogger extends ConsoleLogger {
     private _fileLatestLog: string;
@@ -13,14 +14,15 @@ class FileLogger extends ConsoleLogger {
 
     private constructor() {
         super();
-        const folderExists = fs.existsSync(logFolder);
-        if (!folderExists) {
-            fs.mkdir(logFolder, (err) => {
-                if (err) throw err;
-            });
-        }
+        this.checkFolderAndCreateIfNotExists(baseLogFolder);
 
-        this._fileLatestLog = `${logFolder}latest.log`;
+        const date = new Date();
+        logFolder += `${date.getFullYear()}/`;
+        this.checkFolderAndCreateIfNotExists(logFolder);
+        logFolder += `${date.getMonth() + 1}/`;
+        this.checkFolderAndCreateIfNotExists(logFolder);
+
+        this._fileLatestLog = `${baseLogFolder}latest.log`;
         if (!fs.existsSync(this._fileLatestLog)) {
             fs.writeFile(this._fileLatestLog, "", (err) => {
                 if (err) throw err;
@@ -31,12 +33,60 @@ class FileLogger extends ConsoleLogger {
             });
         }
 
-        this._logLevel = logLv.FULL;
-        const servRestart = `${"=".repeat(10)} Server restarted ${"=".repeat(10)}`;
-        this.none("log", servRestart);
-        this.debug("log", `Log level set to ${this._logLevel.displayName}`);
+        this.moveLogFiles();
+
+        this.none("log", `${"=".repeat(10)} Server restarted ${"=".repeat(10)}`);
+        this.info("log", `Log level set to ${this._logLevel.displayName}`);
+        this.info("log", `Server environment: ${config.ENV}`);
     }
 
+    /**
+     * Verify if the folder exists and create it if it doesn't
+     * @param folder the path of the folder to check
+     */
+    private checkFolderAndCreateIfNotExists(folder: string) {
+        let folderExists = fs.existsSync(folder);
+        if (!folderExists) {
+            fs.mkdir(folder, (err) => {
+                if (err) throw err;
+            });
+        }
+    }
+
+    /**
+     * Move all log files from the base log folder into a folder with the year and a subfolder with the month of the log
+     */
+    private moveLogFiles() {
+        const baseLogFolder = `.${config.app.baseURL}logs/`;
+
+        const files = fs.readdirSync(baseLogFolder);
+        const fileNameRegex = /(\d{4})-(\d{1,2})-(\d{1,2}).log/;
+        files.forEach((file) => {
+            if (!file.startsWith("latest")) {
+                const match = file.match(fileNameRegex);
+                if (match) {
+                    const year = match[1];
+                    const month = match[2];
+
+                    let logFolder = `${baseLogFolder}${year}/`;
+                    this.checkFolderAndCreateIfNotExists(logFolder);
+                    logFolder += `${month}/`;
+                    this.checkFolderAndCreateIfNotExists(logFolder);
+
+                    const oldPath = `${baseLogFolder}${file}`;
+                    const newPath = `${logFolder}${file}`;
+                    fs.rename(oldPath, newPath, (err) => {
+                        if (err) throw err;
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Get the instance of the FileLogger because it's a singleton to avoid multiple file access
+     * @returns the instance of the FileLogger
+     */
     static getInstance() {
         if (!FileLogger._instance) {
             FileLogger._instance = new FileLogger();

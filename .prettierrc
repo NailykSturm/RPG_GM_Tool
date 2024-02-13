@@ -9,12 +9,5 @@
     "bracketSameLine": true,
     "vueIndentScriptAndStyle": true,
     "singleAttributePerLine": false,
-    "overrides": [
-        {
-            "files": "vitest.config.ts",
-            "options": {
-                "printWidth": 60
-            }
-        }
-    ]
+    "overrides": []
 }

@@ -1,5 +1,5 @@
 import type { UserWithoutPassword } from "../../types/User/IUser";
-import { defineAuthenticatedEventHandler } from "../../server/utils/defineAuthenticatedEventHandler";
+import { defineAuthenticatedEventHandler } from "../tools/defineAuthenticatedEventHandler";
 
 export default defineAuthenticatedEventHandler((_, user) => {
     if (user == null) return null;
