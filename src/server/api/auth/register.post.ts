@@ -1,41 +1,34 @@
 import { validateBody } from "h3-typebox";
 
-import { registerSchema } from "../../../server/validations/index";
-import UserModal from "../../../server/models/User";
+import { registerSchema } from "../../validations/user";
 import { log } from "../../utils/filelogger";
+import { createUser } from "../../db/user/create";
+import { getUserByMail } from "../../db/user/read";
+import type { IAPIResponse } from "../../../types/API/IAPI";
+import type { IUserInfo } from "../../../types/User/IUser";
 
 export default defineEventHandler(async (event) => {
     try {
         const { email, password } = await validateBody(event, registerSchema);
+        const mail = email.toLowerCase();
 
-        log.debug("POST API/auth/register", `New register request incoming => new user email : ${email}`, email);
+        log.debug("POST API/auth/register", `New register request incoming => new user email : ${mail}`, mail);
 
-        try {
-            const mail = email.toLowerCase();
-            const user = await UserModal.findOne({ email: mail });
-            if (user) {
-                log.info("POST API/auth/register", `Email already used => ${user}`, email);
-                return createError({ statusCode: 400, statusMessage: "Email already used" });
-            }
-
-            try {
-                const newUser = await UserModal.create({ email: mail, password });
-                if (!newUser) {
-                    log.error("POST API/auth/register", `Cannot register new user`, email);
-                    return createError({ statusCode: 500, statusMessage: "Cannot create user" });
-                }
-                log.info("POST API/auth/register", `New user registered => ${newUser}`, newUser.email);
-                return { code: 200, message: "Account created" };
-            } catch (error) {
-                log.error("POST API/auth/register", `Cannot register new user : ${error}`, email);
-                return createError({ statusCode: 500, statusMessage: "Cannot create user" });
-            }
-        } catch (error) {
-            log.error("POST API/auth/register", `Cannot access DB to find a user : ${error}`, email);
-            return createError({ statusCode: 500, statusMessage: "Internal Server error" });
+        let user = await getUserByMail(mail);
+        if (user) {
+            log.info("POST API/auth/register", `Email already used => ${user}`, email);
+            return createError({ statusCode: 400, statusMessage: "Email already used" });
         }
+
+        user = await createUser(mail, password);
+        if (!user) {
+            log.error("POST API/auth/register", `Cannot register new user`, email);
+            return createError({ statusCode: 500, statusMessage: "Cannot create user" });
+        }
+        log.info("POST API/auth/register", `New user registered => ${user}`, user.email);
+        return { statusCode: 200, message: "Account created", data: user } as IAPIResponse<IUserInfo>;
     } catch (error: any) {
-        log.error("POST API/auth/register", `Wrong parameters for register request : ${error.statusMessage}`);
+        log.error("POST API/auth/register", `Wrong parameters for register request : ${error}`);
         return error;
     }
 });

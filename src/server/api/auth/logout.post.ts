@@ -2,6 +2,8 @@ import type { IAPIResponse } from "../../../types/API/IAPI";
 import { log } from "../../utils/filelogger";
 import meGet from "../me.get";
 
+const config = useRuntimeConfig();
+
 export default defineEventHandler(async (event) => {
     try {
         const { _id } = await meGet(event);
@@ -10,7 +12,7 @@ export default defineEventHandler(async (event) => {
             httpOnly: true,
             path: "/",
             sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
+            secure: config.ENV === "prod",
         });
 
         log.debug("POST API/auth/logout", "Logout success", _id);

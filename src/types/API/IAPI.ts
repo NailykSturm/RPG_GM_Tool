@@ -1,6 +1,6 @@
-export interface IAPIResponse {
+export interface IAPIResponse<T = any> {
     statusCode: number;
     statusMessage: string;
     message?: string;
-    data?: any;
+    data?: T;
 }

@@ -1,9 +1,8 @@
 import { createError, type H3Error } from "h3";
-import { validateBody, Type } from "h3-typebox";
-import type { NuxtError } from "nuxt/dist/app/composables";
+import { validateBody } from "h3-typebox";
 
 import userModel from "../../models/User";
-import { gameInfoSchema } from "../../validations/index";
+import { gameInfoSchema } from "../../validations/game";
 import { log } from "../../utils/filelogger";
 import type { IAPIResponse } from "../../../types/API/IAPI";
 import type { IBestiary } from "../../../types/Game/IGame";

@@ -1,6 +1,6 @@
 import { validateBody } from "h3-typebox";
 
-import { gameInfoUpdateSchema } from "../../validations/index";
+import { gameInfoUpdateSchema } from "../../validations/game";
 import userModel from "../../models/User";
 import { log } from "../../utils/filelogger";
 import type { IAPIResponse } from "../../../types/API/IAPI";

@@ -1,46 +1,39 @@
-import { send } from "h3";
-import { validateBody, Type } from "h3-typebox";
+import { validateBody } from "h3-typebox";
 import jwt from "jsonwebtoken";
 
-import { registerSchema } from "../../validations/index";
-import userModal from "../../models/User";
+import { registerSchema } from "../../validations/user";
 import { log } from "../../utils/filelogger";
 import type { UserWithoutPassword } from "../../../types/User/IUser";
+import { validatePassword } from "../../db/user/utils";
+import { getUserByMail } from "../../db/user/read";
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
 
     try {
         const { email, password } = await validateBody(event, registerSchema);
-        const mail = email.toLowerCase();
+        log.full("POST API/auth/login", `New login request incoming => user email : ${email}`, email);
 
-        log.full("POST API/auth/login", `New login request incoming => user email : ${mail}`, mail);
+        const user = await getUserByMail(email);
+        if (user) {
+            const validatePass = await validatePassword(user._id, password);
+            if (!validatePass) return createError({ statusCode: 400, statusMessage: "Your password is wrong" });
 
-        try {
-            const user = await userModal.findOne({ email: mail });
-            if (user) {
-                const validatePass = await user.validatePassword(password);
-                if (!validatePass) return createError({ statusCode: 400, statusMessage: "Your password is wrong" });
+            const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, {
+                expiresIn: config.END === "prod" ? "1d" : "7d",
+            });
 
-                const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, {
-                    expiresIn: process.env.NODE_END === "production" ? "1d" : "7d",
-                });
+            setCookie(event, "token", token, {
+                maxAge: config.END === "prod" ? 60 * 60 * 8 : 60 * 60 * 24 * 7,
+                httpOnly: true,
+                path: "/",
+                sameSite: true,
+                secure: config.ENV === "prod" ? true : false,
+            });
 
-                setCookie(event, "token", token, {
-                    maxAge: process.env.NODE_END === "production" ? 60 * 60 * 8 : 60 * 60 * 24 * 7,
-                    httpOnly: true,
-                    path: "/",
-                    sameSite: true,
-                    secure: process.env.NODE_ENV === "production" ? true : false,
-                });
-
-                log.info("POST API/auth/login", `User logged in`, user._id);
-                return { _id: user._id, email: user.email } as UserWithoutPassword;
-            } else return createError({ statusCode: 400, statusMessage: "Your email is wrong" });
-        } catch (error) {
-            log.critical("POST API/auth/login", `Cannot access DB to find a user : ${error}`, email);
-            return createError({ statusCode: 500, statusMessage: "Internal Server error" });
-        }
+            log.info("POST API/auth/login", `User logged in`, user._id);
+            return { _id: user._id, email: user.email } as UserWithoutPassword;
+        } else return createError({ statusCode: 400, statusMessage: "Your email is wrong" });
     } catch (error) {
         log.error("POST API/auth/login", `Wrong parameters for register request : ${error}`);
         return error;
