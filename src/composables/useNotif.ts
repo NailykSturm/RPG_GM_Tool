@@ -1,4 +1,4 @@
-import type { Ref } from "nuxt/dist/app/compat/capi";
+import type { Ref } from "#imports";
 
 export const NotifType = {
     success: "success",

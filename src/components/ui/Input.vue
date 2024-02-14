@@ -26,11 +26,13 @@
 </script>
 
 <template>
-    <label class="block mb-2 font-extrabold" for="">{{ label }}</label>
-    <input
-        class="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-info shadow border-2 border-info rounded"
-        v-model="value"
-        :type="props.type"
-        :placeholder="props.placeholder" />
-    <p class="text-error-content">{{ errorMessage }}</p>
+    <div>
+        <label class="block mb-2 font-extrabold" for="">{{ label }}</label>
+        <input
+            class="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-info shadow border-2 border-info rounded"
+            v-model="value"
+            :type="props.type"
+            :placeholder="props.placeholder" />
+        <p class="text-error-content">{{ errorMessage }}</p>
+    </div>
 </template>

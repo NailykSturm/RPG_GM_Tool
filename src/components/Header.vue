@@ -1,6 +1,11 @@
 <script lang="ts" setup>
     const { loggedIn, logout } = useAuth();
     const { changeTheme, list_themes, theme: usedTheme } = useTheme();
+    const isLogged = ref(false);
+
+    onMounted(() => {
+        isLogged.value = loggedIn.value;
+    });
 </script>
 
 <template>
@@ -11,7 +16,7 @@
         <div class="navbar-end gap-2">
             <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
                 <NuxtLink to="/" class="btn btn-ghost" aria-current="page">Home</NuxtLink>
-                <NuxtLink v-if="loggedIn" to="/games" class="btn btn-ghost">Games Managment</NuxtLink>
+                <NuxtLink v-if="isLogged" to="/games" class="btn btn-ghost">Games Managment</NuxtLink>
             </template>
             <div class="dropdown dropdown-end">
                 <label tabindex="0" class="btn btn-ghost rounded-btn">Theme</label>
@@ -37,7 +42,7 @@
                 </div>
             </div>
             <template v-if="useRoute().fullPath.split('/')[1] !== 'auth'">
-                <template v-if="loggedIn">
+                <template v-if="isLogged">
                     <button class="btn btn-outline" @click="logout">Logout</button>
                 </template>
                 <template v-else>

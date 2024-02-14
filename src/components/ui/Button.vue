@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import Spinner from "~/components/icons/Spinner.vue";
+    import Spinner from "../icons/Spinner.vue";
     const props = defineProps({
         click: {
             type: Function,

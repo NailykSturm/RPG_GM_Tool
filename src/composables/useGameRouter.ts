@@ -1,4 +1,5 @@
-import type { Ref, ShallowRef } from "nuxt/dist/app/compat/capi";
+import type { Ref } from "#imports";
+import type { ShallowRef } from "vue";
 
 import bestiaryVue from "../components/pages/bestiary.vue";
 import equipementVue from "../components/pages/equipment.vue";

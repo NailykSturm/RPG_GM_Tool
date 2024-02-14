@@ -1,4 +1,4 @@
-import type { Ref } from "nuxt/dist/app/compat/capi";
+import type { Ref } from "#imports";
 
 import type { IListGamesBestiaries, IGameInfo } from "../types/Game/IGame";
 import type { IUIBestiaryInfo } from "../types/User/IUI";

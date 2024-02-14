@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type { Ref } from "nuxt/dist/app/compat/capi";
+    import type { Ref } from "#imports";
 
     const full_road: Ref<string[]> = useState("full_road", () => []);
     const gameName: Ref<string | string[]> = useState("game_name", () => "");

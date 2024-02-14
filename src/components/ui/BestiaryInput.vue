@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type { PropType, Ref } from "nuxt/dist/app/compat/capi";
+    import type { PropType, Ref } from "#imports";
 
     import type { IUIBestiaryField } from "../../types/User/IUI";
     import { bestiaryFieldTypes } from "../../types/Game/IGameImpl";

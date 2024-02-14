@@ -1,6 +1,6 @@
 <script setup lang="ts">
     /* __placeholder__ */
-    import type { Ref } from "nuxt/dist/app/compat/capi";
+    import type { Ref } from "#imports";
 
     import { bestiaryFieldTypes, emptyUIBestiaryField } from "../../types/Game/IGameImpl";
     import { CSelectList } from "../../types/Game/CSelectList";

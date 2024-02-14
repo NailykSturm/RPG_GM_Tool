@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         validateOnInput: true,
         validateOnBlur: true,
     });
-    const rules = {
+    const rules: { [key: string]: (value: unknown, params?: any) => boolean } = {
         email,
         required,
         min_value,

@@ -1,4 +1,4 @@
-import type { Ref } from "nuxt/dist/app/compat/capi";
+import type { Ref } from "#imports";
 
 import type { IGameInfo } from "../types/Game/IGame";
 import { emptyGame } from "../types/Game/IGameImpl";
