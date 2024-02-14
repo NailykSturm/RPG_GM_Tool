@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-import type { IUserComplete } from "../../types/User/IUser";
+import type { IUserComplete, IUserCompleteSave } from "../../types/User/IUser";
 import { GameSchema } from "../../types/Game/IGameDB";
 
 interface IUserDocument extends IUserComplete, Document {
@@ -33,3 +33,16 @@ UserSchema.methods.validatePassword = async function validatePassword(password: 
 };
 
 export default mongoose.model<IUserDocument>("users", UserSchema);
+
+/**
+ * Parse a user document into a object with only the informations that the API or the client can see/use
+ * @param user user document to parse
+ * @returns a user object with the minimal informations needed
+ */
+export function userDocumentIntoUserComplete(user: IUserDocument): IUserCompleteSave {
+    return {
+        email: user.email,
+        games: user.games,
+        _id: user._id,
+    };
+}

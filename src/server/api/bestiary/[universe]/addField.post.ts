@@ -1,3 +1,5 @@
+import { getRouterParam } from "h3";
+
 import userModel from "../../../models/User";
 import bestiaryModel from "../../../models/Bestiary";
 import { log } from "../../../utils/filelogger";
@@ -8,7 +10,8 @@ import type { IAPIResponse } from "../../../../types/API/IAPI";
 
 const caller = "POST API/bestiary/:universe/addField";
 export default defineEventHandler(async (event) => {
-    const { universe } = event.context.params;
+    // const { universe } = event.context.params;
+    const universe = getRouterParam(event, "universe");
     log.debug(caller, `Add a field for universe: ${universe}'s bestiary`, "not known yet");
 
     try {

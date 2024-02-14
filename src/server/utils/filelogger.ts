@@ -17,12 +17,17 @@ class FileLogger extends ConsoleLogger {
         this.checkFolderAndCreateIfNotExists(baseLogFolder);
 
         const date = new Date();
+        const testEnv = config.ENV.toUpperCase() === "TEST";
+        if (testEnv) {
+            logFolder += "test/";
+            this.checkFolderAndCreateIfNotExists(logFolder);
+        }
         logFolder += `${date.getFullYear()}/`;
         this.checkFolderAndCreateIfNotExists(logFolder);
         logFolder += `${date.getMonth() + 1}/`;
         this.checkFolderAndCreateIfNotExists(logFolder);
 
-        this._fileLatestLog = `${baseLogFolder}latest.log`;
+        this._fileLatestLog = `${baseLogFolder}latest${testEnv ? "_test" : ""}.log`;
         if (!fs.existsSync(this._fileLatestLog)) {
             fs.writeFile(this._fileLatestLog, "", (err) => {
                 if (err) throw err;

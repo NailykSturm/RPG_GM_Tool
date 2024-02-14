@@ -14,7 +14,7 @@ export interface IUserInfo {
 
 export interface IUserComplete extends IUserInfo {
     games: IGameDetails[];
-    bestiaries: IBestiary[];
 }
 
+export type IUserCompleteSave = Omit<IUserComplete, "password">;
 export type UserWithoutPassword = Omit<IUserInfo, "password">;

@@ -1,8 +1,8 @@
 import type { ObjectId } from "mongoose";
 
 import { log } from "../../utils/filelogger";
-import userModal from "../../models/User";
-import type { IUserInfo } from "../../../types/User/IUser";
+import userModal, { userDocumentIntoUserComplete } from "../../models/User";
+import type { IUserCompleteSave, IUserInfo } from "../../../types/User/IUser";
 
 const caller = "db/user/read";
 
@@ -11,10 +11,13 @@ const caller = "db/user/read";
  * @param id id of the user
  * @returns the informations of the user
  */
-export async function getUserById(id: string | ObjectId): Promise<IUserInfo | null> {
+export async function getUserById(id: ObjectId): Promise<IUserCompleteSave | null> {
     try {
-        const user: IUserInfo | null = await userModal.findById(id);
-        return user;
+        const user = await userModal.findById(id);
+        if (!user) {
+            return null;
+        }
+        return userDocumentIntoUserComplete(user);
     } catch (error) {
         log.critical(`${caller}/getUserId`, `Error while getting user : ${JSON.stringify(error)}`, id);
         return null;
@@ -26,10 +29,13 @@ export async function getUserById(id: string | ObjectId): Promise<IUserInfo | nu
  * @param mail mail of the user
  * @returns
  */
-export async function getUserByMail(mail: string): Promise<IUserInfo | null> {
+export async function getUserByMail(mail: string): Promise<IUserCompleteSave | null> {
     try {
-        const user: IUserInfo | null = await userModal.findOne({ email: mail.toLowerCase() });
-        return user;
+        const user = await userModal.findOne({ email: mail.toLowerCase() });
+        if (!user) {
+            return null;
+        }
+        return userDocumentIntoUserComplete(user);
     } catch (error) {
         log.critical(`${caller}/getUserByMail`, `Error while getting user : ${JSON.stringify(error)}`, mail);
         return null;

@@ -1,10 +1,16 @@
-import { configDefaults, defineConfig } from "vitest/config";
+import { defineVitestConfig } from "@nuxt/test-utils/config";
+import { configDefaults } from "vitest/config";
 import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.test" });
 
-export default defineConfig({
+export default defineVitestConfig({
+    optimizeDeps: {
+        noDiscovery: true,
+        include: undefined,
+    },
     test: {
+        environment: "nuxt",
         exclude: [...configDefaults.exclude],
         deps: {
             web: {
@@ -13,18 +19,16 @@ export default defineConfig({
             },
         },
         coverage: {
-            exclude: [
-                // ...configDefaults.coverage.exclude,
-                "**/[IE]*.ts",
-                "**/*.vue",
-                "**/assets/**",
-                // "**/models/**",
-                // "**/validations/**",
-            ],
-            include: [
-                // ...configDefaults.coverage.include,
-                "**/src/**",
-            ],
+            exclude: ["**/[IE]*.ts", "**/*.vue", "**/assets/**"],
+            include: ["**/src/**"],
+        },
+        environmentOptions: {
+            nuxt: {
+                mock: {
+                    intersectionObserver: true,
+                    indexedDb: true,
+                },
+            },
         },
     },
 });

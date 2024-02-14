@@ -3,6 +3,7 @@
     "version": "1.0.1",
     "description": "A GM tool for RPGs",
     "private": true,
+    "type": "module",
     "scripts": {
         "info": "nuxt info",
         "build": "nuxt build",
@@ -13,7 +14,7 @@
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "test": "vitest",
+        "test": "vitest dev",
         "test:coverage": "vitest run --coverage",
         "prettier": "prettier --write .",
         "prebuild": "npm run prettier",
@@ -35,8 +36,10 @@
         "@types/jsonwebtoken": "^9.0.5",
         "@vitest/coverage-v8": "^1.2.2",
         "@vitest/ui": "^1.2.2",
+        "@vue/test-utils": "^2.4.4",
         "daisyui": "^4.7.2",
-        "nuxt": "^3.10.1",
+        "happy-dom": "^13.3.8",
+        "nuxt": "^3.10.2",
         "prettier": "3.2.5",
         "vitest": "^1.2.2"
     }

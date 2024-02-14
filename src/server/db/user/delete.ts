@@ -1,6 +1,7 @@
 import type { ObjectId } from "mongoose";
 
-import userModal from "../../models/User";
+import { log } from "../../utils/filelogger";
+import userModal, { userDocumentIntoUserComplete } from "../../models/User";
 import { getUserByMail } from "./read";
 
 const caller = "db/user/delete";
@@ -10,13 +11,15 @@ const caller = "db/user/delete";
  * @param id id of the user
  * @returns the feedback of the deletion
  */
-export async function deleteUserById(id: string | ObjectId) {
+export async function deleteUserById(id: ObjectId): Promise<boolean> {
     try {
-        const feedback = await userModal.findByIdAndDelete(id);
-        log.debug(`${caller}/deleteUserById`, `feedback: ${feedback}`, id);
-        return feedback;
+        const deletedUser = await userModal.findByIdAndDelete(id);
+        if (!deletedUser) return false;
+        log.info(`${caller}/deleteUserById`, `user deleted: ${JSON.stringify(userDocumentIntoUserComplete(deletedUser))}`, id);
+        return true;
     } catch (error) {
         log.critical(`${caller}/deleteUserById`, `Error while deleting user : ${JSON.stringify(error)}`, id);
+        return false;
     }
 }
 /**
@@ -24,10 +27,12 @@ export async function deleteUserById(id: string | ObjectId) {
  * @param mail mail of the user
  * @returns the feedback of the deletion
  */
-export async function deleteUserByMail(mail: string) {
+export async function deleteUserByMail(mail: string): Promise<boolean> {
     const user = await getUserByMail(mail);
+    if (!user) return false;
+    log.trace(`${caller}/deleteUserByMail`, `delete user from mail: ${JSON.stringify(user)}`, user?._id);
     if (user) {
         return deleteUserById(user._id);
     }
-    return null;
+    return false;
 }
