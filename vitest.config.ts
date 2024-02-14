@@ -18,9 +18,27 @@ export default defineVitestConfig({
                 transformAssets: false,
             },
         },
+        logHeapUsage: true,
         coverage: {
-            exclude: ["**/[IE]*.ts", "**/*.vue", "**/assets/**"],
-            include: ["**/src/**"],
+            provider: "v8",
+            reporter: ["text", "json", "html"],
+            exclude: ["**/[IE]*.ts", "**/*.vue", "**/assets/**", "**/**.d.ts"],
+            // include: ["**/src/**"],
+            reportsDirectory: "../coverage",
+            cleanOnRerun: true,
+            thresholds: {
+                statements: 90,
+                branches: 90,
+                functions: 100,
+                lines: 90,
+                perFile: true,
+                "**/server/utils/**.ts": {
+                    statements: 60,
+                    branches: 50,
+                    functions: 55,
+                    lines: 65,
+                },
+            },
         },
         environmentOptions: {
             nuxt: {

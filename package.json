@@ -14,8 +14,8 @@
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "test": "vitest dev",
-        "test:coverage": "vitest run --coverage",
+        "test": "vitest dev --api.port=3050",
+        "test:coverage": "vitest run --coverage --api.port=3051",
         "prettier": "prettier --write .",
         "prebuild": "npm run prettier",
         "clean": "rm -rf .nuxt dist"
