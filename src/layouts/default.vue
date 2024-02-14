@@ -9,7 +9,7 @@
 <template>
     <div class="flex flex-col h-screen bg-base-100" :data-theme="theme">
         <Header />
-        <main class="grow">
+        <main class="grow" :data-theme="theme">
             <slot />
         </main>
         <Notif />

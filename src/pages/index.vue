@@ -48,7 +48,7 @@
                         </div>
                         <div class="card-actions justify-end items-center">
                             You can see our tutorial
-                            <NuxtLink class="btn btn-outline btn-secondary ml-2">here</NuxtLink>
+                            <NuxtLink class="btn btn-outline btn-secondary ml-2 btn-disabled">here</NuxtLink>
                         </div>
                     </div>
                 </div>
