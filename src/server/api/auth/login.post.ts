@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
         const user = await getUserByMail(email);
         if (user) {
-            const validatePass = await validatePassword(user._id, password);
+            const validatePass = await validatePassword(user, password);
             if (!validatePass) return createError({ statusCode: 400, statusMessage: "Your password is wrong" });
 
             const token = jwt.sign({ id: user._id }, config.JWT_ACCESS_SECRET, {

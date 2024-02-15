@@ -2,7 +2,7 @@ import type { ObjectId } from "mongoose";
 
 import { log } from "../../utils/filelogger";
 import userModal, { userDocumentIntoUserComplete } from "../../models/User";
-import type { IUserCompleteSave, IUserInfo } from "../../../types/User/IUser";
+import type { IUserCompleteSave } from "../../../types/User/IUser";
 
 const caller = "db/user/read";
 
@@ -33,6 +33,7 @@ export async function getUserByMail(mail: string): Promise<IUserCompleteSave | n
     try {
         const user = await userModal.findOne({ email: mail.toLowerCase() });
         if (!user) {
+            log.error(`${caller}/getUserByMail`, `User not found for this mail`, mail);
             return null;
         }
         return userDocumentIntoUserComplete(user);

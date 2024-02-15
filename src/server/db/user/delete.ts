@@ -31,8 +31,5 @@ export async function deleteUserByMail(mail: string): Promise<boolean> {
     const user = await getUserByMail(mail);
     if (!user) return false;
     log.trace(`${caller}/deleteUserByMail`, `delete user from mail: ${JSON.stringify(user)}`, user?._id);
-    if (user) {
-        return deleteUserById(user._id);
-    }
-    return false;
+    return deleteUserById(user._id);
 }

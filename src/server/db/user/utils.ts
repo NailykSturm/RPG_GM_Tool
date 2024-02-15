@@ -1,11 +1,16 @@
-import type { ObjectId } from "mongoose";
-
 import userModal from "../../models/User";
+import type { IUserCompleteSave } from "../../../types/User/IUser";
 
 const caller = "db/user/utils";
 
-export async function validatePassword(id: ObjectId, password: string): Promise<boolean> {
-    const user = await userModal.findById(id);
+/**
+ * Validate the password of a user
+ * @param usr user to validate
+ * @param password password to validate
+ * @returns if the password is the same as the user's password
+ */
+export async function validatePassword(usr: IUserCompleteSave, password: string): Promise<boolean> {
+    const user = await userModal.findById(usr._id);
     if (user) {
         return user.validatePassword(password);
     }
