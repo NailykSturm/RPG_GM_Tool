@@ -18,6 +18,8 @@ export default defineVitestConfig({
                 transformAssets: false,
             },
         },
+        // fileParallelism: false,
+        root: "./test",
         logHeapUsage: true,
         coverage: {
             provider: "v8",

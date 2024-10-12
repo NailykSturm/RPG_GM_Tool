@@ -1,6 +1,6 @@
 import type { ObjectId } from "mongoose";
 
-import type { IUserInfo } from "../../../types/User/IUser";
+import type { IUserInfo } from "../../types/User/IUser";
 
 export const userTest: IUserInfo = {
     _id: null as unknown as ObjectId,

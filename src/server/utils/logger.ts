@@ -8,6 +8,7 @@ export interface ILog {
 
 const lvNone: ILog = { displayName: "NONE", priority: -1, color: "\x1b[97m" };
 const lvTrace: ILog = { displayName: "TRACE", priority: 7, color: "\x1b[30m" };
+const lvNoDisplay: ILog = { displayName: "NO_DISPLAY", priority: 10, color: "\x1b[97m" };
 
 const lvFull: ILog = { displayName: "FULL", priority: 0, color: "\x1b[35m" };
 const lvDebug: ILog = { displayName: "DEBUG", priority: 1, color: "\x1b[32m" };
@@ -30,6 +31,7 @@ export const logLv = {
     CRITICAL: lvCritical,
     FATAL: lvFatal,
     TRACE: lvTrace,
+    NO_DISPLAY: lvNoDisplay,
 };
 
 /**
@@ -53,7 +55,7 @@ export function formatLog(lv: ILog = logLv.INFO, caller: string, message: string
 export function getLogLevelFromString(lv: string): ILog {
     let logLvParsed: ILog = logLv.FULL;
 
-    switch (lv) {
+    switch (lv.toUpperCase()) {
         case lvNone.displayName: {
             logLvParsed = logLv.NONE;
             break;
@@ -92,6 +94,10 @@ export function getLogLevelFromString(lv: string): ILog {
         }
         case lvFatal.displayName: {
             logLvParsed = logLv.FATAL;
+            break;
+        }
+        case lvNoDisplay.displayName: {
+            logLvParsed = logLv.NO_DISPLAY;
             break;
         }
     }

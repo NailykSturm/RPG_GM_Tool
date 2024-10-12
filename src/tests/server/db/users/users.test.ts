@@ -9,7 +9,7 @@ import { changePassword } from "../../../../server/db/user/update";
 import { getUserByMail, getUserById } from "../../../../server/db/user/read";
 import { validatePassword } from "../../../../server/db/user/utils";
 import type { IUserCompleteSave } from "../../../../types/User/IUser";
-import { userTest } from "../test_utils";
+import { userTest } from "../../../utils/test_utils";
 
 describe("databases user tests with mail", () => {
     let database: typeof mongoose | null = null;

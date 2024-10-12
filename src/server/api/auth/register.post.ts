@@ -5,7 +5,7 @@ import { log } from "../../utils/filelogger";
 import { createUser } from "../../db/user/create";
 import { getUserByMail } from "../../db/user/read";
 import type { IAPIResponse } from "../../../types/API/IAPI";
-import type { IUserInfo } from "../../../types/User/IUser";
+import type { IUserCompleteSave } from "../../../types/User/IUser";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
             return createError({ statusCode: 500, statusMessage: "Cannot create user" });
         }
         log.info("POST API/auth/register", `New user registered => ${user}`, user.email);
-        return { statusCode: 200, message: "Account created", data: user } as IAPIResponse<IUserInfo>;
+        return { statusCode: 200, statusMessage: "Account created", data: user } as IAPIResponse<IUserCompleteSave>;
     } catch (error: any) {
         log.error("POST API/auth/register", `Wrong parameters for register request : ${error}`);
         return error;

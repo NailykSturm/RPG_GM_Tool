@@ -16,6 +16,7 @@
         "postinstall": "nuxt prepare",
         "test": "vitest dev --api.port=3050",
         "test:coverage": "vitest run --coverage --api.port=3051",
+        "test:dev_coverage": "vitest --coverage --api.port=3050",
         "prettier": "prettier --write .",
         "prebuild": "npm run prettier",
         "clean": "rm -rf .nuxt dist"
